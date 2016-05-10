@@ -1,29 +1,20 @@
-# See https://www.dartlang.org/tools/private-files.html
-
-# Files and directories created by pub
+# Don’t commit the following directories created by pub.
 .buildlog
-.packages
-.project
 .pub/
 build/
-**/packages/
+packages
+.packages
 
-# Files created by dart2js
-# (Most Dart developers will use pub build to compile Dart, use/modify these 
-#  rules if you intend to use dart2js directly
-#  Convention is to use extension '.dart.js' for Dart compiled to Javascript to
-#  differentiate from explicit Javascript files)
+# Or the files created by dart2js.
 *.dart.js
-*.part.js
+*.js_
 *.js.deps
 *.js.map
-*.info.json
 
-# Directory created by dartdoc
-doc/api/
+# Or the files created by dartdoc.
+doc/
 
-# Don't commit pubspec lock file 
-# (Library packages only! Remove pattern if developing an application package)
+# Don't commit pubspec lock file. (Library packages only! Remove pattern if developing an application package.)
 pubspec.lock
 
 # =========================
