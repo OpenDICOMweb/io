@@ -1,0 +1,24 @@
+name: io
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+#author: Your Name <email@example.com>
+#homepage: https://www.example.com
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+dependencies:
+  attribute:
+    path: C:/odw/dicom/attribute
+  dataset:
+    path: C:/odw/dicom/dataset
+  date_time:
+    path: C:/odw/utilities/date_time
+  uid:
+    path: C:/odw/dicom/uid
+  uuid:
+    path: C:/odw/utilities/uuid
+  path: any
+
+dev_dependencies:
+  test: '>=0.12.0 <0.13.0'
