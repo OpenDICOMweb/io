@@ -1,24 +1,45 @@
-# Don't commit JetBrains stuff
-.idea
-
-# Don’t commit the following directories created by pub.
-.buildlog
+# Files and directories created by pub
+.packages
 .pub/
 build/
 packages
-.packages
+pubspec.lock
 
-# Or the files created by dart2js.
+# Files created by dart2js
 *.dart.js
-*.js_
+*.part.js
 *.js.deps
 *.js.map
+*.info.json
 
-# Or the files created by dartdoc.
-doc/
+# Directory created by dartdoc
+doc/api/
 
-# Don't commit pubspec lock file. (Library packages only! Remove pattern if developing an application package.)
-pubspec.lock
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
 
 # =========================
 # Operating System Files
@@ -49,24 +70,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Windows
-# =========================
 
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
