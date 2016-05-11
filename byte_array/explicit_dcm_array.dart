@@ -3,13 +3,12 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
-library odw.sdk.reference.io.explict_dcm_byte_array;
+library odw.sdk.dicom.io.explict_dcm_byte_array;
 
 import 'dart:core' hide DateTime;
 import 'dart:typed_data';
 
-import 'package:base/type.dart';
-import 'package:base/src/io/byte_array/dcm_byte_array.dart';
+import 'dcm_byte_array.dart';
 
 /// A library for parsing [Uint8List], aka [ExplicitDcmByteArray]
 ///

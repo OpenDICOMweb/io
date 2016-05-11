@@ -5,17 +5,13 @@
 // See the AUTHORS file for other contributors.
 //library odw.sdk.base.io.fs_entity;
 
-//import 'dart:async';
-import 'dart:io';
-
 import 'package:path/path.dart' as path;
 
-class FSEntity {
-  final FileSystemEntity entity;
+abstract class FSEntity {
 
-  FSEntity(this.entity);
+  //FSEntity(this.entity);
 
-  String get name => entity.path;
+  String get name;
   String get file => path.basenameWithoutExtension(name);
   String get basename => path.basename(name);
   String get extension => path.extension(name);

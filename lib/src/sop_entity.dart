@@ -10,11 +10,14 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:base/type.dart';
+import 'package:uid/uid.dart';
+
+import 'fs_entity.dart';
 import 'sop_file_system.dart';
 
 
-class SopEntity {
+class SopEntity extends FSEntity {
+
   static const bool isLink = false;
   final SopFileSystem fs;
   final Uid study;
@@ -23,24 +26,17 @@ class SopEntity {
   String _path;
   FileSystemEntity _entity;
 
-  SopEntity(this.fs, this.study, [this.series, this.instance]);
+  SopEntity(this.fs, this.study, [this.series, this.instance]) {
+
+  }
+
+  String get name => _entity.path;
 
   bool get isDirectory => instance == null;
 
   bool get isFile => instance != null;
 
-  FileSystemEntity get entity => (_entity == null) ? _initEntity : _entity;
-
-  FileSystemEntity get _initEntity {
-    if(isDirectory) {
-      _entity = new Directory(_path);
-    } else if(isFile) {
-      _entity = new File(_path);
-    } else {
-      throw "Invalid path: $_path";
-    }
-    return _entity;
-  }
+  FileSystemEntity get entity => (_entity == null) ? _initEntity() : _entity;
 
   String get path => (_path == null) ? _initPath : _path;
 
@@ -50,6 +46,20 @@ class SopEntity {
     var s3 = (instance == null) ? "" : instance.toString();
     _path = '$s1/$s2/$s3';
     return _path;
+  }
+
+  /// If [this] is a [File], returns a [Uint8List] of the bytes in
+  /// the [File].
+  /// If [this] is a [Directory], returns a [Stream] of [Uint8List]s, one
+  /// for each file in the directory.
+  dynamic get readBytes {
+    if (_entity is Directory) {
+      return readDirBytes(_entity);
+    } else if (_entity is File) {
+      return readFileBytes(_entity);
+    } else {
+      throw "Invalid Entity: $_entity";
+    }
   }
 
   Stream<FileSystemEntity> _listEntities(Directory dir) =>
@@ -70,14 +80,16 @@ class SopEntity {
     }
   }
 
-  dynamic get readBytes {
-    if (_entity is Directory) {
-      return readDirBytes(_entity);
-    } else if (_entity is File) {
-      return readFileBytes(_entity);
+  FileSystemEntity _initEntity() {
+    if(isDirectory) {
+      _entity = new Directory(_path);
+    } else if(isFile) {
+      _entity = new File(_path);
     } else {
-      throw "Invalid Entity: $_entity";
+      throw "Invalid path: $_path";
     }
+    return _entity;
   }
+
 }
 

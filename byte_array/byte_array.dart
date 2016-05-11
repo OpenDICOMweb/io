@@ -7,6 +7,8 @@ library odw.sdk.base.utils.byte_array;
 
 import 'dart:typed_data';
 
+import 'package:ascii/ascii.dart';
+
 //TODO: edit comment
 /// A library for parsing [Uint8List], aka [ByteArray]
 ///
@@ -439,7 +441,10 @@ class ByteArray {
   String getString(int offset, int length) {
     checkRange(offset, length, 1, "getString");
     Uint8List charCodes = bytes.buffer.asUint8List(offset, length);
-    return new String.fromCharCodes(charCodes);
+    var s = new String.fromCharCodes(charCodes);
+    if ((s.codeUnitAt(length - 1) == kSpace) || (s.codeUnitAt(length - 1) == kNull))
+      return s.substring(0, length - 1);
+    return s;
   }
 
   /// Reads a string of 8 bit characters from the byte array.

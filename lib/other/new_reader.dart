@@ -1,12 +1,8 @@
 library odw.sdk.base.dataset;
 
-import 'dart:core' hide DateTime;
 import 'dart:collection';
+import 'dart:core' hide DateTime;
 import 'dart:typed_data';
-
-import '../utils/byte_array.dart';
-import '../utils/formatter.dart';
-import 'attribute.dart';
 
 /**
  * The DataSet class encapsulates a collection of DICOM Elements and

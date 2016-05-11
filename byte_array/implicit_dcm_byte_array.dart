@@ -3,20 +3,21 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
-library odw.sdk.base.io.byte_array.explicit_dcm_byte_array;
+library odw.sdk.dicom.io.byte_array.explicit_dcm_byte_array;
 
 import 'dart:core' hide DateTime;
 import 'dart:typed_data';
 
-import 'package:base/type.dart';
-import 'package:base/src/io/byte_array/byte_array.dart';
+import 'package:attribute/attribute.dart';
+
+import 'dcm_byte_array.dart';
 
 /// A library for parsing [Uint8List], aka [ByteArray]
 ///
 /// Supports parsing both BIG_ENDIAN and LITTLE_ENDIAN byte arrays. The default
 /// Endianness is the endianness of the host [this] is running on, aka HOST_ENDIAN.
 /// All read* methods advance the [position] by the number of bytes read.
-class ImplicitDcmByteArray extends ByteArray {
+class ImplicitDcmByteArray extends DcmByteArray {
   static const bool isExplicit = false;
   final List<String> warnings = [];
 
@@ -24,7 +25,7 @@ class ImplicitDcmByteArray extends ByteArray {
       : super(bytes, start, length);
 
   ImplicitDcmByteArray.ofLength(int length)
-      : super(new Uint8List(length), start, length);
+      : super(new Uint8List(length), 0, length);
 
   ImplicitDcmByteArray.fromBuffer(ByteBuffer buffer,
       [int start = 0, int length])

@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
-library odw.sdk.base.io.top_level;
+library odw.sdk.dicom.io.top_level;
 
 /// This module contains the entry point for parsing a DICOM P10 byte stream
 ///

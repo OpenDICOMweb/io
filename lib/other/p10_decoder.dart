@@ -5,11 +5,9 @@
 // See the AUTHORS file for other contributors.
 library odw.sdk.base.io.p10_decoder;
 
-import 'dart:core' hide DateTime;
 import 'dart:collection';
+import 'dart:core' hide DateTime;
 import 'dart:typed_data';
-
-import 'package:base/base.dart';
 
 //typedef Decoder([int limit]);
 

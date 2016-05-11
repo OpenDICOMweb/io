@@ -3,8 +3,6 @@ library top_level_dataset;
 
 import 'dart:typed_data';
 
-import 'package:base/base.dart';
-
 
 class TopLevelDataset extends Dataset {
  // MintHeader header;

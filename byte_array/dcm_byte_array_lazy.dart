@@ -8,8 +8,7 @@ library odw.sdk.reference.io.byte_array.dcm_byte_array;
 import 'dart:core' hide DateTime;
 import 'dart:typed_data';
 
-import 'package:base/type.dart';
-import 'package:base/src/io/byte_array/byte_array.dart';
+import 'byte_array.dart';
 
 typedef List VFReader(int tag, int length);
 enum Trim {left, right, both}
@@ -27,7 +26,7 @@ class DcmByteArray extends ByteArray {
       : super(bytes, start, length);
 
   DcmByteArray.ofLength(int length)
-      : super(new Uint8List(length), start, length);
+      : super(new Uint8List(length), 0, length);
 
   DcmByteArray.fromBuffer(ByteBuffer buffer, [int start = 0, int length])
       : super(buffer.asUint8List(), start, length);
