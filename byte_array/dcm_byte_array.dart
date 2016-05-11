@@ -424,7 +424,7 @@ class DcmByteArray extends ByteArray {
 
   readFragments(List<int> basicOffsetTable) {
     for (int i = 0; i < basicOffsetTable.length; i++) {
-      
+
     }
 
   }
