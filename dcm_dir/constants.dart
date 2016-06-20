@@ -1,7 +1,5 @@
-// DCMiD Project"
-// Copyright 2014 Johns Hopkins University
-// Author: James F Philbin <james.philbin@jhmi.edu>
-library odw.sdk.base.type.dcm_dir.constants;
+//TODO: copyright
+library odw.sdk.dicom.io.dcm_dir.constants;
 
 import 'package:base/tag.dart';
 
