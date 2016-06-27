@@ -3,7 +3,7 @@
 // Author: James F Philbin <james.philbin@jhmi.edu>
 library odw.sdk.base.io.dcm_dir_tag_class ;
 
-import 'package:base/type.dart';
+import 'package:attribute/attribute.dart';
 
 /// A compile time constant class implementing the DICOM Directory Data Element definitions.
 class DcmDirTag {

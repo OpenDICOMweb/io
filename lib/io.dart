@@ -1,5 +1,6 @@
 //TODO: copyright
 library io;
 
-export 'src/io_base.dart';
+export 'src/read_base.dart';
+export 'src/write_base.dart';
 
