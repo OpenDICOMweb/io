@@ -1,9 +1,5 @@
-// Copyright (c) 2016, Open DICOMweb Project. All rights reserved.
-// Use of this source code is governed by the open source license
-// that can be found in the LICENSE file.
-// Original author: Jim Philbin <jfphilbin@gmail.edu>
-// See the AUTHORS file for other contributors.
-library odw.sdk.dicom.io.file_system;
+//TODO: copyright
+library odw.sdk.base.io.file_system;
 
 /// Examples:
 ///     var fs = FileSystem.opent(String path);
@@ -71,7 +67,7 @@ abstract class FileSystem {
   static String extension;
 
   /// The path to the root of the file system.
-  final String base;
+  final String rootPath;
 
   /// The root [Directory] of the file system.
   Directory _root;
@@ -80,21 +76,15 @@ abstract class FileSystem {
   /// The index of all the files in the file system.
   FileSystemIndex _index;
 
-  FileSystem(this.base) {
+  FileSystem(this.rootPath) {
     //TODO: do we need the index?
     _index = new FileSystemIndex(this);
   }
 
-  Directory get root => (_root != null) ? _root : new Directory(base);
+  Directory get root => (_root != null) ? _root : new Directory(rootPath);
 
   FileSystemIndex get index =>
       (_index != null) ? _index : new FileSystemIndex(this);
-
-  String toPath(Uid study, [Uid series, Uid instance]) =>
-      '$base/${study.toString()}/${series.toString()}/${instance.toString()}.$extension';
-
-  // All concrete implementations of this class should implement parse(s).
-  //static FSEntity parse(String s);
 
   // *** Read Async  ***
 
@@ -145,8 +135,5 @@ abstract class FileSystem {
    ''';
 
   @override
-  String toString() => 'File System ($type/$subtype), root: $base';
-
-  static Stream<FileSystemEntity> listEntities(Directory dir) =>
-      dir.list(recursive: true, followLinks: false);
+  String toString() => 'File System ($type/$subtype), root: $rootPath';
 }

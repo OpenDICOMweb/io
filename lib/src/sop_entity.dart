@@ -26,9 +26,10 @@ class SopEntity extends FSEntity {
   String _path;
   FileSystemEntity _entity;
 
-  SopEntity(this.fs, this.study, [this.series, this.instance]);
+  SopEntity(this.fs, this.study, [this.series, this.instance]) {
 
-  @override
+  }
+
   String get name => _entity.path;
 
   bool get isDirectory => instance == null;
@@ -38,16 +39,6 @@ class SopEntity extends FSEntity {
   FileSystemEntity get entity => (_entity == null) ? _initEntity() : _entity;
 
   String get path => (_path == null) ? _initPath : _path;
-
-  List<String> get pathList {
-    if (isFile) {
-      return [path];
-    } else if (isDirectory) {
-      return list;
-    } else {
-      throw "Invalid Path: $_path";
-    }
-  }
 
   String get _initPath {
     var s1 = study.toString();

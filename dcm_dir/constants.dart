@@ -1,7 +1,7 @@
 //TODO: copyright
 library odw.sdk.dicom.io.dcm_dir.constants;
 
-import 'package:attribute/attribute.dart';
+import 'package:base/tag.dart';
 
 /// A library of compile time constants for handling DICOM Directory data
 

@@ -4,6 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 //library odw.sdk.base.io.fs_entity;
+
 import 'package:path/path.dart' as path;
 
 abstract class FSEntity {
