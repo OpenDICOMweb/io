@@ -24,6 +24,7 @@ class SopFiles {
       const ["CR.2.16.840.1.114255.393386351.1568457295.17895.5.dcm",
       "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm"
       ]);
+
   static const cr2 = const SopFiles(
       "D:/M2sata/mint_test_data/sfd/cr/PID_MINT10/Group2_dcm4che/",
       const ["2.16.840.1.114255.393386351.1568457295.17895.5",

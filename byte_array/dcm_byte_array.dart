@@ -8,10 +8,10 @@ library odw.sdk.dicom.io.byte_array.dcm_byte_array;
 import 'dart:typed_data';
 
 import 'package:ascii/ascii.dart';
-import 'package:attribute/attribute.dart';
-import 'package:dataset/dataset.dart';
-import 'package:date_time/date_time.dart';
-import 'package:uid/uid.dart';
+import 'package:odwsdk/attribute.dart';
+import 'package:odwsdk/dataset_sop.dart';
+import 'package:odwsdk/date_time.dart';
+import 'package:odwsdk/uid.dart';
 
 import 'byte_array.dart';
 

@@ -8,16 +8,12 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 
 dependencies:
-  attribute:
-    path: C:/odw/dicom/attribute
-  dataset:
-    path: C:/odw/dicom/dataset
-  date_time:
-    path: C:/odw/utilities/date_time
-  uid:
-    path: C:/odw/dicom/uid
+  odwsdk:
+    path: C:/odw/sdk/odwsdk
+  #date_time:
+  #  path: C:/odw/sdk/utils/date_time
   uuid:
-    path: C:/odw/utilities/uuid
+    path: C:/odw/sdk/uuid
   path: any
 
 dev_dependencies:

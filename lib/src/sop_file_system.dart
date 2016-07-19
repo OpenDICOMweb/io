@@ -7,7 +7,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:uid/uid.dart';
+import 'package:odwsdk/uid.dart';
 
 import 'file_system.dart';
 import 'sop_entity.dart';
@@ -70,11 +70,59 @@ class FlatSopFileSystem extends SopFileSystem {
 
   FlatSopFileSystem(String root) : super(root);
 
+
+  // *** Read Async  ***
   @override
-  Stream<Uint8List> readStudy(Uid study) {}
+  Future<Uint8List> read(Uid study, [Uid series, Uid instance]){}
 
   @override
-  Stream<Uint8List> readSeries(Uid study, Uid series) {}
+  Stream<Uint8List> readStudy(Uid study){}
 
-  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance) {}
+  @override
+  Stream<Uint8List> readSeries(Uid study, Uid series){}
+
+  @override
+  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance){}
+
+  // *** Read Sync  ***
+
+  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]){}
+
+  @override
+  List<Uint8List> readStudySync(Uid study){}
+
+  @override
+  List<Uint8List> readSeriesSync(Uid study, Uid series){}
+
+  @override
+  Uint8List readInstanceSync(Uid study, Uid series, Uid instance){}
+
+  // *** Write Async  ***
+
+  @override
+  Future write(Uid study, [Uid series, Uid instance]){}
+
+  @override
+  Future writeStudy(Uid study){}
+
+  @override
+  Future writeSeries(Uid study, Uid series){}
+
+  @override
+  Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance){}
+
+  // *** Write Sync  ***
+
+  @override
+  void writeSync(Uid study, [Uid series, Uid instance]){}
+
+  @override
+  void writeStudySync(Uid study){}
+
+  @override
+  void writeSeriesSync(Uid study, Uid series){}
+
+  void writeInstanceSync(Uid study, Uid series, Uid instance){}
+
+
 }
