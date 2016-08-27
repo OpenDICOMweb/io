@@ -16,9 +16,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:odwsdk/uid.dart';
+import 'package:core/dicom.dart';
 
 import 'file_system_index.dart';
+///     var fs = FileSystem.opent(String path);
+///     FSFile file = fs.File(studyUid);
+///     file.isStudy
+///     file.isSeries
+///     file.isInstance
+///     file.isMetadata
+///     file.isBulkdata
+///
+
 ///     var fs = FileSystem.opent(String path);
 ///     FSFile file = fs.File(studyUid);
 ///     file.isStudy

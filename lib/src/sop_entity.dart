@@ -10,7 +10,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:odwsdk/uid.dart';
+import 'package:core/base.dart';
 
 import 'fs_entity.dart';
 import 'sop_file_system.dart';

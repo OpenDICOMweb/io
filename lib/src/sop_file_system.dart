@@ -7,7 +7,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:odwsdk/uid.dart';
+import 'package:core/base.dart';
 
 import 'file_system.dart';
 import 'sop_entity.dart';
@@ -32,12 +32,16 @@ class SopFileSystem extends FileSystem {
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
   @override
-  Future<Uint8List> read(Uid study, [Uid series, Uid instance]) async {}
+  Future<Uint8List> read(Uid study, [Uid series, Uid instance]) async {
+
+  }
 
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  Stream<Uint8List> readStudy(Uid study) async* {}
+  Stream<Uint8List> readStudy(Uid study) async* {
+
+  }
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
@@ -82,7 +86,9 @@ class FlatSopFileSystem extends SopFileSystem {
   Stream<Uint8List> readSeries(Uid study, Uid series){}
 
   @override
-  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance){}
+  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance){
+
+  }
 
   // *** Read Sync  ***
 
@@ -95,7 +101,10 @@ class FlatSopFileSystem extends SopFileSystem {
   List<Uint8List> readSeriesSync(Uid study, Uid series){}
 
   @override
-  Uint8List readInstanceSync(Uid study, Uid series, Uid instance){}
+  Uint8List readInstanceSync(Uid study, Uid series, Uid instance){
+
+    return new Uint8List(0);
+  }
 
   // *** Write Async  ***
 
