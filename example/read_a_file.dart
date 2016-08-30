@@ -5,6 +5,7 @@
 // See the   AUTHORS file for other contributors.
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
 import 'package:core/dicom.dart';
@@ -23,11 +24,11 @@ void main() {
   Logger log = Logger.init(level: Level.fine);
 
   for (String path in filesList) {
-    File file = new File(path);
-    log.config('Reading file: $file');
+    print('Reading file: $path');
+    log.config('Reading file: $path');
 
     Instance instance = readSopInstance(file1);
-    print('***patient:\n${instance.patient.format(new Prefixer())}');
+    print('***patient:\n${instance.patient.format(new Prefixer(depth:5))}');
   }
 
   print('Active Patients: ${activePatients.stats}');
@@ -35,7 +36,7 @@ void main() {
 
 Instance readSopInstance(String path) {
   var file = new File(path);
-  var bytes = file.readAsBytesSync();
+  Uint8List bytes = file.readAsBytesSync();
   DcmDecoder decoder = new DcmDecoder(bytes);
   return decoder.readSopInstance(file.path);
 }

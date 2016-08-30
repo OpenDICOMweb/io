@@ -14,6 +14,7 @@ String inputDir0 = "C:/odw/test_data/sfd/CR_and_RF/Patient_25_UGI_and_SBFT/1_DIC
 String inputDir1 = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
 String inputDir2 =
     "C:/odw/test_data/sfd/CR_and_RF/Patient_27_enema_-_ilioanal_anastomosis/1_DICOM_Original/";
+String inputDir3 = "C:/odw/test_data/sfd/MG/Patient_41/1_DICOM_Original";
 
 String outputDir = "C:/odw/sdk/io/example/output";
 
@@ -21,26 +22,27 @@ String outputDir = "C:/odw/sdk/io/example/output";
 void main() {
   Logger log = new Logger("read_a_directory", Level.debug);
 
-  Directory dir = new Directory(inputDir0);
+  Directory dir = new Directory(inputDir1);
 
   List<FileSystemEntity> fList = dir.listSync();
   log.info('File count: ${fList.length}');
   for (File f in fList)
     log.info('File: $f');
 
+  Instance instance;
   for (File file in fList) {
-    print('Reading file: $file');
-    Instance instance = readSopInstance(file);
+    print('\nReading file: $file');
+    instance = readSopInstance(file);
    // print('output:\n${instance.patient.format(new Prefixer())}');
   }
-
-  print('Active Patients: ${activePatients.stats}');
+  print(instance.study.summary);
+  print('Active Patients: ${activePatients}');
 
 }
 
 Instance readSopInstance(File f) {
   var bytes = f.readAsBytesSync();
-  print('LengthInBytes: ${bytes.length}');
+ // print('LengthInBytes: ${bytes.length}');
   DcmDecoder decoder = new DcmDecoder(bytes);
   return decoder.readSopInstance(f.path);
 }
