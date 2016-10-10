@@ -1,6 +1,8 @@
-//TODO: copyright
-
-library odw.sdk.reference.io.sop_file_system;
+// Copyright (c) 2016, Open DICOMweb Project. All rights reserved.
+// Use of this source code is governed by the open source license
+// that can be found in the LICENSE file.
+// Author: Jim Philbin <jfphilbin@gmail.edu> -
+// See the AUTHORS file for other contributors.
 
 //TODO: make everything async
 import 'dart:async';
@@ -29,6 +31,8 @@ class SopFileSystem extends FileSystem {
 
   //TODO: openStudy(Uid study);
 
+  // *** Read Async  ***
+
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
   @override
@@ -39,9 +43,7 @@ class SopFileSystem extends FileSystem {
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  Stream<Uint8List> readStudy(Uid study) async* {
-
-  }
+  Stream<Uint8List> readStudy(Uid study) async* {}
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
@@ -51,9 +53,59 @@ class SopFileSystem extends FileSystem {
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance) async {
+  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance) async {}
+
+  // *** Read Synchronous  ***
+
+  /// Read a [Study], [Series], or [Instance].
+  /// Returns a [Uint8List] containing the requested object.
+  @override
+  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {}
+
+  /// Reads a DICOM [Study].
+  /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
+  @override
+  List<Uint8List> readStudySync(Uid study) {}
+
+  /// Reads a DICOM [Series].
+  /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
+  @override
+  List<Uint8List> readSeriesSync(Uid study, Uid series)  {}
+
+  /// Reads a DICOM [SopInstance].
+  /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
+  @override
+  Uint8List readInstanceSync(Uid study, Uid series, Uid instance)  {
 
   }
+
+  // *** Write Async  ***
+
+  @override
+  Future write(Uid study, [Uid series, Uid instance]){}
+
+  @override
+  Future writeStudy(Uid study){}
+
+  @override
+  Future writeSeries(Uid study, Uid series){}
+
+  @override
+  Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance){}
+
+  // *** Write Sync  ***
+
+  @override
+  void writeSync(Uid study, [Uid series, Uid instance]){}
+
+  @override
+  void writeStudySync(Uid study){}
+
+  @override
+  void writeSeriesSync(Uid study, Uid series){}
+
+  void writeInstanceSync(Uid study, Uid series, Uid instance){}
+
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
