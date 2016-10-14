@@ -4,7 +4,9 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
+import 'sop_entity.dart';
 import 'sop_file.dart';
+import 'sop_file_system.dart';
 
 enum DirType {patient, study, series}
 

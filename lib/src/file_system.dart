@@ -77,9 +77,6 @@ abstract class FileSystem {
   /// The [type] of the file system.
   static FSType type;
 
-  /// The [subtype] of the file system.
-  static FSSubType subtype;
-
   // The [version] of the file system.
   static String version;
 
@@ -103,18 +100,31 @@ abstract class FileSystem {
 
   //TODO: create the async version of this.
   /// Creates a [SopFileSystem] rooted at the [Directory] specified by the [rootPath].
-  FileSystem(String rootPath, {bool createIfAbsent: true})
-      : root = createRoot(rootPath, createIfAbsent);
+  FileSystem(String rootPath, {bool createIfAbsent: true, bool isSync: false})
+      : root = createRootSync(rootPath, createIfAbsent);
 
-  static Directory createRoot(String rootPath, bool createIfAbsent) {
+  //TODO: debug - allows asynchronous creation of the FS root.
+  /*
+  static Future<Directory> createRoot(String rootPath, bool createIfAbsent) sync* {
+    var root = new Directory(rootPath);
+    bool exists = await root.exists();
+    if (! exists && createIfAbsent)
+        await root.createSync(recursive: true);
+    return root;
+  }
+  */
+  /// Create the [root] Directory of the [FileSystem] recursively.
+  static Directory createRootSync(String rootPath, bool createIfAbsent) {
     var root = new Directory(rootPath);
     if ((!root.existsSync()) && (createIfAbsent == true))
       root.createSync(recursive: true);
     return root;
   }
 
+  /// The [path] to the [root] [Directory] of this [FileSystem].
   String get path => root.path;
 
+  /// Returns an [Index] to the files in this [FileSystem].
   FileSystemIndex get index => new FileSystemIndex(this);
 
 

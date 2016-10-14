@@ -10,10 +10,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/base.dart';
-
-import 'fs_entity.dart';
 import 'package:io/other/sop_file_system.dart';
 
+import 'sop_directory.dart';
+import 'sop_entity.dart';
+import 'sop_file_system.dart';
 
 
 /// A [SopEntity] is a [Directory], [File], or [link] in a [SopFileSystem].
@@ -30,21 +31,15 @@ class SopFile extends SopEntity {
   String get path => '${dir.path}/$instance.dcm';
 
   /// Returns [true] if the [Entity] is a [Directory].
-  bool get isDirectory => falsel;
+  bool get isDirectory => false;
 
   bool get isStudy => false;
   bool get isSeries => true;
   bool get isFile => true;
-  FileSystemEntity get entity => _entity ??= _initEntity();
-
-
-
 
   Future<Uint8List> readFileBytes(File file) => file.readAsBytes();
 
-  Uint8List readFileBytesSync(File file) => file.readAsBytes();
-
-
+  Uint8List readFileBytesSync(File file) => file.readAsBytesSync();
 
 }
 

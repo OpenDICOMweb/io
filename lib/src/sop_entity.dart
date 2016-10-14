@@ -11,34 +11,24 @@ import 'dart:typed_data';
 
 import 'package:core/base.dart';
 
-import 'fs_entity.dart';
 import 'sop_file_system.dart';
 
-abstact class SopEntity extends SopFileSystem {
-  String get path;
-
-  SopEntity(this.path) : super();
-
-}
 
 /// A [SopEntity] is a [Directory], [File], or [link] in a [SopFileSystem].
 ///
-class SopEntity extend SopFileSystem {
+class SopEntity {
   static const bool isLink = false;
-  final String path;
-
   final SopFileSystem fs;
   final Uid study;
   final Uid series;
   final Uid instance;
   String _path;
-  FileSystemEntity _entity;
 
   /// Create a [SopFileSystem] [Entity].
-  SopEntity(this.fs, this.study, [this.series, this.instance]);
+  SopEntity(this.fs, this.study, [this.series = "", this.instance = ""]);
 
-  ///
-  String get name => _entity.path;
+  /// Returns the
+  String get path => _path ??= _initPath;
 
   /// Returns [true] if the [Entity] is a [Directory].
   bool get isDirectory => instance == null;
@@ -46,15 +36,11 @@ class SopEntity extend SopFileSystem {
   /// Returns [true] if the [Entity] is a [File].
   bool get isFile => instance != null;
 
-  FileSystemEntity get entity => _entity ??= _initEntity();
-
-  String get path => _path ??= _initPath;
 
   String get _initPath {
-    var s1 = study.toString();
-    var s2 = (series == null) ? "" : series.toString();
-    var s3 = (instance == null) ? "" : instance.toString();
-    _path = '$s1/$s2/$s3';
+    var s2 = (series == null) ? "" : '/$series';
+    var s3 = (instance == null) ? "" : '/$instance';
+    _path = '${fs.root}/$study/$s2/$s3';
     return _path;
   }
 
