@@ -19,7 +19,7 @@ class FileSystemIndex {
 
   FileSystemIndex(this.fs) {
     print(fs);
-    if(!fs.root.existsSync()) {
+    if (!fs.root.existsSync()) {
       fs.root.createSync();
       //_list = [];
     } else {
@@ -67,11 +67,11 @@ class FileSystemIndex {
     List<FileSystemEntity> files = dir.listSync(recursive: false, followLinks: false);
     print('  Files (${files.length}): $files');
     List<String> list = [];
-    for(FileSystemEntity e in files) {
-      if(e is Directory) {
+    for (FileSystemEntity e in files) {
+      if (e is Directory) {
         list.add(path.basename(e.path));
         list.addAll(_walkEntities(e));
-      } else if(e is File) {
+      } else if (e is File) {
         list.add(path.basename(e.path));
       } else {
         throw 'Invalid item $e in File System Entities List';
@@ -83,13 +83,13 @@ class FileSystemIndex {
   void printIndentedList(List<FileSystemEntity> list, [int indent = 2, int level = 0]) {
     int limit = 5;
     var sp = ''.padLeft(level * indent, ' ');
-    for(int i = 0; i < list.length; i++) {
+    for (int i = 0; i < list.length; i++) {
       //for(e in l) {
       var e = list[i];
-      if(e is File) {
-        if(i < limit) print('${sp}File: ${e.path}');
+      if (e is File) {
+        if (i < limit) print('${sp}File: ${e.path}');
         //files.add(e);
-      } else if(e is Directory) {
+      } else if (e is Directory) {
         //List list = e.listSync(recursive: true);
         print('${sp}Dir (${e.path}): length = ${list.length}');
         printIndentedList(e.listSync(), indent, level++);
@@ -108,6 +108,6 @@ class FileSystemIndex {
   String toJson() => JSON.encode(_list);
 
   @override
-  String toString() => 'FS (${FileSystem.type}/${FileSystem.subtype} Index rooted at ${fs.root}';
+  String toString() => 'FS (${FileSystem.type}) Index rooted at ${fs.root}';
 }
 

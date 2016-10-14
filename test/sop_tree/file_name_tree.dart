@@ -3,12 +3,20 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
-//library odw.sdk.base.io.fs_entity;
+
+import 'dart:async';
+
+import 'package:io/io.dart';
 
 
+Future main()  async {
+  String root = r"C:\odw\test_data\sfd\CR_and_RF";
+  List<String> tree = await getDcmFiles(root);
+  Formatter format  = new Formatter();
+  var out = format(tree);
 
-abstract class FSEntity {
-  FileSystem fs;
-
-
+  print('Tree:\n$out');
 }
+
+
+

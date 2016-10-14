@@ -5,11 +5,11 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/dicom.dart';
+import 'package:path/path.dart';
 
 import 'fs_index.dart';
 import 'fs_type.dart';
@@ -26,58 +26,16 @@ import 'fs_type.dart';
 ///     file.isBulkdata
 ///
 
-
-///     var fs = FileSystem.opent(String path);
-///     FSFile file = fs.File(studyUid);
-///     file.isStudy
-///     file.isSeries
-///     file.isInstance
-///     file.isMetadata
-///     file.isBulkdata
-///
-
-///     var fs = FileSystem.opent(String path);
-///     FSFile file = fs.File(studyUid);
-///     file.isStudy
-///     file.isSeries
-///     file.isInstance
-///     file.isMetadata
-///     file.isBulkdata
-///
-
-///     var fs = FileSystem.opent(String path);
-///     FSFile file = fs.File(studyUid);
-///     file.isStudy
-///     file.isSeries
-///     file.isInstance
-///     file.isMetadata
-///     file.isBulkdata
-///
-
-///     var fs = FileSystem.opent(String path);
-///     FSFile file = fs.File(studyUid);
-///     file.isStudy
-///     file.isSeries
-///     file.isInstance
-///     file.isMetadata
-///     file.isBulkdata
-///
-
-///     var fs = FileSystem.opent(String path);
-///     FSFile file = fs.File(studyUid);
-///     file.isStudy
-///     file.isSeries
-///     file.isInstance
-///     file.isMetadata
-///     file.isBulkdata
-///
+/// Goals:
+/// 1. The file system should be completely independent of core except for [Uid]s.
+/// 2. Simple read write interface using study, series, and instance [Uid]s
 
 abstract class FileSystem {
   // The next four vars should be implemented as 'static const'
   /// The [type] of the file system.
   static FSType type;
 
-  // The [version] of the file system.
+  /// The [version] of the file system.
   static String version;
 
   // The File [extension] of DICOM files in this FS.
@@ -98,13 +56,11 @@ abstract class FileSystem {
   /// [Series] [Uid] [String]s,
   FileSystemIndex _index;
 
-  //TODO: create the async version of this.
   /// Creates a [SopFileSystem] rooted at the [Directory] specified by the [rootPath].
   FileSystem(String rootPath, {bool createIfAbsent: true, bool isSync: false})
       : root = createRootSync(rootPath, createIfAbsent);
 
-  //TODO: debug - allows asynchronous creation of the FS root.
-  /*
+  /* TODO: debug - allows asynchronous creation of the FS root.
   static Future<Directory> createRoot(String rootPath, bool createIfAbsent) sync* {
     var root = new Directory(rootPath);
     bool exists = await root.exists();
@@ -113,6 +69,7 @@ abstract class FileSystem {
     return root;
   }
   */
+
   /// Create the [root] Directory of the [FileSystem] recursively.
   static Directory createRootSync(String rootPath, bool createIfAbsent) {
     var root = new Directory(rootPath);
@@ -127,13 +84,21 @@ abstract class FileSystem {
   /// Returns an [Index] to the files in this [FileSystem].
   FileSystemIndex get index => new FileSystemIndex(this);
 
+  Directory directory(Uid study, [Uid series]) {
+    var part3 = (series == null) ? "" : '/$series';
+    return new Directory('$path/$study$series');
+  }
+
+  File file (Uid study, Uid series, Uid instance) {
+    return new File('$path/$study/$series/$instance.$extension');
+  }
 
   // *** Read Async  ***
   // *** See https://www.dartlang.org/articles/language/await-async
 
   /// Returns a [Stream] of [Uint8List] containing the [Study], [Series],
   /// or [Instance] as specified.
-  Stream<Uint8List> read(Uid study, [Uid series, Uid instance]);
+  Stream<Uint8List> read(Uid study, [Uid series, Uid instance]) {}
 
   /// Returns a [Stream] of [Uint8List]s containing all the SOP [Instances] in the [Study].
   Stream<Uint8List> readStudy(Uid study);
@@ -148,11 +113,33 @@ abstract class FileSystem {
 
   /// Returns a [List] of [Uint8List], where each [Uint8List] contains a [Study], [Series],
   /// or [Instance] as specified by the corresponding [FileSystemEntity].
-  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]);
+  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {
+
+  }
 
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
   /// specified by the [Directory].
-  List<Uint8List> readStudySync(Uid study);
+  List<Uint8List> readStudySync(Uid study) {
+    Directory d = directory(study);
+    Map<Uid, Uint8List> files;
+    try {
+      var dirList = d.listSync();
+      for (FileSystemEntity f in dirList) {
+        if (f is File) {
+          print('Found file ${f.path}');
+          var uid = basenameWithoutExtension(path);
+          files[uid] = f.readAsBytesSync();
+        } else if (f is Directory) {
+          print('Found dir ${f.path}');
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+
+
 
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Series]
   /// specified by the [Directory].
@@ -164,14 +151,13 @@ abstract class FileSystem {
 
   // *** Write Async  ***
 
-  Sink write(Uid study, [Uid series, Uid instance]);
+  Sink<Uint8List> write(Sink<Uint> bytes, Uid study, [Uid series, Uid instance]);
 
+  Sink<Uint8List> writeStudy(Uid study, Uint8List bytes);
 
-  Sink<Uint8List> writeStudy(Uid study);
+  Sink<Uint8List> writeSeries(Uid study, Uid series, Uint8List bytes);
 
-  Future writeSeries(Uid study, Uid series);
-
-  Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance);
+  Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance, Uint8List bytes);
 
   // *** Write Sync  ***
 
@@ -188,14 +174,6 @@ abstract class FileSystem {
   /// "$rootPath/$study/$series/$instance".
   void writeInstanceSync(Uid study, Uid series, Uid instance, Uint8List bytes);
 
-  String toJson() => '''
-{ "@type": $type,
-  "@subtype": $subtype,
-  "@version": $version,
-  "index": ${JSON.encode(_index)}
-  }
-   ''';
-
   @override
-  String toString() => 'File System ($type/$subtype), root: $path';
+  String toString() => 'File System ($type), root: $path';
 }

@@ -14,6 +14,7 @@ dependencies:
     path: C:/odw/sdk/convert
   core:
     path: C:/odw/sdk/core
+  path: any
   uuid:
     path: C:/odw/sdk/uuid
   path: any

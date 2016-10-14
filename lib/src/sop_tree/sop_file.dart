@@ -11,10 +11,8 @@ import 'dart:typed_data';
 
 import 'package:core/base.dart';
 import 'package:io/other/sop_file_system.dart';
-
-import 'sop_directory.dart';
-import 'sop_entity.dart';
-import 'sop_file_system.dart';
+import 'package:io/src/sop_tree/sop_directory.dart';
+import 'package:io/src/sop_tree/sop_entity.dart';
 
 
 /// A [SopEntity] is a [Directory], [File], or [link] in a [SopFileSystem].

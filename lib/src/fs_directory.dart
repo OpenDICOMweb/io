@@ -4,29 +4,37 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
-import 'sop_entity.dart';
-import 'sop_file.dart';
-import 'sop_file_system.dart';
+import 'dart:io';
+
+import 'package:core/base.dart';
+import 'package:io/src/sop_tree/sop_entity.dart';
+import 'package:io/src/sop_tree/sop_fs.dart';
 
 enum DirType {patient, study, series}
 
-class SopDirectory extends SopEntity {
-  const String ext = '.dcm';
-  final SopFileSystem fs;
-  final Uid dir;
+class FSDirectory extends SopEntity {
+  final Directory directory;
+  final Uid study;
+  final Uid series;
 
-  SopDirectory._(this.fs, this.dir);
 
-  factory SopDirectory(this.fs, Uid study, [Uid series]) {
-    Directory d = new Directory('${fs.root}/$study/$series');
-  }
+  FSDirectory(FileSystem fs, this.study, [this.series])
+      : directory = toDirectory(fs, study, series),
+        super(fs);
+
+  String get path => directory.path;
+
+  Directory get root => fs.root;
+
+  String get rootPath => fs.path;
 
   bool get isStudy => (study != null) && (series == null);
 
   bool get isSeries => (study != null) && (series != null);
 
-  String get path => '$root/$study/$series$ext';
 
+
+/*
   //TODO: debug
   Stream<Uint8List> readAsBytes() async* {
     var entities = dir.list(recursive: true, followLinks: false);
@@ -47,5 +55,5 @@ class SopDirectory extends SopEntity {
         list.add(entity.readAsBytes());
     }
   }
-
+ */
 }
