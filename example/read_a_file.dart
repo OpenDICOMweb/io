@@ -24,14 +24,15 @@ void main() {
   Logger log = Logger.init(level: Level.fine);
 
   for (String path in filesList) {
-    print('Reading file: $path');
     log.config('Reading file: $path');
 
-    Instance instance = readSopInstance(file1);
-    print('***patient:\n${instance.patient.format(new Prefixer(depth:5))}');
+    Instance instance = readSopInstance(path);
+    var output = instance.patient.format(new Prefixer());
+    print('***patient:\n${output}');
   }
 
-  print('Active Patients: ${activePatients.stats}');
+  print('Active Studies: ${activeStudies.stats}');
+  //print('Summary:\n ${activeStudies.summary}');
 }
 
 Instance readSopInstance(String path) {

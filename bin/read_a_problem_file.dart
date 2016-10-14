@@ -28,10 +28,10 @@ void main() {
     log.config('Reading file: $path');
 
     Instance instance = readSopInstance(path);
-    print('***patient:\n${instance.patient.format(new Prefixer(depth:5))}');
+    print('***patient:\n${instance.patient.format(new Prefixer(maxDepth:5))}');
   }
 
-  print('Active Patients: ${activePatients.stats}');
+  print('Active Patients: ${activeStudies.stats}');
 }
 
 Instance readSopInstance(String path) {

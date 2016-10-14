@@ -82,6 +82,7 @@ File toFile(path) {
 
 Future<Uint8List> readDicomFile(String path) async {
   File file = toFile(path);
+  //FIX:
   return await file.readAsBytes();
 }
 

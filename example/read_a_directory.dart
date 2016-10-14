@@ -36,7 +36,7 @@ void main() {
    // print('output:\n${instance.patient.format(new Prefixer())}');
   }
   print(instance.study.summary);
-  print('Active Patients: ${activePatients}');
+  print('Active Patients: ${activeStudies}');
 
 }
 
