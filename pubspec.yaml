@@ -8,6 +8,8 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 
 dependencies:
+  bytebuf:
+    path: C:/odw/sdk/bytebuf
   convert:
     path: C:/odw/sdk/convert
   core:

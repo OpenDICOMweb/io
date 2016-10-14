@@ -21,21 +21,11 @@ import 'sop_entity.dart';
 /// defined, it must be defined at a higher level.
 class SopFileSystem extends FileSystem {
   static const FSType type = FSType.sop;
-  static const FSSubType subtype = FSSubType.structured;
+  static const FSSubtype subtype = FSSubtype.structured;
   static const String version = "0.1.0";
   static const String extension = ".dcm";
 
-  final Directory root;
-
-  SopFileSystem(String rootPath) : super(rootPath);
-
-  directory(Study study, [Series series]) {
-    return new SopDirectory.fs(this, study, series);
-  }
-
-  file(Study study, Series series, Instance instance) {
-    return new SopFile.fs(this, study, series, instance);
-  }
+  SopFileSystem(String path) : super(path);
 
   SopEntity entity(Uid study, [Uid series, Uid instance]) =>
       new SopEntity(this, study, series, instance);

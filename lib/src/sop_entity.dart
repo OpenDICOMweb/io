@@ -3,7 +3,6 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
-library odw.sdk.base.io.sop_reference;
 
 //TODO: make async
 import 'dart:async';
@@ -15,10 +14,19 @@ import 'package:core/base.dart';
 import 'fs_entity.dart';
 import 'sop_file_system.dart';
 
+abstact class SopEntity extends SopFileSystem {
+  String get path;
 
-class SopEntity extends FSEntity {
+  SopEntity(this.path) : super();
 
+}
+
+/// A [SopEntity] is a [Directory], [File], or [link] in a [SopFileSystem].
+///
+class SopEntity extend SopFileSystem {
   static const bool isLink = false;
+  final String path;
+
   final SopFileSystem fs;
   final Uid study;
   final Uid series;
@@ -26,19 +34,21 @@ class SopEntity extends FSEntity {
   String _path;
   FileSystemEntity _entity;
 
-  SopEntity(this.fs, this.study, [this.series, this.instance]) {
+  /// Create a [SopFileSystem] [Entity].
+  SopEntity(this.fs, this.study, [this.series, this.instance]);
 
-  }
-
+  ///
   String get name => _entity.path;
 
+  /// Returns [true] if the [Entity] is a [Directory].
   bool get isDirectory => instance == null;
 
+  /// Returns [true] if the [Entity] is a [File].
   bool get isFile => instance != null;
 
-  FileSystemEntity get entity => (_entity == null) ? _initEntity() : _entity;
+  FileSystemEntity get entity => _entity ??= _initEntity();
 
-  String get path => (_path == null) ? _initPath : _path;
+  String get path => _path ??= _initPath;
 
   String get _initPath {
     var s1 = study.toString();
@@ -46,6 +56,17 @@ class SopEntity extends FSEntity {
     var s3 = (instance == null) ? "" : instance.toString();
     _path = '$s1/$s2/$s3';
     return _path;
+  }
+
+  FileSystemEntity _initEntity() {
+    if(isDirectory) {
+      _entity = new Directory(_path);
+    } else if(isFile) {
+      _entity = new File(_path);
+    } else {
+      throw "Invalid path: $_path";
+    }
+    return _entity;
   }
 
   /// If [this] is a [File], returns a [Uint8List] of the bytes in
@@ -78,17 +99,6 @@ class SopEntity extends FSEntity {
         yield(bytes);
       }
     }
-  }
-
-  FileSystemEntity _initEntity() {
-    if(isDirectory) {
-      _entity = new Directory(_path);
-    } else if(isFile) {
-      _entity = new File(_path);
-    } else {
-      throw "Invalid path: $_path";
-    }
-    return _entity;
   }
 
 }

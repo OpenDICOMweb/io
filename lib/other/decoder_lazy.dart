@@ -3,7 +3,6 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
-library odw.sdk.base.io.decoder_lazy;
 
 import 'dart:collection';
 import 'dart:core' hide DateTime;
