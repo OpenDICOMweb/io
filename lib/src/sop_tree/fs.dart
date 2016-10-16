@@ -12,6 +12,8 @@ import 'dart:typed_data';
 import 'package:core/dicom.dart';
 import 'package:io/src/base/fs_base.dart';
 import 'package:io/src/fs_type.dart';
+import 'package:io/src/utils/bytes_files.dart';
+import 'package:io/src/utils/utils.dart';
 
 //TODO: finish all IO calls async
 
@@ -46,7 +48,7 @@ class SopFileSystem extends FileSystemBase {
   //TODO: openStudy(Uid study);
 
   // *** Read Async  ***
-/* TODO: implement later
+  /* TODO: implement later
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
   @override
@@ -74,12 +76,17 @@ class SopFileSystem extends FileSystemBase {
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
   @override
-  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {}
+  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {
+    String p = toPath(path, study, series, instance);
+  }
 
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  List<Uint8List> readStudySync(Uid study) {}
+  List<Uint8List> readStudySync(Uid study) {
+    String p = toPath(path, study);
+    return readDirectorySync(path);
+  }
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
@@ -89,9 +96,7 @@ class SopFileSystem extends FileSystemBase {
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  Uint8List readInstanceSync(Uid study, Uid series, Uid instance) {
-
-  }
+  Uint8List readInstanceSync(Uid study, Uid series, Uid instance) {}
 
   // *** Write Async  ***
 
@@ -117,9 +122,7 @@ class SopFileSystem extends FileSystemBase {
   void writeStudySync(Uid study) {}
 
   @override
-  void writeSeriesSync(Uid study, Uid series) {
-
-  }
+  void writeSeriesSync(Uid study, Uid series) {}
 
   @override
   void writeInstanceSync(Uid study, Uid series, Uid instance, Uint8List bytes) {}

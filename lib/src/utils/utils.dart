@@ -8,11 +8,12 @@
 import 'dart:async';
 import 'dart:io';
 
-// TODO: replace with core/uid
 import 'package:core/base.dart';
-import 'package:path/path.dart';
-
+import 'package:io/src/file_system.dart';
 import 'package:io/src/file_type.dart';
+import 'package:path/path.dart';
+// TODO: replace with core/uid
+
 
 //TODO: debug and create unit test for this file.
 

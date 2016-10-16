@@ -9,9 +9,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/dicom.dart';
+import 'package:io/src/base/fs_base.dart';
 import 'package:path/path.dart';
 
-import 'package:io/src/base/fs_base.dart';
 import 'fs_index.dart';
 import 'fs_type.dart';
 
@@ -44,10 +44,10 @@ class FileSystem extends FileSystemBase {
 
   /// Creates a [SopFileSystem] rooted at the [Directory] specified by the [rootPath].
   FileSystem(String rootPath, {bool createIfAbsent: true, bool isSync: false})
-      : root = createRootSync(rootPath, createIfAbsent);
+      : root = maybeCreateRootSync(rootPath);
 
   /* TODO: debug - allows asynchronous creation of the FS root.
-  static Future<Directory> createRoot(String rootPath, bool createIfAbsent) sync* {
+  static Future<Directory> maybeCreateRoot(String rootPath, bool createIfAbsent) sync* {
     var root = new Directory(rootPath);
     bool exists = await root.exists();
     if (! exists && createIfAbsent)
@@ -57,10 +57,9 @@ class FileSystem extends FileSystemBase {
   */
 
   /// Create the [root] Directory of the [FileSystem] recursively.
-  static Directory createRootSync(String rootPath, bool createIfAbsent) {
+  static Directory maybeCreateRootSync(String rootPath) {
     var root = new Directory(rootPath);
-    if ((!root.existsSync()) && (createIfAbsent == true))
-      root.createSync(recursive: true);
+    if (!root.existsSync()) root.createSync(recursive: true);
     return root;
   }
 
@@ -103,11 +102,15 @@ class FileSystem extends FileSystemBase {
 */
   // *** Read Sync  ***
 
+  /* TODO: is this needed?
   /// Returns a [List] of [Uint8List], where each [Uint8List] contains a [Study], [Series],
   /// or [Instance] as specified by the corresponding [FileSystemEntity].
   //TODO: maybe provide an implemention
-  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {}
+  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {
+    String p = toPath(path, study, series, instance);
 
+  }
+*/
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
   /// specified by the [Directory].
   // TODO: fix

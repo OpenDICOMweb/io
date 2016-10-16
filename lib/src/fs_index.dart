@@ -4,6 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,7 +15,6 @@ import 'package:io/src/base/fs_base.dart';
 
 class FSIndex extends FSIndexBase {
   FileSystemBase fs;
-  List<String> _index;
 
   FSIndex(this.fs) {
     print(fs);
@@ -22,7 +22,7 @@ class FSIndex extends FSIndexBase {
       fs.root.createSync();
       //_list = [];
     } else {
-      _list = load(fs.root);
+      return loadSync(fs.root);
     }
   }
 
@@ -47,7 +47,6 @@ class FSIndex extends FSIndexBase {
     }
     return _list;
   }
-  */
   // FS Index
   List<String> loadSync(Directory rootDir) {
     print('loading Root: $rootDir...');
@@ -56,6 +55,19 @@ class FSIndex extends FSIndexBase {
     store();
     return _list;
   }
+
+
+  /// Asynchronously stores an [Index].
+  Future<Null> store() => writeFile()
+    String index = toJson();
+    // print('Json: $index');
+    File oFile = new File(filename);
+    print('Storing ${oFile.path}...');
+    oFile.writeAsStringSync(index);
+  }
+
+  /// Synchronously stores an [Index].
+  void storeSync() {}
 
   List<String> _walkRoot() => _walkEntities(fs.root);
 
@@ -93,14 +105,6 @@ class FSIndex extends FSIndexBase {
         printIndentedList(e.listSync(), indent, level++);
       }
     }
-  }
-
-  void store() {
-    String index = toJson();
-    // print('Json: $index');
-    File oFile = new File(filename);
-    print('Storing ${oFile.path}...');
-    oFile.writeAsStringSync(index);
   }
 
   String toJson() => JSON.encode(_list);
