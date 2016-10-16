@@ -12,22 +12,25 @@ import 'dart:io';
 import 'package:core/base.dart';
 import 'package:path/path.dart';
 
-import 'file_system.dart';
+import 'package:io/src/file_type.dart';
 
-//TODO
-String toPath(FileSystem fs, Uid study, [Uid series, Uid instance]) {
-  String part4 = (series == null) ? "" : '/$instance.dcm';
+//TODO: debug and create unit test for this file.
+
+
+/// Return a path to a file in the [FileSystem]
+String toPath(String root, Uid study, [Uid series, Uid instance, String extension]) {
+  String part5 = (extension == null) ? "" : ".dcm";
+  String part4 = (series == null) ? "" : '/$instance';
   String part3 = (series == null) ? "" : '/$series';
-  return '${fs.path}/$study$part3/$part4';
+  return '$root/$study$part3$part4$part5';
 }
 
 
 // TODO: debug - allows asynchronous creation of the FS root.
-Future<Directory> createRoot(String rootPath, bool createIfAbsent) async {
-    var root = new Directory(rootPath);
-    bool exists = await root.exists();
-    if (! exists && createIfAbsent)
-        await root.create(recursive: true);
+/// Returns the [root] [Directory] of the [FileSystem], creating it if it doesn't exist.
+Future<Directory> createRoot(String path) async {
+    var root = new Directory(path);
+    if (! await root.exists()) await root.create(recursive: true);
     return root;
 }
 
@@ -36,25 +39,44 @@ Future<Directory> createRoot(String rootPath, bool createIfAbsent) async {
 String getFilename(File f) =>   basenameWithoutExtension(f.path);
 String getFileExt(File f) => extension(f.path);
 
+/// A predicate for testing properties of [File]s.
+typedef bool Filter(File f);
+
+/// Returns [true] if the [path] has [ext] as it's file extension.
 bool hasExtension(String path, String ext) => extension(path) == ext;
 
 String testExtension(String path, String ext) =>
     (hasExtension(path, ext)) ? ext : null;
 
-bool isDcmFile(File f) => hasExtension(f.path, ".dcm");
+/// Returns [true] if [f] has the [sopInstance] file extension.
+bool isDcmFile(File f) => hasExtension(f.path, FileType.sopInstance);
 
-String filterDcm(File f) => (isDcmFile(f)) ? f.path : null;
+/// Returns [true] if [f] has the [metadata] file extension.
+bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata);
 
 
-List getDcmFilesSync(String path) {
+/// Returns [true] if [f] has the [bulkdate] file extension.
+bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata);
+
+/// Returns the [File] if the [predicate] is [true]; otherwise, null.
+String filter(File f, Filter p ) => (p(f)) ? f.path : null;
+
+/// Returns the [File] if the [predicate] is [true]; otherwise, null.
+String dcmFilter(File f) => filter(f, isDcmFile);
+
+/// Returns a [List] of [File] from the [Directory] specified by [path].
+List getFilesSync(String path, [Filter filter]) {
   var d = new Directory(path);
-  return walkSync(d, filterDcm);
+  return walkSync(d, filter);
 }
 
-List walkSync(Directory d, Function func) {
+//TODO: debug and create unit test
+/// Returns a [List] of values that result from walking the [Directory] tree, and applying [func]
+/// to each [File] in the tree.
+List walkSync(Directory d, Function func) => _walkSync(d, func, []);
+
+List _walkSync(Directory d, Function func, List list) {
   var entries = d.listSync(followLinks: false);
- // print('Length: ${entries.length}');
-  List list = [];
   try {
     for (FileSystemEntity e in entries) {
       if (e is File) {
@@ -63,8 +85,7 @@ List walkSync(Directory d, Function func) {
         if (v == null) continue;
         list.add(v);
       } else if (e is Directory) {
-     //   print('Found dir ${e.path}');
-        list.add(walk(e, func));
+        list.add(_walkSync(e, func, list));
       }
     }
   } catch (e) {
@@ -73,35 +94,27 @@ List walkSync(Directory d, Function func) {
   return list;
 }
 
-Stream getDcmFiles(String path) => walk(new Directory(path), filterDcm);
+Stream getFiles(String path, [Filter filter]) => walk(new Directory(path), filter);
 
-/* TODO: flush or use
-Stream walk(Directory d) async* {
-  Stream stream = d.list(followLinks: false);
-  await for (FileSystemEntity f in stream) {
-    if (f is Directory) walk(f);
-    if (f is File)
-    var s = filterDcm(f);
-    if (s == null) continue;
-    list.add(s);
-  }
-  return list;
-}
-*/
+//TODO: debug and create unit test
+/// Returns a [List] of values that result from walking the [Directory] tree, and applying [filter]
+/// to each [File] in the tree.
+Stream walk(Directory d, Filter filter) => _walk(d, filter);
 
-Stream walk(Directory d, Function func) async* {
+
+Stream _walk(Directory d, Filter filter) async* {
   var stream = d.list(followLinks: false);
   // print('Length: ${entries.length}');
   try {
     await for (FileSystemEntity e in stream) {
       if (e is File) {
         // print('Found file ${e.path}');
-        var v = func(e);
+        var v = filter(e);
         if (v == null) continue;
         yield v;
       } else if (e is Directory) {
         //   print('Found dir ${e.path}');
-        walk(e, func);
+        walk(e, filter);
       }
     }
   } catch (e) {

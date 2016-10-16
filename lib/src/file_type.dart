@@ -12,6 +12,6 @@ class FileType {
   const FileType(this.index, this.name, this.extension);
 
   static const sopInstance = const FileType(1, "SOP Instance", ".dcm");
-  static const metadata = const FileType(1, "Metadata",  ".md");
+  static const metadata = const FileType(2, "Metadata",  ".md");
   static const bulkdata = const FileType(3, "Bulkdata", ".bd");
 }

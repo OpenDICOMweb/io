@@ -8,7 +8,7 @@
 import 'dart:io';
 
 import 'package:io/src/sop_tree/fs.dart';
-import 'package:io/src/fs_entity_base.dart';
+import 'package:io/src/base/fs_entity_base.dart';
 import 'fs.dart';
 
 

@@ -7,7 +7,7 @@
 import 'dart:io';
 
 import 'package:core/base.dart';
-import 'package:io/src/fs_entity_base.dart';
+import 'package:io/src/base/fs_entity_base.dart';
 
 enum DirType {patient, study, series}
 

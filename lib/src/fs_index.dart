@@ -9,15 +9,14 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 
-import 'file_system.dart';
+import 'package:io/src/base/fs_index_base.dart';
+import 'package:io/src/base/fs_base.dart';
 
-class FileSystemIndex {
-  static const String version = "0.1.0";
-  String type = "FileSystemIndex";
-  FileSystem fs;
-  List<String> _list;
+class FSIndex extends FSIndexBase {
+  FileSystemBase fs;
+  List<String> _index;
 
-  FileSystemIndex(this.fs) {
+  FSIndex(this.fs) {
     print(fs);
     if (!fs.root.existsSync()) {
       fs.root.createSync();
@@ -27,12 +26,11 @@ class FileSystemIndex {
     }
   }
 
-  String get filename => '.index.json';
+  String get path => fs.path;
 
-  /*
   // FS Index
-  List<FileSystemEntity> load(Directory rootDir) {
-    print('loading Root: $rootDir...');
+  List<FileSystemEntity> load() {
+    print('loading Root: $path...');
     File iFile = new File(filename);
     if(iFile.existsSync()) {
       _list = JSON.decode(iFile.readAsStringSync());
@@ -51,7 +49,7 @@ class FileSystemIndex {
   }
   */
   // FS Index
-  List<String> load(Directory rootDir) {
+  List<String> loadSync(Directory rootDir) {
     print('loading Root: $rootDir...');
     _list = _walkRoot();
     print('_list: $_list');
@@ -107,7 +105,12 @@ class FileSystemIndex {
 
   String toJson() => JSON.encode(_list);
 
+  String format(List<FileSystemEntity> list, [int indent = 2, int level = 0]) {
+    Formatter fmt = new Formatter(indent, level);
+    return fmt(list);
+  }
+
   @override
-  String toString() => 'FS (${FileSystem.type}) Index rooted at ${fs.root}';
+  String toString() => 'FS Index ($runtimeType) rooted at ${fs.path}';
 }
 

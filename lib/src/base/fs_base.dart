@@ -10,8 +10,8 @@ import 'dart:typed_data';
 import 'package:core/dicom.dart';
 import 'package:path/path.dart';
 
-import 'fs_index.dart';
-import 'fs_type.dart';
+import 'fs_index_base.dart';
+import '../fs_type.dart';
 
 //TODO: Make all IO calls async
 
@@ -51,7 +51,7 @@ abstract class FileSystemBase {
   /// are [List] and the leaves are [String]s containing the [Uid] of the [SopInstance].
   /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
   /// [Series] [Uid] [String]s,
-  FileSystemIndex index;
+  FSIndexBase index;
 
   /// Creates a [SopFileSystem] rooted at the [Directory] specified by the [rootPath].
  // FileSystem(String rootPath, {bool createIfAbsent: true, bool isSync: false})

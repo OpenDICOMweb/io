@@ -11,7 +11,7 @@ import 'dart:typed_data';
 
 import 'package:core/base.dart';
 import 'package:io/src/file_system.dart';
-import 'package:io/src/fs_entity_base.dart';
+import 'package:io/src/base/fs_entity_base.dart';
 
 /// A [FSFileBase] is a [File], in a [FileSystem].
 class FSFileBase extends FSEntityBase {

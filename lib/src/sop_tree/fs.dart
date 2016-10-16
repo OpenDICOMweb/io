@@ -10,7 +10,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/dicom.dart';
-import 'package:io/src/fs_base.dart';
+import 'package:io/src/base/fs_base.dart';
 import 'package:io/src/fs_type.dart';
 
 //TODO: finish all IO calls async

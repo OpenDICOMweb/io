@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:io/src/fs_base.dart';
+import 'package:io/src/base/fs_base.dart';
 
 
 abstract class FSEntityBase {

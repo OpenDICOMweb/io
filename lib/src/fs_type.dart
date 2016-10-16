@@ -10,8 +10,8 @@ class FSType {
 
   const FSType(this.type, this.ext);
 
-  static const sopTree = const FSType("SOP", "dcm");
-  static const sopFlat = const FSType("SOP",  "dcm");
+  static const sopTree = const FSType("SOP", ".dcm");
+  static const sopFlat = const FSType("SOP",  ".dcm");
   static const msd = const FSType("MSD", "msd");
   static const mint = const FSType("Mint", "mint");
 }

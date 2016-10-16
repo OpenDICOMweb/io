@@ -11,7 +11,7 @@ import 'dart:typed_data';
 import 'package:core/dicom.dart';
 import 'package:path/path.dart';
 
-import 'fs_base.dart';
+import 'package:io/src/base/fs_base.dart';
 import 'fs_index.dart';
 import 'fs_type.dart';
 
@@ -74,7 +74,7 @@ class FileSystem extends FileSystemBase {
   /// are [List] and the leaves are [String]s containing the [Uid] of the [SopInstance].
   /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
   /// [Series] [Uid] [String]s,
-  FileSystemIndex get index => new FileSystemIndex(this);
+  FSIndex get index => new FSIndex(this);
 
   Directory directory(Uid study, [Uid series]) {
     var part3 = (series == null) ? "" : '/$series';

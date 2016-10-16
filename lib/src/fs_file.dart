@@ -12,7 +12,7 @@ import 'dart:typed_data';
 import 'package:core/base.dart';
 import 'package:io/src/file_system.dart';
 import 'package:io/src/fs_entity.dart';
-import 'utils.dart';
+import 'package:io/src/utils/utils.dart';
 
 /// A [FSFile] is a [File], in a [FileSystem].
 class FSFile extends FSEntity {

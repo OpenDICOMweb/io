@@ -4,5 +4,5 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-export 'src/utils.dart';
+export 'package:io/src/utils/utils.dart';
 
