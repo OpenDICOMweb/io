@@ -4,31 +4,30 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:core/base.dart';
+import 'package:io/src/sop_tree/fs.dart';
+import 'package:io/src/sop_tree/entity.dart';
+import 'utils.dart';
 
-import 'package:io/src/sop_tree/sop_entity.dart';
-import 'package:io/src/sop_tree/sop_fs.dart';
-
+/// The types of [SopDirectory]s.
 enum DirType {patient, study, series}
 
 class SopDirectory extends SopEntity {
-  final FileSystem fs;
-  final SopDirectory directory;
+  final Directory directory;
   final Uid study;
   final Uid series;
   final String path;
 
-  SopDirectory(FileSystem fs, this.study, [this.series])
-      : directory = new Directory('$root/'),
+  SopDirectory(SopFileSystem fs, Uid study, [Uid series])
+      : study = study,
+        series = series,
+        path = toPath(fs, study, series),
+        directory = new Directory(fs.path),
         super(fs);
 
   Directory get root => fs.root;
-
-  String rootPath => fs.path;
 
   bool get isStudy => (study != null) && (series == null);
 

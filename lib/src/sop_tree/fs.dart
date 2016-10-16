@@ -10,15 +10,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/dicom.dart';
-import 'package:io/src/file_system.dart';
+import 'package:io/src/fs_base.dart';
 import 'package:io/src/fs_type.dart';
-import 'package:io/src/sop/sop_entity.dart';
 
-//Make all IO calls async
+//TODO: finish all IO calls async
 
 /// A DICOM File System containing SOP Instances.  The structure is not
 /// defined, it must be defined at a higher level.
-class FileSystem extends FileSystem {
+class SopFileSystem extends FileSystemBase {
   static const FSType type = FSType.sopTree;
 
   static const String version = "0.1.0";
@@ -27,34 +26,31 @@ class FileSystem extends FileSystem {
   final Directory root;
   final String path;
 
-  FileSystem(String rootPath)
-      : path = toDirectory(rootPath);
-        super(rootPath);
+  SopFileSystem(String path)
+      : path = path,
+        root = new Directory(path),
+        super();
 
-  static toPath(Uid Study, [Uid series, Uid instance]) {
-
-  }
-  static toDirectory(String path) {
-    return new Directory(path, recursive: true);
-  }
-
-  toFile(Study study, Series series, Instance instance) {
-    return new SopFile.fs(this, study, series, instance);
+  Directory directory(Uid study, [Uid series]) {
+    var part3 = (series == null) ? "" : '/$series';
+    return new Directory('$path/$study$part3');
   }
 
+  File file(Uid study, Uid series, Uid instance) =>
+      new File('$path/$study/$series/$instance.$extension');
+
+  /*
   SopEntity entity(Uid study, [Uid series, Uid instance]) =>
       new SopEntity(this, study, series, instance);
-
+  */
   //TODO: openStudy(Uid study);
 
   // *** Read Async  ***
-
+/* TODO: implement later
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
   @override
-  Stream<Uint8List> read(Uid study, [Uid series, Uid instance]) async {
-
-  }
+  Stream<Uint8List> read(Uid study, [Uid series, Uid instance]) async* {}
 
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
@@ -72,7 +68,7 @@ class FileSystem extends FileSystem {
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
   Future<Uint8List> readInstance(Uid study, Uid series, Uid instance) async {}
-
+*/
   // *** Read Synchronous  ***
 
   /// Read a [Study], [Series], or [Instance].
@@ -88,19 +84,20 @@ class FileSystem extends FileSystem {
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
-  List<Uint8List> readSeriesSync(Uid study, Uid series)  {}
+  List<Uint8List> readSeriesSync(Uid study, Uid series) {}
 
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  Uint8List readInstanceSync(Uid study, Uid series, Uid instance)  {
+  Uint8List readInstanceSync(Uid study, Uid series, Uid instance) {
 
   }
 
   // *** Write Async  ***
 
+  /* TODO: later
   @override
-  Future write(Uid study, [Uid series, Uid instance]){}
+  Sink<Uint8List> write(Uid study, [Uid series, Uid instance]) async* {}
 
   @override
   Future writeStudy(Uid study){}
@@ -110,21 +107,22 @@ class FileSystem extends FileSystem {
 
   @override
   Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance){}
-
+*/
   // *** Write Sync  ***
 
   @override
-  void writeSync(Uid study, [Uid series, Uid instance]){}
+  void writeSync(Uid study, [Uid series, Uid instance]) {}
 
   @override
-  void writeStudySync(Uid study){}
+  void writeStudySync(Uid study) {}
 
   @override
-  void writeSeriesSync(Uid study, Uid series){}
+  void writeSeriesSync(Uid study, Uid series) {
+
+  }
 
   @override
-  void writeInstanceSync(Uid study, Uid series, Uid instance, Uint8List bytes){}
-
+  void writeInstanceSync(Uid study, Uid series, Uid instance, Uint8List bytes) {}
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
@@ -132,11 +130,6 @@ class FileSystem extends FileSystem {
   static bool isSopFile(FileSystemEntity entity) =>
       ((entity is File) && entity.path.endsWith(extension));
 
-  static String tpPath(Uid study, [Uid series, Uid instance]) {
-    String part4 = (series == null) ? "" : '/$instance.dcm';
-    String part3 = (series == null) ? "" : '/$series';
-    return '$path/$study$part3/part4';
-  }
 }
 
 

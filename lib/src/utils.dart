@@ -8,7 +8,28 @@
 import 'dart:async';
 import 'dart:io';
 
+// TODO: replace with core/uid
+import 'package:core/base.dart';
 import 'package:path/path.dart';
+
+import 'file_system.dart';
+
+//TODO
+String toPath(FileSystem fs, Uid study, [Uid series, Uid instance]) {
+  String part4 = (series == null) ? "" : '/$instance.dcm';
+  String part3 = (series == null) ? "" : '/$series';
+  return '${fs.path}/$study$part3/$part4';
+}
+
+
+// TODO: debug - allows asynchronous creation of the FS root.
+Future<Directory> createRoot(String rootPath, bool createIfAbsent) async {
+    var root = new Directory(rootPath);
+    bool exists = await root.exists();
+    if (! exists && createIfAbsent)
+        await root.create(recursive: true);
+    return root;
+}
 
 /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
 /// specified by the [Directory].
@@ -52,11 +73,9 @@ List walkSync(Directory d, Function func) {
   return list;
 }
 
-Future<List<String>> getDcmFiles(String path) async {
-  var d = new Directory(path);
-  Stream stream = d.list(followLinks: false);
-  List<String> list = [];
-}
+Stream getDcmFiles(String path) => walk(new Directory(path), filterDcm);
+
+/* TODO: flush or use
 Stream walk(Directory d) async* {
   Stream stream = d.list(followLinks: false);
   await for (FileSystemEntity f in stream) {
@@ -68,6 +87,7 @@ Stream walk(Directory d) async* {
   }
   return list;
 }
+*/
 
 Stream walk(Directory d, Function func) async* {
   var stream = d.list(followLinks: false);

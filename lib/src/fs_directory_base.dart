@@ -7,55 +7,32 @@
 import 'dart:io';
 
 import 'package:core/base.dart';
-import 'package:io/src/fs_entity.dart';
-import 'package:io/src/file_system.dart';
+import 'package:io/src/fs_entity_base.dart';
 
 enum DirType {patient, study, series}
 
-class FSDirectory extends FSEntity {
-  final Directory directory;
-  final Uid study;
-  final Uid series;
+abstract class FSDirectoryBase extends FSEntityBase {
+  Directory directory;
+  Uid study;
+  Uid series;
 
-
+/* flush
   FSDirectory(FileSystem fs, Uid study, [Uid series])
       : study = study,
         series = series,
         directory = fs.directory(study, series),
         super(fs);
-
+*/
   String get path => directory.path;
 
   Directory get root => fs.root;
 
   String get rootPath => fs.path;
 
+  bool get isRoot => false;
+
   bool get isStudy => (study != null) && (series == null);
 
   bool get isSeries => (study != null) && (series != null);
 
-
-
-/*
-  //TODO: debug
-  Stream<Uint8List> readAsBytes() async* {
-    var entities = dir.list(recursive: true, followLinks: false);
-    await for(var entity in entities) {
-      print('entity: $entity');
-      if (entity is File) {
-        var bytes = await* entity.readAsBytes();
-        yield(bytes);
-      }
-    }
-  }
-
-  List<Uint8List> readAsBytesSync() {
-    var entities = dir.list(recursive: true, followLinks: false);
-    var list = <Uint8List>[];
-    for (var entity in entities) {
-      if (entity is SopFile)
-        list.add(entity.readAsBytes());
-    }
-  }
- */
 }

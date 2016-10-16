@@ -10,23 +10,22 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/base.dart';
-import 'package:io/other/sop_file_system.dart';
-import 'package:io/src/sop_tree/sop_directory.dart';
-import 'package:io/src/sop_tree/sop_entity.dart';
+import 'package:io/src/sop_tree/fs.dart';
+import 'package:io/src/sop_tree/entity.dart';
 
 
 /// A [SopEntity] is a [Directory], [File], or [link] in a [SopFileSystem].
 ///
 class SopFile extends SopEntity {
-  final SopDirectory dir;
+  final Directory directory;
   final Uid instance;
   final Uint8List bytes;
 
   /// Create a [SopFileSystem] [Entity].
-  SopFile(this.dir, this.instance, this.bytes);
+  SopFile(SopFileSystem fs, this.directory, this.instance, this.bytes) : super(fs);
 
   ////
-  String get path => '${dir.path}/$instance.dcm';
+  String get path => '${directory.path}/$instance.dcm';
 
   /// Returns [true] if the [Entity] is a [Directory].
   bool get isDirectory => false;

@@ -4,9 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-import 'dart:typed_data';
-
-import 'package:io/io.dart';
+import 'package:io/sop_file_system.dart';
 
 import 'sop_data.dart';
 
@@ -23,9 +21,12 @@ void main() {
 
   print(SopFiles.cr2.list);
 
+  SopFileSystem fs = new SopFileSystem(tdir);
+
   for (String s in files) {
-    Uint8List data = readSync(files[0]);
-    print('$s: len= ${data.length}');
+    // TODO:fix
+    // Uint8List data = fs.readInstanceSync(files[0]);
+    //print('$s: len= ${data.length}');
   }
 
 }

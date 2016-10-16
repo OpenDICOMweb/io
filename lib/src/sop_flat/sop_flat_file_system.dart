@@ -25,6 +25,7 @@ class FlatSopFileSystem extends FileSystem {
 
 
   // *** Read Async  ***
+  /* TODO: finish async later
   @override
   Stream<Uint8List> read(Uid study, [Uid series, Uid instance]){}
 
@@ -35,9 +36,8 @@ class FlatSopFileSystem extends FileSystem {
   Stream<Uint8List> readSeries(Uid study, Uid series){}
 
   @override
-  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance){
-
-  }
+  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance){}
+  */
 
   // *** Read Sync  ***
 
@@ -57,6 +57,7 @@ class FlatSopFileSystem extends FileSystem {
 
   // *** Write Async  ***
 
+  /* TODO: implement async later
   @override
   Sink<Uint8List> write(Uid study, [Uid series, Uid instance]){}
 
@@ -68,6 +69,7 @@ class FlatSopFileSystem extends FileSystem {
 
   @override
   Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance){}
+  */
 
   // *** Write Sync  ***
 
@@ -80,7 +82,7 @@ class FlatSopFileSystem extends FileSystem {
   @override
   void writeSeriesSync(Uid study, Uid series){}
 
-  void writeInstanceSync(Uid study, Uid series, Uid instance){}
+  void writeInstanceSync(Uid study, Uid series, Uid instance, Uint8List bytes){}
 
 
 }

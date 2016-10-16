@@ -7,16 +7,18 @@
 //TODO: make async
 import 'dart:io';
 
-import 'package:io/src/sop_tree/sop_fs.dart';
+import 'package:io/src/sop_tree/fs.dart';
+import 'package:io/src/fs_entity_base.dart';
+import 'fs.dart';
 
 
 /// A [SopEntity] is a [Directory], [File], or [link] in a [FileSystem].
 ///
-abstract class SopEntity {
-  FileSystem fs;
+abstract class SopEntity extends FSEntityBase {
+  final SopFileSystem fs;
 
   /// Create a [SopFileSystem] [Entity].
-  //SopEntity(this.fs);
+  SopEntity(SopFileSystem this.fs);
 
   Directory get root => fs.root;
 
