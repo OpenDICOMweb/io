@@ -111,8 +111,6 @@ class SopFileSystem extends FileSystemBase {
 */
   // *** Write Sync  ***
 
-  @override
-  void writeSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
 
   @override
   void writeInstanceSync(FileType fType, Uid study, Uid series, Uid instance, Uint8List bytes) {
