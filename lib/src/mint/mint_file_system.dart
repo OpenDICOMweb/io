@@ -10,11 +10,10 @@ import 'dart:typed_data';
 
 import 'package:core/uid.dart';
 import 'package:io/src/base/fs_base.dart';
-import 'package:path/path.dart';
-
-import 'package:io/src/mint/other/fs_index.dart';
-import 'package:io/src/fs_type.dart';
 import 'package:io/src/file_type.dart';
+import 'package:io/src/fs_type.dart';
+import 'package:io/src/mint/other/fs_index.dart';
+import 'package:path/path.dart';
 
 //TODO: Make all IO calls async
 
@@ -51,8 +50,8 @@ class MintFileSystem extends FileSystemBase {
     return new Directory('$path/$study$part3');
   }
 
-  File file (Uid study, Uid series, Uid instance) {
-    return new File('$path/$study/$series/$instance.$extension');
+  File file (FileType fType, Uid study, Uid series, Uid instance) {
+    return new File('$path/$study/$series/$instance.${fType.extension}');
   }
 
   // *** Read Async  ***
@@ -73,15 +72,13 @@ class MintFileSystem extends FileSystemBase {
 */
   // *** Read Sync  ***
 
-  /* TODO: is this needed?
-  /// Returns a [List] of [Uint8List], where each [Uint8List] contains a [Study], [Series],
-  /// or [Instance] as specified by the corresponding [FileSystemEntity].
-  //TODO: maybe provide an implemention
-  List<Uint8List> readSync(Uid study, [Uid series, Uid instance]) {
-    String p = toPath(path, study, series, instance);
+  //TODO: is this needed?
+  /// Returns a [List] of [Uint8List] or [String] (depending on the [FileType],
+  /// where each element contains a [Study], [Series],
+  /// or [Instance] as specified by the arguments
+  @override
+  List readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
 
-  }
-*/
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
   /// specified by the [Directory].
   // TODO: fix
@@ -111,9 +108,11 @@ class MintFileSystem extends FileSystemBase {
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Series]
   /// specified by the [Directory].
   /// [Directory].
+  //TODO: implement after SopFileSystem is working
   List<Uint8List> readSeriesSync(FileType fType, Uid study, Uid series) {}
 
   /// Returns a [Uint8List] containing the SOP [Instance] in the specified [File].
+  //TODO: implement once SopFileSystem is working
   Uint8List readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) {}
 
   // *** Write Async  ***

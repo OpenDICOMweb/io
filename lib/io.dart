@@ -4,6 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-export 'package:io/src/sop/sop_file_system.dart';
 export 'package:io/src/mint/mint_file_system.dart';
+export 'package:io/src/sop/sop_file_system.dart';
+export 'package:io/src/utils/utils.dart';
 

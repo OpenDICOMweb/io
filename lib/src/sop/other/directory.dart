@@ -7,8 +7,8 @@
 import 'dart:io';
 
 import 'package:core/base.dart';
-import 'package:io/src/sop_tree/fs.dart';
-import 'package:io/src/sop_tree/entity.dart';
+import 'package:io/src/sop/fs.dart';
+import 'package:io/src/sop/entity.dart';
 import 'utils.dart';
 
 /// The types of [SopDirectory]s.
