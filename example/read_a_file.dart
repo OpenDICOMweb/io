@@ -11,6 +11,8 @@ import 'package:convert/dicom.dart';
 import 'package:core/dicom.dart';
 import 'package:logger/logger.dart';
 
+import 'package:io/src/sop_tree/sop_file_system.dart';
+
 
 String inputDir = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
 String outputDir = "C:/odw/sdk/io/example/output";
@@ -22,6 +24,8 @@ List<String> filesList = [file1, file2];
 
 void main() {
   Logger log = Logger.init(level: Level.fine);
+
+  var fs = new SopFileSystem("")
 
   for (String path in filesList) {
     log.config('Reading file: $path');

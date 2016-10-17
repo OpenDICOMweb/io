@@ -8,8 +8,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:core/base.dart';
-import 'package:io/src/file_system.dart';
+import 'package:core/uid.dart';
+import 'package:io/src/mint/mint_file_system.dart';
 import 'package:io/src/file_type.dart';
 import 'package:path/path.dart';
 // TODO: replace with core/uid
@@ -17,18 +17,17 @@ import 'package:path/path.dart';
 
 //TODO: debug and create unit test for this file.
 
-
-/// Return a path to a file in the [FileSystem]
+//TODO: remove if not used
+/// Return a path to a file in the [MintFileSystem]
 String toPath(String root, Uid study, [Uid series, Uid instance, String extension]) {
   String part5 = (extension == null) ? "" : ".dcm";
-  String part4 = (series == null) ? "" : '/$instance';
+  String part4 = (instance == null) ? "" : '/$instance';
   String part3 = (series == null) ? "" : '/$series';
   return '$root/$study$part3$part4$part5';
 }
 
-
 // TODO: debug - allows asynchronous creation of the FS root.
-/// Returns the [root] [Directory] of the [FileSystem], creating it if it doesn't exist.
+/// Returns the [root] [Directory] of the [MintFileSystem], creating it if it doesn't exist.
 Future<Directory> createRoot(String path) async {
     var root = new Directory(path);
     if (! await root.exists()) await root.create(recursive: true);
@@ -50,7 +49,7 @@ String testExtension(String path, String ext) =>
     (hasExtension(path, ext)) ? ext : null;
 
 /// Returns [true] if [f] has the [sopInstance] file extension.
-bool isDcmFile(File f) => hasExtension(f.path, FileType.sopInstance);
+bool isDcmFile(File f) => hasExtension(f.path, FileType.instance);
 
 /// Returns [true] if [f] has the [metadata] file extension.
 bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata);

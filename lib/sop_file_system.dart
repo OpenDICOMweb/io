@@ -7,4 +7,4 @@
 export 'src/sop_tree/directory.dart';
 export 'src/sop_tree/entity.dart';
 export 'src/sop_tree/file.dart';
-export 'src/sop_tree/fs.dart';
+export 'src/sop_tree/sop_file_system.dart';

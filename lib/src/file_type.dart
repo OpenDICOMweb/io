@@ -11,7 +11,15 @@ class FileType {
 
   const FileType(this.index, this.name, this.extension);
 
-  static const sopInstance = const FileType(1, "SOP Instance", ".dcm");
-  static const metadata = const FileType(2, "Metadata",  ".md");
-  static const bulkdata = const FileType(3, "Bulkdata", ".bd");
+  static const instance = const FileType(0, "SOP Instance", ".dcm");
+  static const metadata = const FileType(1, "Metadata",  ".md");
+  static const bulkdata = const FileType(2, "Bulkdata", ".bd");
+
+  static const jsonInstance = const FileType(3, "JSON SOP Instance", ".dcm.json");
+  static const jsonMetadata = const FileType(4, "JSON Metadata",  ".md.json");
+  static const jsonBulkdata = const FileType(5, "JSON Bulkdata", ".bd");
+
+  static const xmlInstance = const FileType(6, "XML SOP Instance", ".dicom+xml");
+  static const xmlMetadata = const FileType(7, "XML Metadata",  ".dicom+xml.md");
+  static const xmlBulkdata = const FileType(8, "XML Bulkdata", ".dicom+xml.bd");
 }

@@ -8,12 +8,13 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:core/dicom.dart';
+import 'package:core/uid.dart';
 import 'package:io/src/base/fs_base.dart';
 import 'package:path/path.dart';
 
-import 'fs_index.dart';
-import 'fs_type.dart';
+import 'package:io/src/mint/other/fs_index.dart';
+import 'package:io/src/fs_type.dart';
+import 'package:io/src/file_type.dart';
 
 //TODO: Make all IO calls async
 
@@ -31,48 +32,18 @@ import 'fs_type.dart';
 /// 1. The file system should be completely independent of core except for [Uid]s.
 /// 2. Simple read write interface using study, series, and instance [Uid]s
 
-class FileSystem extends FileSystemBase {
-  // The next four vars should be implemented as 'static const'
-  /// The [type] of the file system.
-  static const type = FSType.sopTree;
-
-  /// The [version] of the file system.
+class MintFileSystem extends FileSystemBase {
+  static const type = FSType.mint;
   static const String version = '0.1.0';
 
-  /// The root [Directory] of the file system.
+  final String path;
   final Directory root;
 
-  /// Creates a [SopFileSystem] rooted at the [Directory] specified by the [rootPath].
-  FileSystem(String rootPath, {bool createIfAbsent: true, bool isSync: false})
-      : root = maybeCreateRootSync(rootPath);
+  MintFileSystem(String path)
+      : path = path,
+        root = FileSystemBase.maybeCreateRootSync(path),
+        super();
 
-  /* TODO: debug - allows asynchronous creation of the FS root.
-  static Future<Directory> maybeCreateRoot(String rootPath, bool createIfAbsent) sync* {
-    var root = new Directory(rootPath);
-    bool exists = await root.exists();
-    if (! exists && createIfAbsent)
-        await root.createSync(recursive: true);
-    return root;
-  }
-  */
-
-  /// Create the [root] Directory of the [FileSystem] recursively.
-  static Directory maybeCreateRootSync(String rootPath) {
-    var root = new Directory(rootPath);
-    if (!root.existsSync()) root.createSync(recursive: true);
-    return root;
-  }
-
-  /// The [path] to the [root] [Directory] of this [FileSystem].
-  String get path => root.path;
-
-  /// Returns an [Index] to the files in this [FileSystem] at the time of invocation.
-  ///   //TODO: better doc
-  ///
-  /// An [FSIndex] is a structured tree, 3 levels deep, where the interior nodes are
-  /// are [List] and the leaves are [String]s containing the [Uid] of the [SopInstance].
-  /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
-  /// [Series] [Uid] [String]s,
   FSIndex get index => new FSIndex(this);
 
   Directory directory(Uid study, [Uid series]) {
@@ -114,7 +85,7 @@ class FileSystem extends FileSystemBase {
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
   /// specified by the [Directory].
   // TODO: fix
-  List<Uint8List> readStudySync(Uid study) {
+  List<Uint8List> readStudySync(FileType fType, Uid study) {
     Directory d = directory(study);
     List<Uint8List> files;
     try {
@@ -140,10 +111,10 @@ class FileSystem extends FileSystemBase {
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Series]
   /// specified by the [Directory].
   /// [Directory].
-  List<Uint8List> readSeriesSync(Uid study, Uid series) {}
+  List<Uint8List> readSeriesSync(FileType fType, Uid study, Uid series) {}
 
   /// Returns a [Uint8List] containing the SOP [Instance] in the specified [File].
-  Uint8List readInstanceSync(Uid study, Uid series, Uid instance) {}
+  Uint8List readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) {}
 
   // *** Write Async  ***
   /* TODO: implement async calls
@@ -157,18 +128,13 @@ class FileSystem extends FileSystemBase {
 */
   // *** Write Sync  ***
 
-  //TODO: Not needed?
-  void writeSync(Uid study, [Uid series, Uid instance]) {}
+  void writeSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
 
-  //TODO: Not needed?
-  //void writeStudySync(Uid study);
+  void writeStudySync(FileType fType, Uid study) {}
 
-  //TODO: Not needed?
-  //void writeSeriesSync(Uid study, Uid series);
+  void writeSeriesSync(FileType fType, Uid study, Uid series, bytes) {}
 
-  /// Writes the [bytes] containing a SOP [Instance] to the file specified by
-  /// "$rootPath/$study/$series/$instance".
-  void writeInstanceSync(Uid study, Uid series, Uid instance, Uint8List bytes) {}
+  void writeInstanceSync(FileType fType, Uid study, Uid series, Uid instance, bytes) {}
 
   @override
   String toString() => 'File System ($type), root: $path';

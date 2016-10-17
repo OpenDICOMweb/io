@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-import 'package:io/src/file_system.dart';
+import 'package:io/src/mint/file_system.dart';
 
 
 abstract class FSEntity {
