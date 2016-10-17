@@ -14,7 +14,9 @@ import 'package:core/uid.dart';
 import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
-import 'package:io/src/utils/bytes_files.dart';
+import 'package:io/src/utils/utils.dart';
+
+import 'sop_index.dart';
 
 //TODO: finish all IO calls async
 
@@ -41,6 +43,9 @@ class SopFileSystem extends FileSystemBase {
   /// Returns the [File] corresponding to the specified arguments.
   File file(FileType fType, Uid study, Uid series, Uid instance) =>
       new File('$path/$study/$series/$instance.${fType.extension}');
+
+  //TODO: implement
+  SopIndex get index => new SopIndex(this);
 
   //TODO: if needed, openStudy(Uid study);
 
@@ -73,26 +78,32 @@ class SopFileSystem extends FileSystemBase {
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
   // TODO: if needed.
-  @override
-  List<dynamic> readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
+  //@override
+  //List<dynamic> readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
 
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
   List<dynamic> readStudySync(FileType fType, Uid study) =>
-      readDirectorySync(toPath(fType, study));
+      (fType.contents == "binary")
+      ?  readBinaryDirectorySync(toPath(fType, study))
+      : readStringDirectorySync(toPath(fType, study));
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
   List<dynamic> readSeriesSync(FileType fType, Uid study, Uid series) =>
-      readDirectorySync(toPath(fType, study, series));
+      (fType.contents == "binary")
+      ?  readBinaryDirectorySync(toPath(fType, study, series))
+      : readStringDirectorySync(toPath(fType, study, series));
 
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
   dynamic readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) =>
-      readFileSync(toPath(fType, study, series, instance));
+      (fType.contents == "binary")
+      ?  readBinaryDirectorySync(toPath(fType, study, series, instance))
+      : readStringDirectorySync(toPath(fType, study, series, instance));
 
   // *** Write Async  ***
 

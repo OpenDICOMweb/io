@@ -4,13 +4,17 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
+/// An enumerated set of the types of File Systems supported by the IO package.
 class FSType {
-  final String type;
+  final String name;
+  /// The file extension for this type.
   final String ext;
 
-  const FSType(this.type, this.ext);
+  const FSType(this.name, this.ext);
 
-  static const sop = const FSType("SOP", ".dcm");
-  static const msd = const FSType("MSD", "msd");
-  static const mint = const FSType("Mint", "mint");
+  static const sop = const FSType("SOP Instance DICOM", ".dcm");
+  static const msd = const FSType("Multi-Series DICOM", ".msd");
+  static const mint = const FSType("Mint Normalized FS", ".mint");
+
+  toString() => '$runtimeType($name)';
 }

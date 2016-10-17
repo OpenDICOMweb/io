@@ -4,17 +4,16 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-// TODO: move Uid out of Core/base maybe to core/utils?
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:core/uid.dart';
-import 'package:io/src/mint/mint_file_system.dart';
 import 'package:io/src/file_type.dart';
+import 'package:io/src/mint/mint_file_system.dart';
 import 'package:path/path.dart';
-// TODO: replace with core/uid
 
-
+//TODO: document this file
 //TODO: debug and create unit test for this file.
 
 //TODO: remove if not used
@@ -122,32 +121,154 @@ Stream _walk(Directory d, Filter filter) async* {
   }
 }
 
-class Formatter {
-  int level = 0;
-  int count = 0;
-  int indent;
+//**** Binary Utility Functions
+//TODO: implement later
+//Stream<Uint8List> readDirectory(String path) {}
 
-  Formatter({this.indent: 2});
+//TODO: debug, doc, and Test
+List<Uint8List> readBinaryDirectorySync(String path) {
+  Directory d = new Directory(path);
+  return _readBinaryDirectorySync(d, []);
+}
 
-  String get sp => "".padRight(indent * level, " ");
-
-  String call(List tree, [String output = ""]) {
-    print('Level: $level');
-    output += '${sp}Level: $level\n';
-    for (var v in tree) {
-      if (v is String) {
-        count++;
-        output += '$sp$v\n';
-      } else if (v is List) {
-        level++;
-        output = call(v, output);
-        level--;
+List<Uint8List> _readBinaryDirectorySync(Directory d, List<Uint8List> bytesList) {
+  List<FileSystemEntity> entities = d.listSync(recursive: true, followLinks: false);
+  try {
+    for(FileSystemEntity e in entities) {
+      if (e is Directory) {
+        _readBinaryDirectorySync(e, bytesList);
+      } else if (e is File) {
+        bytesList.add(e.readAsBytesSync());
       } else {
-        throw "invalid object: $v";
+        throw 'Invalid FileSystem Entity: $e';
       }
     }
-    print('loops: $level');
-    print('count: $count');
-    return output;
+  } catch (e) {
+
+  }
+  return bytesList;
+}
+
+Future<Uint8List> readBinaryFile(String path) async {
+  File f = new File(path);
+  return await f.readAsBytes();
+}
+
+Uint8List readBinaryFileSync(String path)  {
+  File f = new File(path);
+  Uint8List bytes;
+  try {
+    bytes = f.readAsBytesSync();
+  } catch (e) {
+    //TODO: finish
+  }
+  return bytes;
+}
+
+//TODO: implement later
+//Stream<Uint8List> writeDirectory(String path) {}
+
+Future<Null> writeBinaryFile(String path, Uint8List bytes) async {
+  File f = new File(path);
+  try {
+    await f.writeAsBytes(bytes);
+  } catch (e) {
+    //TODO: add code
   }
 }
+
+//TODO: implement later
+//TODO: add try block
+void writeDirectorySync(String path, Map<String, Uint8List> entries) {
+  entries.forEach((String path, Uint8List bytes) {
+    File f = new File(path);
+    try {
+      f.writeAsBytesSync(bytes);
+    } catch (e) {
+      //TODO: finish
+    }
+  });
+}
+
+void writeBinaryFileSync(String path, Uint8List bytes) {
+  File f = new File(path);
+  try {
+    f.writeAsBytes(bytes);
+  } catch (e) {
+    //TODO: finish
+  }
+}
+
+//**** [String] based [File] utilities
+//TODO: implement later
+//Stream<String> readStringDirectory(String path) {}
+
+
+List<String> readStringDirectorySync(String path) => _readStringDirectorySync(new Directory(path), []);
+
+List<String> _readStringDirectorySync(Directory d, List<String> bytesList) {
+  List<FileSystemEntity> entities = d.listSync(recursive: true, followLinks: false);
+  try {
+    for(FileSystemEntity e in entities) {
+      if (e is Directory) {
+        _readStringDirectorySync(e, bytesList);
+      } else if (e is File) {
+        bytesList.add(e.readAsStringSync());
+      } else {
+        throw 'Invalid FileSystem Entity: $e';
+      }
+    }
+  } catch (e) {
+
+  }
+  return bytesList;
+}
+Future<String> readStringFile(String path) async {
+  File f = new File(path);
+  return await f.readAsString();
+}
+
+String readStringFileSync(String path)  {
+  File f = new File(path);
+  String s;
+  try {
+    s = f.readAsStringSync();
+  } catch (e) {
+    //TODO: finish
+  }
+  return s;
+}
+
+//TODO: implement later
+//Stream<String> writeDirectory(String path) {}
+
+//TODO: debug and test
+void writeStringDirectorySync(String path, Map<String, String> entries) {
+  entries.forEach((String path, String s) {
+    File f = new File(path);
+    try {
+      f.writeAsStringSync(s);
+    } catch (e) {
+      //TODO: finish
+    }
+  });
+}
+
+Future<Null> writeStringFile(String path, String s) async {
+  File f = new File(path);
+  try {
+    await f.writeAsString(s);
+  } catch (e) {
+    //TODO: add code
+  }
+}
+
+void writeStringFileSync(String path, String s) {
+  File f = new File(path);
+  try {
+    f.writeAsString(s);
+  } catch (e) {
+    //TODO: finish
+  }
+}
+

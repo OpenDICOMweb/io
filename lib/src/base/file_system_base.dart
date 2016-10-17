@@ -11,7 +11,7 @@ import 'package:core/uid.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
 
-import 'fs_index_base.dart';
+import 'index_base.dart';
 
 
 //TODO: Implement all async IO calls

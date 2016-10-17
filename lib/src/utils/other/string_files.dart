@@ -6,33 +6,31 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 //TODO: document this file
 
+///
+
 
 //TODO: implement later
-//Stream<Uint8List> readDirectory(String path) {}
+//Stream<String> readDirectory(String path) {}
 
-Future<Uint8List> readFile(String path) async {
+Future<String> readStringFile(String path) async {
   File f = new File(path);
-  return await f.readAsBytes();
+  return await f.readAsString();
 }
 
 
-List<Uint8List> readDirectorySync(String path) {
-  Directory d = new Directory(path);
-  return _readDirectorySync(d, []);
-}
+List<String> readDirectorySync(String path) => _readDirectorySync(new Directory(path), []);
 
-List<Uint8List> _readDirectorySync(Directory d, List<Uint8List> bytesList) {
+List<String> _readDirectorySync(Directory d, List<String> bytesList) {
   List<FileSystemEntity> entities = d.listSync(recursive: true, followLinks: false);
   try {
     for(FileSystemEntity e in entities) {
       if (e is Directory) {
         _readDirectorySync(e, bytesList);
       } else if (e is File) {
-        bytesList.add(e.readAsBytesSync());
+        bytesList.add(e.readAsStringSync());
       } else {
         throw 'Invalid FileSystem Entity: $e';
       }
@@ -43,24 +41,24 @@ List<Uint8List> _readDirectorySync(Directory d, List<Uint8List> bytesList) {
   return bytesList;
 }
 
-Uint8List readFileSync(String path)  {
+String readStringFileSync(String path)  {
   File f = new File(path);
-  Uint8List bytes;
+  String s;
   try {
-    bytes = f.readAsBytesSync();
+    s = f.readAsStringSync();
   } catch (e) {
     //TODO: finish
   }
-  return bytes;
+  return s;
 }
 
 //TODO: implement later
-//Stream<Uint8List> writeDirectory(String path) {}
+//Stream<String> writeDirectory(String path) {}
 
-Future<Null> writeBytesFile(String path, Uint8List bytes) async {
+Future<Null> writeStringFile(String path, String s) async {
   File f = new File(path);
   try {
-    await f.writeAsBytes(bytes);
+    await f.writeAsString(s);
   } catch (e) {
     //TODO: add code
   }
@@ -68,21 +66,21 @@ Future<Null> writeBytesFile(String path, Uint8List bytes) async {
 
 //TODO: implement later
 //TODO: add try block
-void writeDirectorySync(String path, Map<String, Uint8List> entries) {
-  entries.forEach((String path, Uint8List bytes) {
+void writeDirectorySync(String path, Map<String, String> entries) {
+  entries.forEach((String path, String s) {
     File f = new File(path);
     try {
-      f.writeAsBytesSync(bytes);
+      f.writeAsStringSync(s);
     } catch (e) {
       //TODO: finish
     }
   });
 }
 
-void writeFileSync(String path, Uint8List bytes) {
+void writeStringFileSync(String path, String s) {
   File f = new File(path);
   try {
-    f.writeAsBytes(bytes);
+    f.writeAsString(s);
   } catch (e) {
     //TODO: finish
   }

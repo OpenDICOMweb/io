@@ -5,6 +5,7 @@
 // See the AUTHORS file for other contributors.
 
 //import 'dart:async';
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -12,7 +13,7 @@ import 'package:core/uid.dart';
 import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
-import 'package:io/src/mint/other/fs_index.dart';
+import 'package:io/src/mint/mint_index.dart';
 import 'package:path/path.dart';
 
 //TODO: Make all IO calls async
@@ -43,7 +44,7 @@ class MintFileSystem extends FileSystemBase {
         root = FileSystemBase.maybeCreateRootSync(path),
         super();
 
-  FSIndex get index => new FSIndex(this);
+  MintIndex get index => new MintIndex(this);
 
   Directory directory(Uid study, [Uid series]) {
     var part3 = (series == null) ? "" : '/$series';
@@ -76,8 +77,8 @@ class MintFileSystem extends FileSystemBase {
   /// Returns a [List] of [Uint8List] or [String] (depending on the [FileType],
   /// where each element contains a [Study], [Series],
   /// or [Instance] as specified by the arguments
-  @override
-  List readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
+  // @override
+  // List readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
 
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
   /// specified by the [Directory].
@@ -101,19 +102,16 @@ class MintFileSystem extends FileSystemBase {
     }
     return files;
   }
-
-
-
-
+  
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Series]
   /// specified by the [Directory].
   /// [Directory].
   //TODO: implement after SopFileSystem is working
-  List<Uint8List> readSeriesSync(FileType fType, Uid study, Uid series) {}
+  List readSeriesSync(FileType fType, Uid study, Uid series) {}
 
   /// Returns a [Uint8List] containing the SOP [Instance] in the specified [File].
   //TODO: implement once SopFileSystem is working
-  Uint8List readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) {}
+  dynamic readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) {}
 
   // *** Write Async  ***
   /* TODO: implement async calls
