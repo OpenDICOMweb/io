@@ -9,7 +9,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/uid.dart';
-import 'package:io/src/base/fs_base.dart';
+import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
 import 'package:io/src/mint/other/fs_index.dart';

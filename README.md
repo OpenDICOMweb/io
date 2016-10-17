@@ -6,7 +6,7 @@ A library for reading and writing DICOM objects.
 
 A simple usage example:
 
-    import 'package:io3/io3.dart';
+    import 'package:io/io.dart';
 
     main() {
       var awesome = new Awesome();
@@ -20,6 +20,8 @@ A simple usage example:
     .dcm        SOP Instance
     .md         Metadata
     .bd         Bulkdata
+    .dcm.json
+    .md.json
 
 
 ### SOP Instance Tree
@@ -28,21 +30,19 @@ A simple usage example:
                 / root / studyUid / seriesUid / instanceUid.md ; instance Metadata
                 / root / studyUid / seriesUid / bulkdataUid.bd ; instance Bulkdata
 
-Where, root, studyUid, and SeriesUid are strings naming directories, and instanceUid is a string 
+Where, root, studyUid, and SeriesUid are strings naming directories, and instanceUid is a string
 naming a file. The studyUid, seriesUid and instancUid are strings containing UIDs.
 
 ### SOP Instance Flat
 
 path format = root / studyUid / instanceUid.dcm
 
-Where, root, and studyUid are strings naming directories, and instanceUid is a string 
+Where, root, and studyUid are strings naming directories, and instanceUid is a string
 naming a file. The studyUid and instancUid are strings containing UIDs.
 
 
 
 ### Mint
-
-
 
     path format = root / studyUid / metadataUid.md ; constains study Metadata
                 / root / studyUid / bulkdataUid.bd ; contain study Bulkdata
@@ -52,11 +52,11 @@ naming a file. The studyUid and instancUid are strings containing UIDs.
                 / root / studyUid / seriesUid / instanceUid.md ; instance Metadata
                 / root / studyUid / seriesUid / bulkdataUid.bd ; instance Bulkdata
 
-Where, root, and studyUid are strings naming directories, and instanceUid is a string 
-naming a file. The studyUid and instancUid are strings containing UIDs.
+Where, root, and studyUid are strings naming directories, and instanceUid is a string
+naming a file. The studyUid and instanceUid are strings containing UIDs.
 
 ### Utility Files
-
+TODO: update
     Media Type  Source Code
     dicom       dicomUtils.dart
     dicom+json  dicom_json_utils.dart
@@ -78,23 +78,28 @@ Read a Directory
 
     stream = directory.read()
     List<Uint8List> = directory.readSync()
- 
+
 Write a File
 
     void file.write(path, bytes)
     void file writeSync(path, bytes)
 
+Update a File
+
+    void file.update(path, bytes)
+    void file updateSync(path, bytes)
+
 Write a Directory
 
     Sink directory.write(path)
     void directory.writeSync(path, List<UintList>)
-   
-    
+
+
 ## Design
 
 The libary is designed to support different file organizations:
 
-- SOP_Flat: All the files are in one directory specified by the 
+- SOP_Flat: All the files are in one directory specified by the
 [_StudyInstanceUID].  Each file contains a single SOP Instance
 
 - Structured: All the files are

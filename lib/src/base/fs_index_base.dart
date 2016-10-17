@@ -7,7 +7,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'fs_base.dart';
+import 'file_system_base.dart';
 
 /// An interface for an [Index] of a [FileSystem].
 abstract class FSIndexBase {

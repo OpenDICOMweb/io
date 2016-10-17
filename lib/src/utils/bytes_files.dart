@@ -57,7 +57,7 @@ Uint8List readFileSync(String path)  {
 //TODO: implement later
 //Stream<Uint8List> writeDirectory(String path) {}
 
-Future<Null> writeFile(String path, Uint8List bytes) async {
+Future<Null> writeBytesFile(String path, Uint8List bytes) async {
   File f = new File(path);
   try {
     await f.writeAsBytes(bytes);

@@ -11,7 +11,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/uid.dart';
-import 'package:io/src/base/fs_base.dart';
+import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
 import 'package:io/src/utils/bytes_files.dart';
@@ -74,24 +74,24 @@ class SopFileSystem extends FileSystemBase {
   /// Returns a [Uint8List] containing the requested object.
   // TODO: if needed.
   @override
-  List readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
+  List<dynamic> readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
 
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  List<Uint8List> readStudySync(FileType fType, Uid study) =>
+  List<dynamic> readStudySync(FileType fType, Uid study) =>
       readDirectorySync(toPath(fType, study));
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
-  List<Uint8List> readSeriesSync(FileType fType, Uid study, Uid series) =>
+  List<dynamic> readSeriesSync(FileType fType, Uid study, Uid series) =>
       readDirectorySync(toPath(fType, study, series));
 
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  Uint8List readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) =>
+  dynamic readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) =>
       readFileSync(toPath(fType, study, series, instance));
 
   // *** Write Async  ***
@@ -113,9 +113,7 @@ class SopFileSystem extends FileSystemBase {
 
 
   @override
-  void writeInstanceSync(FileType fType, Uid study, Uid series, Uid instance, Uint8List bytes) {
-
-  }
+  void writeInstanceSync(FileType fType, Uid study, Uid series, Uid instance, data) {}
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);

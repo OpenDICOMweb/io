@@ -55,7 +55,7 @@ String readFileSync(String path)  {
 //TODO: implement later
 //Stream<String> writeDirectory(String path) {}
 
-Future<Null> writeFile(String path, String s) async {
+Future<Null> writeStringFile(String path, String s) async {
   File f = new File(path);
   try {
     await f.writeAsString(s);

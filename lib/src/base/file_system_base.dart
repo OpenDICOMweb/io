@@ -8,37 +8,33 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/uid.dart';
+import 'package:io/src/file_type.dart';
+import 'package:io/src/fs_type.dart';
+
 import 'fs_index_base.dart';
-import '../fs_type.dart';
-import '../file_type.dart';
 
-//TODO: Make all IO calls async
 
-/// Examples:
-///     var fs = FileSystem.open(String path);
-///     FSFile file = fs.File(studyUid);
-///     file.isStudy
-///     file.isSeries
-///     file.isInstance
-///     file.isMetadata
-///     file.isBulkdata
-///
+//TODO: Implement all async IO calls
 
 /// Goals:
 /// 1. The file system should be completely independent of core except for [Uid]s.
 /// 2. Simple read write interface using study, series, and instance [Uid]s
 
+/// The infterface to all ODW File Systems.
 abstract class FileSystemBase {
   /// The [type] of the file system.
   static FSType type;
 
   /// The [version] of the file system.
-  static String version;
+  static String version = "0.1.0";
 
   /// The path to the [root] directory.
+  //TODO: verify that this is the absolute path.
   String path;
 
   /// The root [Directory] of the file system.
+  //TODO: if [root.path] and [path] are always the same make path get root.path.
+  //TODO: if there is no value to making [root] a [Directory] eliminate it.
   Directory root;
 
   /// Returns an [Index] to the files in this [FileSystem].
@@ -47,13 +43,12 @@ abstract class FileSystemBase {
   /// are [List] and the leaves are [String]s containing the [Uid] of the [SopInstance].
   /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
   /// [Series] [Uid] [String]s,
-  FSIndexBase index;
+  FSIndexBase get index;
 
-  /// Returns the [Directory] corresponding to the specified [Study] or [Series].
+  /// Returns the [Directory] corresponding to the specified [root], [Study] and [Series].
   Directory directory(Uid study, [Uid series]);
 
-
-  /// Returns the [File] corresponding to the specified arguments.
+  /// Returns the [File] corresponding to [root] plus the specified arguments.
   File file (FileType fType, Uid study, Uid series, Uid instance);
 
   // *** Read Async  ***
@@ -78,7 +73,7 @@ abstract class FileSystemBase {
   /// Returns a [List] of [Uint8List], where each [Uint8List] contains a [Study], [Series],
   /// or [Instance] as specified by the corresponding [FileSystemEntity].
   //TODO: decide if this is needed.
-  List<Uint8List> readSync(FileType fType, Uid study, [Uid series, Uid instance]);
+  // List<Uint8List> readSync(FileType fType, Uid study, [Uid series, Uid instance]);
 
   /// Returns a [List] of [Uint8List]s, or [String] (depending on the [FileType])
   /// containing all the SOP Instances of the [Study] in the target [Directory]
@@ -92,7 +87,7 @@ abstract class FileSystemBase {
 
   /// Returns a [Uint8List] or [String] (depending on the [FileType]) containing the
   /// target SOP Instance in the specified [FileType].
-  Uint8List readInstanceSync(FileType fType, Uid study, Uid series, Uid instance);
+  dynamic readInstanceSync(FileType fType, Uid study, Uid series, Uid instance);
 
 
   // *** Write Async  ***
