@@ -14,6 +14,7 @@ import 'package:core/uid.dart';
 import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
+import 'package:io/src/index.dart';
 import 'package:io/src/utils/utils.dart';
 
 //TODO: finish all IO calls async
@@ -41,7 +42,7 @@ class SopFileSystem extends FileSystemBase {
       new File('$path/$study/$series/$instance.${fType.extension}');
 
   //TODO: implement
-  SopIndex get index => new SopIndex(this);
+  FSIndex get index => new FSIndex(path);
 
   //TODO: if needed, openStudy(Uid study);
 
