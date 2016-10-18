@@ -5,28 +5,26 @@
 // See the AUTHORS file for other contributors.
 
 //TODO: make async
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:core/base.dart';
+import 'package:io/src/sop_tree/fs.dart';
+import 'package:io/src/base/other/fs_entity_base.dart';
+import 'fs.dart';
 
-import 'sop_file_system.dart';
 
-
-/// A [SopEntity] is a [Directory], [File], or [link] in a [SopFileSystem].
+/// A [SopEntity] is a [Directory], [File], or [link] in a [FileSystem].
 ///
-class SopEntity {
-  static const bool isLink = false;
+abstract class SopEntity extends FSEntityBase {
   final SopFileSystem fs;
-  final Uid study;
-  final Uid series;
-  final Uid instance;
-  String _path;
 
   /// Create a [SopFileSystem] [Entity].
-  SopEntity(this.fs, this.study, [this.series = "", this.instance = ""]);
+  SopEntity(SopFileSystem this.fs);
 
+  Directory get root => fs.root;
+
+  toString() => '$runtimeType: Root($root)';
+
+  /* flush
   /// Returns the
   String get path => _path ??= _initPath;
 
@@ -86,6 +84,6 @@ class SopEntity {
       }
     }
   }
-
+  */
 }
 

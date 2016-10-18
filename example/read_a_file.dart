@@ -9,19 +9,23 @@ import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
 import 'package:core/dicom.dart';
+import 'package:io/src/sop/sop_file_system.dart';
 import 'package:logger/logger.dart';
 
 
-String inputDir = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
-String outputDir = "C:/odw/sdk/io/example/output";
+String inRoot = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
+String outRoot = "C:/odw/sdk/io/example/output";
 
-String file1 = inputDir + "CR.2.16.840.1.114255.393386351.1568457295.17895.5.dcm";
-String file2 = inputDir + "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
+String file1 = "CR.2.16.840.1.114255.393386351.1568457295.17895.5.dcm";
+String file2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
 
 List<String> filesList = [file1, file2];
 
 void main() {
   Logger log = Logger.init(level: Level.fine);
+
+  var inFS = new SopFileSystem(inRoot);
+  var outFS = new SopFileSystem(outRoot);
 
   for (String path in filesList) {
     log.config('Reading file: $path');

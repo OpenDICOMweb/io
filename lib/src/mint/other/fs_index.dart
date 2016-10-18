@@ -4,35 +4,33 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
 
-import 'file_system.dart';
+import 'package:io/src/base/fs_index_base.dart';
+import 'package:io/src/base/fs_base.dart';
 
-class FileSystemIndex {
-  static const String version = "0.1.0";
-  String type = "FileSystemIndex";
-  FileSystem fs;
-  List<String> _list;
+class FSIndex extends FSIndexBase {
+  FileSystemBase fs;
 
-  FileSystemIndex(this.fs) {
+  FSIndex(this.fs) {
     print(fs);
-    if(!fs.root.existsSync()) {
+    if (!fs.root.existsSync()) {
       fs.root.createSync();
       //_list = [];
     } else {
-      _list = load(fs.root);
+      return loadSync(fs.root);
     }
   }
 
-  String get filename => '.index.json';
+  String get path => fs.path;
 
-  /*
   // FS Index
-  List<FileSystemEntity> load(Directory rootDir) {
-    print('loading Root: $rootDir...');
+  List<FileSystemEntity> load() {
+    print('loading Root: $path...');
     File iFile = new File(filename);
     if(iFile.existsSync()) {
       _list = JSON.decode(iFile.readAsStringSync());
@@ -49,15 +47,27 @@ class FileSystemIndex {
     }
     return _list;
   }
-  */
   // FS Index
-  List<String> load(Directory rootDir) {
+  List<String> loadSync(Directory rootDir) {
     print('loading Root: $rootDir...');
     _list = _walkRoot();
     print('_list: $_list');
     store();
     return _list;
   }
+
+
+  /// Asynchronously stores an [Index].
+  Future<Null> store() => writeFile()
+    String index = toJson();
+    // print('Json: $index');
+    File oFile = new File(filename);
+    print('Storing ${oFile.path}...');
+    oFile.writeAsStringSync(index);
+  }
+
+  /// Synchronously stores an [Index].
+  void storeSync() {}
 
   List<String> _walkRoot() => _walkEntities(fs.root);
 
@@ -67,11 +77,11 @@ class FileSystemIndex {
     List<FileSystemEntity> files = dir.listSync(recursive: false, followLinks: false);
     print('  Files (${files.length}): $files');
     List<String> list = [];
-    for(FileSystemEntity e in files) {
-      if(e is Directory) {
+    for (FileSystemEntity e in files) {
+      if (e is Directory) {
         list.add(path.basename(e.path));
         list.addAll(_walkEntities(e));
-      } else if(e is File) {
+      } else if (e is File) {
         list.add(path.basename(e.path));
       } else {
         throw 'Invalid item $e in File System Entities List';
@@ -83,13 +93,13 @@ class FileSystemIndex {
   void printIndentedList(List<FileSystemEntity> list, [int indent = 2, int level = 0]) {
     int limit = 5;
     var sp = ''.padLeft(level * indent, ' ');
-    for(int i = 0; i < list.length; i++) {
+    for (int i = 0; i < list.length; i++) {
       //for(e in l) {
       var e = list[i];
-      if(e is File) {
-        if(i < limit) print('${sp}File: ${e.path}');
+      if (e is File) {
+        if (i < limit) print('${sp}File: ${e.path}');
         //files.add(e);
-      } else if(e is Directory) {
+      } else if (e is Directory) {
         //List list = e.listSync(recursive: true);
         print('${sp}Dir (${e.path}): length = ${list.length}');
         printIndentedList(e.listSync(), indent, level++);
@@ -97,17 +107,14 @@ class FileSystemIndex {
     }
   }
 
-  void store() {
-    String index = toJson();
-    // print('Json: $index');
-    File oFile = new File(filename);
-    print('Storing ${oFile.path}...');
-    oFile.writeAsStringSync(index);
-  }
-
   String toJson() => JSON.encode(_list);
 
+  String format(List<FileSystemEntity> list, [int indent = 2, int level = 0]) {
+    Formatter fmt = new Formatter(indent, level);
+    return fmt(list);
+  }
+
   @override
-  String toString() => 'FS (${FileSystem.type}/${FileSystem.subtype} Index rooted at ${fs.root}';
+  String toString() => 'FS Index ($runtimeType) rooted at ${fs.path}';
 }
 
