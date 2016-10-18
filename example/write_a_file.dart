@@ -53,6 +53,6 @@ void main() {
 
   //print(study);
 
-  fmtOutput = study.format(new Prefixer());
+  fmtOutput = study.format(new Formatter());
   print(fmtOutput);
 }

@@ -48,7 +48,7 @@ void writeInstance(String outPath, Instance instance) {
   outFile.writeAsBytesSync(outBytes);
 
   // Format study for output;
-  String fmtOutput = instance.study.format(new Prefixer());
+  String fmtOutput = instance.study.format(new Formatter());
   print(fmtOutput);
 }
 
