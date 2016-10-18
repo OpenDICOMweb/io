@@ -10,8 +10,7 @@ import 'dart:typed_data';
 import 'package:core/uid.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
-
-import 'index_base.dart';
+import 'package:io/src/index.dart';
 
 
 //TODO: Implement all async IO calls
@@ -43,7 +42,7 @@ abstract class FileSystemBase {
   /// are [List] and the leaves are [String]s containing the [Uid] of the [SopInstance].
   /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
   /// [Series] [Uid] [String]s,
-  FSIndexBase get index;
+  FSIndex get index;
 
   /// Returns the [Directory] corresponding to the specified [root], [Study] and [Series].
   Directory directory(Uid study, [Uid series]);
@@ -114,6 +113,13 @@ abstract class FileSystemBase {
   /// Writes the [Uint8List] or [String] contained in the bytes argument, to the
   /// file specified by by the [FileType], [Study], [Series], and [Instance] [Uid]s.
   void writeInstanceSync(FileType fType, Uid study, Uid series, Uid instance, bytes);
+
+  /// Return a path to a file in the [FileSystem]
+  String toPath(FileType fType, Uid study, [Uid series, Uid instance, String extension]) {
+    String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
+    String part3 = (series == null) ? "" : '/$series';
+    return '$path/$study$part3$part4';
+  }
 
   @override
   String toString() => 'File System ($type), root: $path';

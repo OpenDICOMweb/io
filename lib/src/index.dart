@@ -6,27 +6,35 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'file_system_base.dart';
+import 'package:core/uid.dart';
+import 'package:io/src/base/file_system_base.dart';
+import 'package:io/src/file_type.dart';
 
 /// An interface for an [Index] of a [FileSystem].
-abstract class FSIndexBase {
+class FSIndex {
   FileSystemBase fs;
   List<String> _list;
+  final String path;
+  final Directory root;
 
-  String get path;
+  FSIndex(String path)
+      : path = path,
+        root = FileSystemBase.maybeCreateRootSync(path),
+        super();
 
   /// Asynchronously retrieves and returns a stored [Index].
-  Future<List<String>> load();
+  Future<List<String>> load() {}
 
   /// Synchronously retrieves and returns a stored [Index].
-  List<String> loadSync();
+  List<String> loadSync() {}
 
   /// Asynchronously stores an [Index].
-  Future<Null> store();
+  Future<Null> store() {}
 
   /// Synchronously stores an [Index].
-  void storeSync();
+  void storeSync() {}
 
   /// Returns an [Index] encoded as a JSON string.
   String toJson() => JSON.encode(_list);
@@ -34,6 +42,14 @@ abstract class FSIndexBase {
   /// Returns a formatted [String] containing the [Index].
   //TODO: fix or flush
   //String format([int indent = 2, int level = 0]);
+
+  /// Return a path to a file in the [FileSystem].
+  //TODO: verify this is correct.  If it is move to index.dart
+  String toPath(FileType fType, Uid study, [Uid series, Uid instance, String extension]) {
+    String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
+    String part3 = (series == null) ? "" : '/$series';
+    return '$path/$study$part3$part4';
+  }
 
   @override
   String toString() => 'FS Index ($runtimeType) rooted at ${fs.root}';
