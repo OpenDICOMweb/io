@@ -14,8 +14,6 @@ abstract class FSIndexBase {
   FileSystemBase fs;
   List<String> _list;
 
-  FSIndexBase();
-
   String get path;
 
   /// Asynchronously retrieves and returns a stored [Index].
@@ -34,7 +32,8 @@ abstract class FSIndexBase {
   String toJson() => JSON.encode(_list);
 
   /// Returns a formatted [String] containing the [Index].
-  String format([int indent = 2, int level = 0]);
+  //TODO: fix or flush
+  //String format([int indent = 2, int level = 0]);
 
   @override
   String toString() => 'FS Index ($runtimeType) rooted at ${fs.root}';

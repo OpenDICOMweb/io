@@ -7,7 +7,7 @@
 import 'dart:io';
 
 import 'package:convert/dicom.dart';
-import 'package:core/dicom.dart';
+import 'package:core/core.dart';
 import 'package:logger/logger.dart';
 
 String inputDir0 = "C:/odw/test_data/sfd/CR_and_RF/Patient_25_UGI_and_SBFT/1_DICOM_Original/";
