@@ -6,12 +6,11 @@
 library odw.sdk.dicom.io.byte_array.dcm_byte_array;
 
 import 'dart:typed_data';
-
 import 'package:ascii/ascii.dart';
-import 'package:odwsdk/attribute.dart';
-import 'package:odwsdk/dataset_sop.dart';
-import 'package:odwsdk/date_time.dart';
-import 'package:odwsdk/uid.dart';
+import 'package:core/attribute.dart';
+//import 'package:core/dataset_sop.dart';
+//import 'package:core/date_time.dart';
+import 'package:core/dicom.dart';
 
 import 'byte_array.dart';
 
@@ -188,7 +187,7 @@ class DcmByteArray extends ByteArray {
     return times;
   }
 
-  List<String> readUC(int length) => readStringListTrimRight(1, Dicom.kMaxLongLength, length);
+  List<String> readUC(int length) => readStringListTrimRight(1, kMaxLongLength, length);
 
   List<Uid> readUI(int length) {
     var list = readStringList(length);
@@ -213,7 +212,7 @@ class DcmByteArray extends ByteArray {
 
   List<int> readUS(int length) => readUint16List(length);
 
-  List<String> readUT(int length) => _readText(length, 1, Dicom.kMaxLongLength);
+  List<String> readUT(int length) => _readText(length, 1, kMaxLongLength);
 
   /// Returns the [attribute]'s value as a [String].  If [_index] is provided,
   /// the attribute is assumed to be multi-valued and will return the value
@@ -306,7 +305,7 @@ class DcmByteArray extends ByteArray {
 
   int getSequenceLength(int endTag) {
     int length = readUint32();
-    if (length == Dicom.kMinusOneAsUint32) {
+    if (length == kMinusOneAsUint32) {
       length = _getUndefinedLength(kSequenceDelimitationItemLast16Bits);
     }
     return length;
@@ -322,14 +321,14 @@ class DcmByteArray extends ByteArray {
   SQ _readSequence(int tag) {
     bool hadUndefinedLength = false;
     int length = readUint32();
-    if (length == Dicom.kUndefinedLength) {
+    if (length == kUndefinedLength) {
       length = _getUndefinedLength(kSequenceDelimitationItemLast16Bits);
       hadUndefinedLength = true;
     }
     List<Item> items = <Item>[];
     while (position < (position + length))
       items.add(_readItem(tag));
-    var sq = new SQ(tag, items, hadUndefinedLength);
+    var sq = new SQ(tag, items,length, hadUndefinedLength);
     //Fix or remove
     // for (Item item in items)
     //   item.sequence = sq;
@@ -340,7 +339,7 @@ class DcmByteArray extends ByteArray {
   Item _readItem(int seqTag) {
     bool hadUndefinedLength = false;
     int length = readUint32();
-    if (length == Dicom.kUndefinedLength) {
+    if (length == kUndefinedLength) {
       length = _getUndefinedLength(kItemDelimitationItemLast16Bits);
       hadUndefinedLength = true;
     }
@@ -349,7 +348,7 @@ class DcmByteArray extends ByteArray {
       var attribute = reader(seqTag, null);
       attributes[attribute.tag] = attribute;
     }
-    Item item = new Item(attributes, seqTag, hadUndefinedLength);
+    Item item = new Item( seqTag,attributes,length,hadUndefinedLength);
     print('readItem: $item($seqTag, $attributes, $hadUndefinedLength)');
     return item;
   }
@@ -391,7 +390,7 @@ class DcmByteArray extends ByteArray {
   }
 
   //TODO this method has not been tested
-  FrameTable readEncapsulatedPixelDataFromBytes(int offset, int length, int frame) {
+ /* FrameTable readEncapsulatedPixelDataFromBytes(int offset, int length, int frame) {
     //print('Read Pixel Data $model, frame=$frame');
     //seek(offset);
     int tag = readUint32();
@@ -406,7 +405,7 @@ class DcmByteArray extends ByteArray {
     if (frame > basicOffsetTable.length)
       throw "parameter frame exceeds number of frames in basic offset table";
     return readFragments(basicOffsetTable);
-  }
+  }*/
 
   List<int> readBasicOffsetTable() {
     int tag = readUint32();

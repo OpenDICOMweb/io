@@ -8,7 +8,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
-import 'package:core/core.dart';
+import 'package:core/dicom.dart';
 import 'package:logger/logger.dart';
 
 const String inputDir = "C:/odw/test_data/problems/";
