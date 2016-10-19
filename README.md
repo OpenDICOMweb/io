@@ -1,6 +1,7 @@
 # DICOM I/O Library
 
-A library for reading and writing DICOM objects.
+A library for reading and writing DICOM objects encoded in a
+DICOM Media Type. See PS3.18, Section 6.1.1.8.
 
 ## Usage
 
@@ -97,17 +98,66 @@ Write a Directory
 
 ## Design
 
-The libary is designed to support different file organizations:
+This library implements different file systems:
 
-- SOP_Flat: All the files are in one directory specified by the
-[_StudyInstanceUID].  Each file contains a single SOP Instance
+- SOP File System
+- MINT File System
 
-- Structured: All the files are
+### SOP File System
+
+The SOP File System is designed to be contained within other
+file systems. It has a four level structure:
+
+- Root Directory
+- Study Directory
+- Series Directory
+- Instance File
+
+All of the files contain either an Instance, Metadata, or
+Bulkdata.
+
+The path to an Instance looks like:
+
+        root/study/series/instance.ext
+
+#### Root Directory
+
+The Root Directory is the path to the root of the File
+System.
+
+#### Study Directory
+
+A directory that contains one or more Series Directories,
+where each Series belongs to the Study.
+
+The directory name is the Study Instance UID of the Study it
+contains.
+
+#### Series Directory
+
+A directory that contains one or more Instance files, where
+each file contains an instance that belongs to the Series.
+The directory name is the Series Instance UID of the Series it
+contains.
+
+#### Instance File
+
+A file that contains a single Instance, Metadata, or
+Bulkdata object, encoded in the [media type][MediaType] specified by
+the file extension. The file name is the SOP Instance UID of
+the Instance it contains.
+
+#### File Extension
+
+A file extension of the Instance File is used to identify
+the media type contained in the file.
+
 
 
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[StudyInstanceUID]
+[MediaType]:
+    http://dicom.nema.org/medical/dicom/current/output/html/part18.html#sect_6.1.1
 [tracker]: http://example.com/issues/replaceme

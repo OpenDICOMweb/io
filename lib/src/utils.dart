@@ -8,22 +8,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:core/uid.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/mint/mint_file_system.dart';
 import 'package:path/path.dart';
 
 //TODO: document this file
 //TODO: debug and create unit test for this file.
-
-//TODO: remove if not used
-/// Return a path to a file in the [MintFileSystem]
-String toPath(String root, Uid study, [Uid series, Uid instance, String extension]) {
-  String part5 = (extension == null) ? "" : ".dcm";
-  String part4 = (instance == null) ? "" : '/$instance';
-  String part3 = (series == null) ? "" : '/$series';
-  return '$root/$study$part3$part4$part5';
-}
 
 // TODO: debug - allows asynchronous creation of the FS root.
 /// Returns the [root] [Directory] of the [MintFileSystem], creating it if it doesn't exist.
@@ -51,21 +41,22 @@ String testExtension(String path, String ext) =>
 bool isDcmFile(File f) => hasExtension(f.path, FileType.instance);
 
 /// Returns [true] if [f] has the [metadata] file extension.
-bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata);
-
+bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.ext);
 
 /// Returns [true] if [f] has the [bulkdate] file extension.
-bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata);
+bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.ext);
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
-String filter(File f, Filter p ) => (p(f)) ? f.path : null;
+File filter(File f, Filter p ) => (p(f)) ? f : null;
+
+bool always(File f) => true;
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
-String dcmFilter(File f) => filter(f, isDcmFile);
+File dcmFilter(File f) => filter(f, isDcmFile);
 
 /// Returns a [List] of [File] from the [Directory] specified by [path].
-List getFilesSync(String path, [Filter filter]) {
-  var d = new Directory(path);
+List getFilesSync(String path, [Filter filter = always]) {
+  Directory d = new Directory(path);
   return walkSync(d, filter);
 }
 
@@ -93,7 +84,7 @@ List _walkSync(Directory d, Function func, List list) {
   return list;
 }
 
-Stream getFiles(String path, [Filter filter]) => walk(new Directory(path), filter);
+Stream getFiles(String root, [Filter filter]) => walk(new Directory(root), filter);
 
 //TODO: debug and create unit test
 /// Returns a [List] of values that result from walking the [Directory] tree, and applying [filter]

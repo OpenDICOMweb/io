@@ -10,7 +10,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
-import 'package:core/dicom.dart';
+import 'package:core/core.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
@@ -48,7 +48,7 @@ void writeInstance(String outPath, Instance instance) {
   outFile.writeAsBytesSync(outBytes);
 
   // Format study for output;
-  String fmtOutput = instance.study.format(new Prefixer());
+  String fmtOutput = instance.study.format(new Formatter());
   print(fmtOutput);
 }
 

@@ -8,7 +8,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
-import 'package:core/dicom.dart';
+import 'package:core/core.dart';
 import 'package:logger/logger.dart';
 
 const String inputDir = "C:/odw/test_data/problems/";
@@ -28,7 +28,7 @@ void main() {
     log.config('Reading file: $path');
 
     Instance instance = readSopInstance(path);
-    print('***patient:\n${instance.patient.format(new Prefixer(maxDepth:5))}');
+    print('***patient:\n${instance.patient.format(new Formatter(maxDepth:5))}');
   }
 
   print('Active Patients: ${activeStudies.stats}');

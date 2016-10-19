@@ -9,7 +9,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
-import 'package:core/dicom.dart';
+import 'package:core/core.dart';
 import 'package:logger/logger.dart';
 
 String inputDir = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
@@ -53,6 +53,6 @@ void main() {
 
   //print(study);
 
-  fmtOutput = study.format(new Prefixer());
+  fmtOutput = study.format(new Formatter());
   print(fmtOutput);
 }

@@ -23,8 +23,8 @@ void main() {
 
   for (String s in files) {
     // TODO:fix
-    // Uint8List data = fs.readInstanceSync(files[0]);
-    //print('$s: len= ${data.length}');
+    var data = inFS.readInstanceSync(files[0]);
+    print('$s: len= ${data.length}');
   }
 
 }

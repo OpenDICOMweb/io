@@ -8,7 +8,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:convert/dicom.dart';
-import 'package:core/dicom.dart';
+import 'package:core/core.dart';
 import 'package:io/src/sop/sop_file_system.dart';
 import 'package:logger/logger.dart';
 
@@ -31,7 +31,7 @@ void main() {
     log.config('Reading file: $path');
 
     Instance instance = readSopInstance(path);
-    var output = instance.patient.format(new Prefixer());
+    var output = instance.patient.format(new Formatter());
     print('***patient:\n${output}');
   }
 

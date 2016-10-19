@@ -14,9 +14,8 @@ import 'package:core/uid.dart';
 import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
-import 'package:io/src/utils/utils.dart';
-
-import 'sop_index.dart';
+import 'package:io/src/index.dart';
+import 'package:io/src/utils.dart';
 
 //TODO: finish all IO calls async
 
@@ -25,14 +24,12 @@ import 'sop_index.dart';
 class SopFileSystem extends FileSystemBase {
   static const FSType type = FSType.sop;
   static const String version = "0.1.0";
-
-  final Directory root;
   final String path;
+  final Directory root;
 
   SopFileSystem(String path)
       : path = path,
-        root = FileSystemBase.maybeCreateRootSync(path),
-        super();
+        root = FileSystemBase.maybeCreateRootSync(path);
 
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
   Directory directory(Uid study, [Uid series]) {
@@ -45,7 +42,7 @@ class SopFileSystem extends FileSystemBase {
       new File('$path/$study/$series/$instance.${fType.extension}');
 
   //TODO: implement
-  SopIndex get index => new SopIndex(this);
+  FSIndex get index => new FSIndex(path);
 
   //TODO: if needed, openStudy(Uid study);
 
@@ -128,13 +125,6 @@ class SopFileSystem extends FileSystemBase {
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
-
-  /// Return a path to a file in the [FileSystem]
-  String toPath(FileType fType, Uid study, [Uid series, Uid instance, String extension]) {
-    String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
-    String part3 = (series == null) ? "" : '/$series';
-    return '$path/$study$part3$part4';
-  }
 
 }
 

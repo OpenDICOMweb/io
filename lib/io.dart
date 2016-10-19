@@ -6,6 +6,6 @@
 
 export 'package:io/src/mint/mint_file_system.dart';
 export 'package:io/src/sop/sop_file_system.dart';
-export 'package:io/src/utils/formatter.dart';
-export 'package:io/src/utils/utils.dart';
+export 'package:io/src/formatter.dart';
+export 'package:io/src/utils.dart';
 
