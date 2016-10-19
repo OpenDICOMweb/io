@@ -14,7 +14,7 @@ import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
 import 'package:io/src/index.dart';
-import 'package:path/path.dart';
+import 'package:io/src/utils.dart';
 
 //TODO: Make all IO calls async
 
@@ -72,37 +72,24 @@ class MintFileSystem extends FileSystemBase {
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
   /// specified by the [Directory].
   // TODO: fix
-  List<Uint8List> readStudySync(FileType fType, Uid study) {
-    Directory d = directory(study);
-    List<Uint8List> files;
-    try {
-      var dirList = d.listSync();
-      for (FileSystemEntity f in dirList) {
-        if (f is File) {
-          print('Found file ${f.path}');
-          var uid = basenameWithoutExtension(path);
-          files[uid] = f.readAsBytesSync();
-        } else if (f is Directory) {
-          print('Found dir ${f.path}');
-        }
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-    return files;
-  }
+  List<Uint8List> readStudySync(FileType fType, Uid study) =>
+  (fType.contents == "binary")
+  ?  readBinaryDirectorySync(toPath(fType, study))
+      : readStringDirectorySync(toPath(fType, study));
+
   
   /// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Series]
   /// specified by the [Directory].
   /// [Directory].
   //TODO: implement after SopFileSystem is working
-  List readSeriesSync(FileType fType, Uid study, Uid series) {
-    String path = toPath(fType, study, series);
-  }
+  List readSeriesSync(FileType fType, Uid study, Uid series) =>
+      (fType.contents == "binary")
+          ?  readBinaryDirectorySync(toPath(fType, study, series))
+          : readStringDirectorySync(toPath(fType, study, series));
 
   /// Returns a [Uint8List] containing the SOP [Instance] in the specified [File].
   //TODO: implement once SopFileSystem is working
-  dynamic readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) {}
+  readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) {}
 
   // *** Write Async  ***
   /* TODO: implement async calls

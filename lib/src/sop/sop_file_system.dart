@@ -15,7 +15,7 @@ import 'package:io/src/base/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:io/src/fs_type.dart';
 import 'package:io/src/index.dart';
-import 'package:io/src/utils/utils.dart';
+import 'package:io/src/utils.dart';
 
 //TODO: finish all IO calls async
 

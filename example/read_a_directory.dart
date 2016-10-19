@@ -24,7 +24,7 @@ String outRoot3 = 'test/output/root3';
 void main() {
   Logger log = new Logger("read_a_directory", Level.debug);
 
-  Directory dir = new Directory(inputDir1);
+  Directory dir = new Directory(inRoot1);
 
   List<FileSystemEntity> fList = dir.listSync();
   log.info('File count: ${fList.length}');
