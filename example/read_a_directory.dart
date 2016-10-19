@@ -10,13 +10,15 @@ import 'package:convert/dicom.dart';
 import 'package:core/core.dart';
 import 'package:logger/logger.dart';
 
-String inputDir0 = "C:/odw/test_data/sfd/CR_and_RF/Patient_25_UGI_and_SBFT/1_DICOM_Original/";
-String inputDir1 = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
-String inputDir2 =
-    "C:/odw/test_data/sfd/CR_and_RF/Patient_27_enema_-_ilioanal_anastomosis/1_DICOM_Original/";
-String inputDir3 = "C:/odw/test_data/sfd/MG/Patient_41/1_DICOM_Original";
+String inRoot0 = "C:/odw/test_data/sfd/CR";
+String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
+String inRoot2 = "C:/odw/test_data/sfd/CT";
+String inRoot3 = "C:/odw/test_data/sfd/MG";
 
-String outputDir = "C:/odw/sdk/io/example/output";
+String outRoot0 = 'test/output/root0';
+String outRoot1 = 'test/output/root1';
+String outRoot2 = 'test/output/root2';
+String outRoot3 = 'test/output/root3';
 
 
 void main() {
