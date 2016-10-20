@@ -12,7 +12,7 @@ import 'package:io/io.dart';
 Future main()  async {
   String root = r"C:\odw\test_data\sfd\CR_and_RF";
   List<String> tree = await getFilesSync(root);
-  Formatter format  = new Formatter();
+  FSFormatter format  = new FSFormatter();
   var out = format(tree);
 
   print('Tree:\n$out');

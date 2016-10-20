@@ -4,12 +4,12 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-class Formatter {
+class FSFormatter {
     int level = 0;
     int count = 0;
     int indent;
 
-    Formatter({this.indent: 2});
+    FSFormatter({this.indent: 2});
 
     String get sp => "".padRight(indent * level, " ");
 

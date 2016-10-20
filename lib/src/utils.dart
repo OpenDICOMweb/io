@@ -54,9 +54,10 @@ bool always(File f) => true;
 File dcmFilter(File f) => filter(f, isDcmFile);
 
 /// Returns a [List] of [File] from the [Directory] specified by [path].
-List getFilesSync(String path, [Filter filter = always]) {
-  Directory d = new Directory(path);
-  return walkSync(d, filter);
+List getFilesSync(directory, [Filter filter = always]) {
+  if (directory is String) directory = new Directory(directory);
+  if (directory is! Directory) throw new ArgumentError('must be String or Directory');
+  return walkSync(directory, filter);
 }
 
 //TODO: debug and create unit test
