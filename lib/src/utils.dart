@@ -9,7 +9,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:io/src/file_type.dart';
-import 'package:io/src/mint/mint_file_system.dart';
 import 'package:path/path.dart';
 
 //TODO: document this file
@@ -38,13 +37,13 @@ String testExtension(String path, String ext) =>
     (hasExtension(path, ext)) ? ext : null;
 
 /// Returns [true] if [f] has the [sopInstance] file extension.
-bool isDcmFile(File f) => hasExtension(f.path, FileType.instance);
+bool isDcmFile(File f) => hasExtension(f.path, FileType.instance.extension);
 
 /// Returns [true] if [f] has the [metadata] file extension.
-bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.ext);
+bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.extension);
 
 /// Returns [true] if [f] has the [bulkdate] file extension.
-bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.ext);
+bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.extension);
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
 File filter(File f, Filter p ) => (p(f)) ? f : null;
