@@ -10,20 +10,61 @@ A simple usage example:
     import 'package:io/io.dart';
 
     main() {
-      var awesome = new Awesome();
+      var fs = new FileSystem();
     }
 
 ## Examples
 
-### Types of files by extensoin
+## Types of DICOM Objects
 
-    Extension   Type
-    .dcm        SOP Instance
-    .md         Metadata
-    .bd         Bulkdata
-    .dcm.json
-    .md.json
+A DICOM Information Object Instance(IOI) can be separated into two separated into a Descriptor 
+object and a Bulkdata object.
 
+A Descriptor contains all of the Data Elements of the IOI, but one or more of the Data 
+Elements with large values have been moved to a Bulkdata object and replaced with a Bulkdata 
+Reference.
+
+A Bulkdata Reference is a URL that references one or more Elements in a Bulkdata object.
+
+A Bulkdata object contains one or more elements. Each Bulkdata element is either a Dataset, a 
+Data Element, or a Data Element Value (Value Field).
+
+### Information Entities
+
+There are four primary information entities in a DICOM Study:
+    1. Patient
+    2. Study
+    3. Series
+    4. Instance
+    
+Each of these entities can be separated a Descriptor and one or more Bulkdata objects.
+
+### Media Types and File Extentions
+
+There are three DICOM Media Types:
+    - dicom: A traditional binary encoding as specified in PS3.10.
+    - dicom+json: A JSON encoding specified in PS3.18.
+    - dicom+xml: An XML encoding specified in PS3.19
+    
+Each of these Media Types has an associated file extension:
+
+|  | Object | Encoding | Extension |
+|----------|--------|----------|-----------|
+| Binary | Instance | dicom | .dcm |
+| Binary | Metadata | dicom | .md.dcm |
+| Binary | Bulkdata | dicom | .bd.dcm |
+| JSON | Instance | dicom+json | .dcm.json |
+| JSON | Metadata | dicom+json | .md.dcm.json |
+| JSON | Bulkdata | dicom+json | .bd.dcm.json |
+| XML | Instance | dicom+xml | .dcm.xml |
+| XML | Metadata | dicom+xml | .md.dcm.xml |
+| XML | Bulkdata | dicom+xml | .bd.dcm.xml |
+
+ 
+### Entity
+
+An Entity object is an object that contains all of the data associated with a Study, Series, or 
+Instance.
 
 ### SOP Instance Tree
 

@@ -12,7 +12,6 @@ import 'package:convert/dicom.dart';
 import 'package:core/core.dart';
 import 'package:io/io.dart';
 import 'package:logger/logger.dart';
-import 'package:path/path.dart' as path;
 
 /// This program copies DICOM PS3.10 files (i.e. files with an extension of ".dcm") from anywhere
 /// in a source directory to a ODW SOP File System rooted at the destination directory.
@@ -32,15 +31,17 @@ void main(List<String> args) {
   var source = results['source'];
   var inDir = new Directory(source);
   var target = results['target'];
-  var sopFS = new SopFileSystem(target);
+  var fs = new SopFileSystem(target);
 
   for (File f in getFilesSync(inDir)) {
-    if (path.extension(f.path) != FileType.instance.extension)
+    if (fs.ext(f.path) != FileType.instance.ext)
       print('Skipping none ".dcm" file: $f');
     log.config('Reading file: $f');
     Instance instance = readSopInstance(f);
-    instance.write(sopFS);
-    var output = instance.patient.format(new Formatter());
+    Uint8List bytes = DCM.encode(instance);
+    IEPath iePath = instance.path;
+    fs.writeInstanceSync(iePath, bytes);
+    var output = instance.format(new Formatter());
     print('***patient:\n${output}');
   }
 

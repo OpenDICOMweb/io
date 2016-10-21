@@ -37,13 +37,13 @@ String testExtension(String path, String ext) =>
     (hasExtension(path, ext)) ? ext : null;
 
 /// Returns [true] if [f] has the [sopInstance] file extension.
-bool isDcmFile(File f) => hasExtension(f.path, FileType.instance.extension);
+bool isDcmFile(File f) => hasExtension(f.path, FileType.instance.ext);
 
 /// Returns [true] if [f] has the [metadata] file extension.
-bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.extension);
+bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.ext);
 
 /// Returns [true] if [f] has the [bulkdate] file extension.
-bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.extension);
+bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.ext);
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
 File filter(File f, Filter p ) => (p(f)) ? f : null;
