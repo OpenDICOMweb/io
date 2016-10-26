@@ -6,8 +6,8 @@
 
 import 'dart:io';
 
-import 'package:convert/dicom.dart';
 import 'package:core/core.dart';
+import 'package:encode/dicom.dart';
 import 'package:logger/logger.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";

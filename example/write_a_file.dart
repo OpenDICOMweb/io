@@ -8,8 +8,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:convert/dicom.dart';
 import 'package:core/core.dart';
+import 'package:encode/dicom.dart';
 import 'package:logger/logger.dart';
 
 String inputDir = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
@@ -43,11 +43,11 @@ void main() {
   File outFile = new File(outPath);
   log.info('Writing file: $outFile');
 
-  DcmEncoder writer = new DcmEncoder(bytes.length + 1024);
-  writer.writeSopInstance(instance);
-  print('writeIndex: ${writer.writeIndex}');
+  DcmEncoder encode = new DcmEncoder(bytes.length + 1024);
+  encode.encodeSopInstance(instance);
+  print('writeIndex: ${encode.writeIndex}');
 
-  var outBytes = writer.bytes.buffer.asUint8List(0, writer.writeIndex);
+  var outBytes = encode.bytes.buffer.asUint8List(0, encode.writeIndex);
   print('out length: ${bytes.length}');
   outFile.writeAsBytesSync(outBytes);
 

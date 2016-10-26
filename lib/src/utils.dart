@@ -28,7 +28,8 @@ String getFilename(File f) =>   basenameWithoutExtension(f.path);
 String getFileExt(File f) => extension(f.path);
 
 /// A predicate for testing properties of [File]s.
-typedef bool Filter(File f);
+/// If the filter should return a [File] or null.
+typedef File Filter(File f);
 
 /// Returns [true] if the [path] has [ext] as it's file extension.
 bool hasExtension(String path, String ext) => extension(path) == ext;
@@ -37,7 +38,8 @@ String testExtension(String path, String ext) =>
     (hasExtension(path, ext)) ? ext : null;
 
 /// Returns [true] if [f] has the [sopInstance] file extension.
-bool isDcmFile(File f) => hasExtension(f.path, FileType.instance.extension);
+File isDcmFile(File f) =>
+    (hasExtension(f.path, FileType.instance.extension)) ? f : null;
 
 /// Returns [true] if [f] has the [metadata] file extension.
 bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.extension);
@@ -46,15 +48,15 @@ bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.extension)
 bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.extension);
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
-File filter(File f, Filter p ) => (p(f)) ? f : null;
+File filter(File f, Filter p ) => (p(f) != null) ? f : null;
 
-bool always(File f) => true;
+File isFile(f) => (f is File) ? f : null;
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
 File dcmFilter(File f) => filter(f, isDcmFile);
 
 /// Returns a [List] of [File] from the [Directory] specified by [path].
-List getFilesSync(directory, [Filter filter = always]) {
+List getFilesSync(directory, [filter = isFile]) {
   if (directory is String) directory = new Directory(directory);
   if (directory is! Directory) throw new ArgumentError('must be String or Directory');
   return walkSync(directory, filter);

@@ -10,51 +10,86 @@ A simple usage example:
     import 'package:io/io.dart';
 
     main() {
-      var awesome = new Awesome();
+      Study study = read("/study.ext");
     }
 
 ## Examples
 
-### Types of files by extensoin
+### Types of Object in Files
 
-    Extension   Type
-    .dcm        SOP Instance
-    .md         Metadata
-    .bd         Bulkdata
-    .dcm.json
-    .md.json
+- Descriptor
+
+A complete Description of a Patient, Study, Series or Instance
+
+- Metadata
+
+An Descriptor where one or more values have been moved to a Bulkdata object. For
+Instances that contain images that would typically be, at a minimum, the Pixel
+Data (7FFE,0010) value.
+
+- Bulkdata
+
+One or more values removed from a Metadata object. Bulkdata objects currently
+only have one media type, which is 'application/octet-stream' (i.e. an array of bytes).
+
+### Types of files by extension
+
+| Type | Media Type | Extension |
+|------|------------|-----------|
+| Descriptor | dicom | .dcm |
+| Metadata   | dicom | .md.dcm |
+| Bulkdata   | octet-stream | .bd.dcm |
+| Descriptor | json | .dcm.json |
+| Metadata   | json | .md.dcm.json |
+| Descriptor | xml | .dcm.xml |
+| Metadata   | xml | .md.dcm.xml |
+
+
+|Type .dcm Complete object .dcmmd Metadata .dcmbd Bulkdata .dcm.json .dcmmd.json
+.dcm.xml .dcmmd.xml
+
 
 
 ### SOP Instance Tree
 
-    path format = root / studyUid / seriesUid / instanceUid.dcm ; Sop Instance
-                / root / studyUid / seriesUid / instanceUid.md ; instance Metadata
-                / root / studyUid / seriesUid / bulkdataUid.bd ; instance Bulkdata
+    path format = root / study / series / instance.dcm ; Sop Instance
+                / root / study / series / instance.md ; instance Metadata
+                / root / study / series / bulkdata.bd ; instance Bulkdata
 
-Where, root, studyUid, and SeriesUid are strings naming directories, and instanceUid is a string
-naming a file. The studyUid, seriesUid and instancUid are strings containing UIDs.
+Where, root, study, and SeriesUid are strings naming directories, and instance is a string
+naming a file. The study, series and instancUid are strings containing UIDs.
 
 ### SOP Instance Flat
 
-path format = root / studyUid / instanceUid.dcm
+path format = root / study / instance.dcm
 
-Where, root, and studyUid are strings naming directories, and instanceUid is a string
-naming a file. The studyUid and instancUid are strings containing UIDs.
+Where, root, and study are strings naming directories, and instance is a string
+naming a file. The study and instancUid are strings containing UIDs.
 
 
 
 ### Mint
 
-    path format = root / studyUid / metadataUid.md ; constains study Metadata
-                / root / studyUid / bulkdataUid.bd ; contain study Bulkdata
-                / root / studyUid / series / metadataUid.md ; constain study & series Metadata
-                / root / studyUid / series / bulkdataUid.md ; contains series Bulkdata
-                / root / studyUid / seriesUid / instanceUid.dcm ; Sop Instance
-                / root / studyUid / seriesUid / instanceUid.md ; instance Metadata
-                / root / studyUid / seriesUid / bulkdataUid.bd ; instance Bulkdata
+    path format = root / study / instance.md ; constains study Metadata
+                / root / study / bulkdata.bd ; contain study Bulkdata
+                / root / study / series / instance.md ; constain study & series Metadata
+                / root / study / series / bulkdata.md ; contains series Bulkdata
+                / root / study / series / instance.dcm ; Sop Instance
+                / root / study / series / instance.md ; instance Metadata
+                / root / study / series / bulkdata.bd ; instance Bulkdata
 
-Where, root, and studyUid are strings naming directories, and instanceUid is a string
-naming a file. The studyUid and instanceUid are strings containing UIDs.
+Where, root, and study are strings naming directories, and instance is a string
+naming a file. The study and instance are strings containing UIDs.
+
+### Combining Mint & Dcm
+
+    path format = / study / instance.md
+                  / study / bulkdata.bd
+                  / study / series / instance.md
+                  / study / series / bulkdata.md
+                  / study / series / instance.dcm
+                  / study / series / instance.md
+                  / study / series / bulkdata.bd
 
 ### Utility Files
 TODO: update

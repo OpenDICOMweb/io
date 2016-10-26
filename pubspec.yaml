@@ -11,8 +11,8 @@ dependencies:
   args: any
   bytebuf:
     path: C:/odw/sdk/bytebuf
-  convert:
-    path: C:/odw/sdk/convert
+  encode:
+    path: C:/odw/sdk/encode
   core:
     path: C:/odw/sdk/core
   path: any
@@ -21,6 +21,7 @@ dependencies:
   path: any
 
 dev_dependencies:
-  test: '>=0.12.0 <0.13.0'
   grinder: any
+  test: '>=0.12.0 <0.13.0'
+
 

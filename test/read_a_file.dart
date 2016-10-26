@@ -11,11 +11,9 @@ import 'package:args/args.dart';
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
 import 'package:io/src/file_type.dart';
-import 'package:io/src/utils.dart';
+import 'package:io/src/sop/sop_file_system.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
-//import 'package:io/src/sop/sop_file_system.dart';
-
 
 /// This program copies DICOM PS3.10 files (i.e. files with an extension of ".dcm") from anywhere
 /// in a source directory to a ODW SOP File System rooted at the destination directory.
@@ -32,28 +30,34 @@ void main(List<String> args) {
   Logger log = Logger.init(level: Level.fine);
   var parser = getArgParser();
   var results = parser.parse(args);
-  var source = results['source'];
+  //var source = results['source'];
+  var source = r"C:\odw\test_data\sfd\CR_and_RF";
   var inDir = new Directory(source);
- // var target = results['target'];
- // var sopFS = new SopFileSystem(target);
-  List<File> files =  getFilesSync(inDir, isDcmFile);
-  print('files: $files');
 
-  for (File f in files) {
-    print('f: $f');
-    print('ext: ${FileType.instance.extension}');
-    if (path.extension(f.path) != FileType.instance.extension)
-      print('Skipping none ".dcm" file: $f');
-    log.config('Reading file: $f');
-    Instance instance = readSopInstance(f);
-    var output = instance.patient.format(new Formatter());
-    print('***patient:\n${output}');
+  var target = results['target'];
+  var sopFS = new SopFileSystem(target);
+  List<FileSystemEntity> files = inDir.listSync(recursive: true, followLinks: false);
+  // print('files: $files');
 
+  for (var fse in files) {
+    if (fse is File) {
+    //  print('f: $fse');
+    //  print('target: ${FileType.instance.extension}');
+    //  print('actual: "${path.extension(fse.path)}"');
+      if (path.extension(fse.path) == FileType.instance.extension) {
+        log.config('Reading file: $fse');
+        Instance instance = sopFS.readInstance(fse);
+        var output = instance.format(new Formatter(maxDepth: 3));
+        print('***patient:\n${output}');
+      } else {
+        print('Skipping none ".dcm" file: $fse');
+      }
+    }
     // Write the instance
-    writeSopInstance(instance, '$outRoot/${instance.uid}.out');
+    //writeSopInstance(instance, '$outRoot/${instance.uid}.out');
   }
 
-  print('Active Studies: ${activeStudies.stats}');
+  //print('Active Studies: ${activeStudies.stats}');
   //print('Summary:\n ${activeStudies.summary}');
 }
 
@@ -78,14 +82,15 @@ ArgParser getArgParser() {
   var parser = new ArgParser()
     ..addOption('source', abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')
     ..addOption('target',
-        abbr: 't',
-        defaultsTo: '.',
-        help: 'Specifies the root directory of the target SOP File System.')
+                    abbr: 't',
+                    defaultsTo: '.',
+                    help: 'Specifies the root directory of the target SOP File System.')
     ..addFlag('validate',
-        abbr: 'v',
-        defaultsTo: true,
-        help: 'Specifies whether the source files should be cheched that '
-            'they contain valid DICOM as they are copied');
+                  abbr: 'v',
+                  defaultsTo: true,
+                  help: 'Specifies whether the source files should be cheched that '
+                      'they contain valid DICOM as they are copied');
 
   return parser;
 }
+

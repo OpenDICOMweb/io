@@ -4,32 +4,31 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:io';
+
 class FSFormatter {
-    int level = 0;
-    int count = 0;
-    int indent;
+  int level = 0;
+  int count = 0;
+  int indent;
 
-    FSFormatter({this.indent: 2});
+  FSFormatter({this.indent: 2});
 
-    String get sp => "".padRight(indent * level, " ");
+  String get sp => "".padRight(indent * level, " ");
 
-    String call(List tree, [String output = ""]) {
-        print('Level: $level');
-        output += '${sp}Level: $level\n';
-        for (var v in tree) {
-            if (v is String) {
-                count++;
-                output += '$sp$v\n';
-            } else if (v is List) {
-                level++;
-                output = call(v, output);
-                level--;
-            } else {
-                throw "invalid object: $v";
-            }
-        }
-        print('loops: $level');
-        print('count: $count');
-        return output;
+  String fmt(Object o) => '${sp}$count: $o';
+
+  String call(FileSystemEntity fse, [String output = ""]) {
+    var s = fmt(fse);
+    count++;
+    print(s);
+    output += s;
+    if (fse is Directory) {
+      level++;
+      var list = fse.listSync(followLinks: false);
+      for (var e in list)
+        output += call(e, output);
+      level--;
     }
+    return output;
+  }
 }
