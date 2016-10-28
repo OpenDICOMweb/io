@@ -10,12 +10,8 @@ import 'dart:typed_data';
 import 'package:args/args.dart';
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
-import 'package:io/src/file_type.dart';
-import 'package:io/src/utils.dart';
+import 'package:io/io.dart';
 import 'package:logger/logger.dart';
-import 'package:path/path.dart' as path;
-//import 'package:io/src/sop/sop_file_system.dart';
-
 
 /// This program copies DICOM PS3.10 files (i.e. files with an extension of ".dcm") from anywhere
 /// in a source directory to a ODW SOP File System rooted at the destination directory.
@@ -34,23 +30,19 @@ void main(List<String> args) {
   var results = parser.parse(args);
   var source = results['source'];
   var inDir = new Directory(source);
- // var target = results['target'];
- // var sopFS = new SopFileSystem(target);
-  List<File> files =  getFilesSync(inDir, isDcmFile);
-  print('files: $files');
+  var target = results['target'];
+  var fs = new SopFileSystem(target);
 
-  for (File f in files) {
-    print('f: $f');
-    print('ext: ${FileType.instance.extension}');
-    if (path.extension(f.path) != FileType.instance.extension)
+  for (File f in getFilesSync(inDir)) {
+    if (fs.ext(f.path) != FileType.instance.ext)
       print('Skipping none ".dcm" file: $f');
     log.config('Reading file: $f');
     Instance instance = readSopInstance(f);
-    var output = instance.patient.format(new Formatter());
+    Uint8List bytes = DCM.encode(instance);
+    IEPath iePath = instance.path;
+    fs.writeInstanceSync(iePath, bytes);
+    var output = instance.format(new Formatter());
     print('***patient:\n${output}');
-
-    // Write the instance
-    writeSopInstance(instance, '$outRoot/${instance.uid}.out');
   }
 
   print('Active Studies: ${activeStudies.stats}');
@@ -65,15 +57,6 @@ Instance readSopInstance(file) {
   return decoder.readSopInstance(file.path);
 }
 
-Instance writeSopInstance(Instance instance, file) {
-  if (file is String) file = new File(file);
-  if (file is! File) throw new ArgumentError('file ($file) must be a String or File.');
-  DcmEncoder encoder = new DcmEncoder(instance.dataset.lengthInBytes);
-  encoder.encodeSopInstance(instance);
-  Uint8List bytes = file.readAsBytesSync();
-  DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.readSopInstance(file.path);
-}
 ArgParser getArgParser() {
   var parser = new ArgParser()
     ..addOption('source', abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')

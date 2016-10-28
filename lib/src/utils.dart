@@ -42,10 +42,10 @@ File isDcmFile(File f) =>
     (hasExtension(f.path, FileType.instance.extension)) ? f : null;
 
 /// Returns [true] if [f] has the [metadata] file extension.
-bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.extension);
+bool isMetadataFile(File f) => hasExtension(f.path, FileType.metadata.ext);
 
 /// Returns [true] if [f] has the [bulkdate] file extension.
-bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.extension);
+bool isBulkdataFile(File f) => hasExtension(f.path, FileType.bulkdata.ext);
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
 File filter(File f, Filter p ) => (p(f) != null) ? f : null;

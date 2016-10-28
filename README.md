@@ -10,13 +10,15 @@ A simple usage example:
     import 'package:io/io.dart';
 
     main() {
-      Study study = read("/study.ext");
+      var fs = new FileSystem();
     }
 
 ## Examples
 
-### Types of Object in Files
+## Types of DICOM Objects
 
+A DICOM Information Object Instance(IOI) can be separated into two separated into a Descriptor
+object and a Bulkdata object.
 - Descriptor
 
 A complete Description of a Patient, Study, Series or Instance
@@ -49,6 +51,51 @@ only have one media type, which is 'application/octet-stream' (i.e. an array of 
 .dcm.xml .dcmmd.xml
 
 
+A Descriptor contains all of the Data Elements of the IOI, but one or more of the Data
+Elements with large values have been moved to a Bulkdata object and replaced with a Bulkdata
+Reference.
+
+A Bulkdata Reference is a URL that references one or more Elements in a Bulkdata object.
+
+A Bulkdata object contains one or more elements. Each Bulkdata element is either a Dataset, a
+Data Element, or a Data Element Value (Value Field).
+
+### Information Entities
+
+There are four primary information entities in a DICOM Study:
+    1. Patient
+    2. Study
+    3. Series
+    4. Instance
+
+Each of these entities can be separated a Descriptor and one or more Bulkdata objects.
+
+### Media Types and File Extentions
+
+There are three DICOM Media Types:
+    - dicom: A traditional binary encoding as specified in PS3.10.
+    - dicom+json: A JSON encoding specified in PS3.18.
+    - dicom+xml: An XML encoding specified in PS3.19
+
+Each of these Media Types has an associated file extension:
+
+|  | Object | Encoding | Extension |
+|----------|--------|----------|-----------|
+| Binary | Instance | dicom | .dcm |
+| Binary | Metadata | dicom | .md.dcm |
+| Binary | Bulkdata | dicom | .bd.dcm |
+| JSON | Instance | dicom+json | .dcm.json |
+| JSON | Metadata | dicom+json | .md.dcm.json |
+| JSON | Bulkdata | dicom+json | .bd.dcm.json |
+| XML | Instance | dicom+xml | .dcm.xml |
+| XML | Metadata | dicom+xml | .md.dcm.xml |
+| XML | Bulkdata | dicom+xml | .bd.dcm.xml |
+
+
+### Entity
+
+An Entity object is an object that contains all of the data associated with a Study, Series, or
+Instance.
 
 ### SOP Instance Tree
 
