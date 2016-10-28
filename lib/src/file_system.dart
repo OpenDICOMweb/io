@@ -11,25 +11,29 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dictionary/uid.dart';
-import 'package:io/src/base/file_system_base.dart';
-import 'package:io/src/file_type.dart';
-import 'package:io/src/fs_type.dart';
-import 'package:io/src/index.dart';
-import 'package:io/src/utils.dart';
+import 'package:io/src/file_system_base.dart';
+
+import 'dcm_file.dart';
+import 'file_type.dart';
+import 'index.dart';
+import 'utils.dart';
+
 
 //TODO: finish all IO calls async
 
 /// A DICOM File System containing SOP Instances.  The structure is not
 /// defined, it must be defined at a higher level.
-class SopFileSystem extends FileSystemBase {
-  static const FSType type = FSType.sop;
+class FileSystem extends FileSystemBase {
+  //static const FSType type = FSType.sop;
   static const String version = "0.1.0";
-  final String path;
   final Directory root;
+  final String path;
 
-  SopFileSystem(String path)
+  FileSystem(String path)
       : path = path,
         root = FileSystemBase.maybeCreateRootSync(path);
+
+
 
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
   Directory directory(Uid study, [Uid series]) {
@@ -38,8 +42,8 @@ class SopFileSystem extends FileSystemBase {
   }
 
   /// Returns the [File] corresponding to the specified arguments.
-  File file(FileType fType, Uid study, Uid series, Uid instance) =>
-      new File('$path/$study/$series/$instance.${fType.extension}');
+  DcmFile file(FileType fType, Uid study, Uid series, Uid instance) =>
+      new DcmFile(this, fType, study, series, instance);
 
   //TODO: implement
   FSIndex get index => new FSIndex(path);
@@ -81,25 +85,25 @@ class SopFileSystem extends FileSystemBase {
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  List<dynamic> readStudySync(FileType fType, Uid study) =>
-      (fType.contents == "binary")
-      ?  readBinaryDirectorySync(toPath(fType, study))
+  List<dynamic> readStudySync(FileSubtype fType, Uid study) =>
+      (fType.charset == "octet")
+      ? readBinaryDirectorySync(toPath(fType, study))
       : readStringDirectorySync(toPath(fType, study));
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
-  List<dynamic> readSeriesSync(FileType fType, Uid study, Uid series) =>
-      (fType.contents == "binary")
-      ?  readBinaryDirectorySync(toPath(fType, study, series))
+  List<dynamic> readSeriesSync(FileSubtype fType, Uid study, Uid series) =>
+      (fType.charset == "octet")
+      ? readBinaryDirectorySync(toPath(fType, study, series))
       : readStringDirectorySync(toPath(fType, study, series));
 
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  dynamic readInstanceSync(FileType fType, Uid study, Uid series, Uid instance) =>
-      (fType.contents == "binary")
-      ?  readBinaryDirectorySync(toPath(fType, study, series, instance))
+  dynamic readInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance) =>
+      (fType.charset == "octet")
+      ? readBinaryDirectorySync(toPath(fType, study, series, instance))
       : readStringDirectorySync(toPath(fType, study, series, instance));
 
   // *** Write Async  ***
@@ -119,13 +123,15 @@ class SopFileSystem extends FileSystemBase {
 */
   // *** Write Sync  ***
 
-
   @override
-  void writeInstanceSync(FileType fType, Uid study, Uid series, Uid instance, data) {}
+  void writeInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance, data) {}
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
 
+  static DcmFile parse(String path) {}
+
 }
+
 
 

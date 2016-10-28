@@ -10,8 +10,7 @@ import 'dart:typed_data';
 import 'package:args/args.dart';
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
-import 'package:io/src/file_type.dart';
-import 'package:io/src/sop/sop_file_system.dart';
+import 'package:io/io.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
@@ -35,7 +34,7 @@ void main(List<String> args) {
   var inDir = new Directory(source);
 
   var target = results['target'];
-  var sopFS = new SopFileSystem(target);
+  var fs = new FileSystem(target);
   List<FileSystemEntity> files = inDir.listSync(recursive: true, followLinks: false);
   // print('files: $files');
 
@@ -44,9 +43,9 @@ void main(List<String> args) {
     //  print('f: $fse');
     //  print('target: ${FileType.instance.extension}');
     //  print('actual: "${path.extension(fse.path)}"');
-      if (path.extension(fse.path) == FileType.instance.extension) {
+      if (path.extension(fse.path) == FileSubtype.instance.extension) {
         log.config('Reading file: $fse');
-        Instance instance = sopFS.readInstance(fse);
+        Instance instance = fs.readInstanceSync(fse);
         var output = instance.format(new Formatter(maxDepth: 3));
         print('***patient:\n${output}');
       } else {
@@ -73,7 +72,7 @@ Instance writeSopInstance(Instance instance, file) {
   if (file is String) file = new File(file);
   if (file is! File) throw new ArgumentError('file ($file) must be a String or File.');
   DcmEncoder encoder = new DcmEncoder(instance.dataset.lengthInBytes);
-  encoder.encodeSopInstance(instance);
+  encoder.writeSopInstance(instance);
   Uint8List bytes = file.readAsBytesSync();
   DcmDecoder decoder = new DcmDecoder(bytes);
   return decoder.readSopInstance(file.path);

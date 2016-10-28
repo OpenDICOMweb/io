@@ -62,13 +62,19 @@ Data Element, or a Data Element Value (Value Field).
 
 ### Information Entities
 
-There are four primary information entities in a DICOM Study:
+There are four [EntityType]s in a DICOM Study:
     1. Patient
     2. Study
     3. Series
     4. Instance
 
-Each of these entities can be separated a Descriptor and one or more Bulkdata objects.
+Each of these has three subtypes:
+
+    - complete
+    - metadata
+    - bulkdata
+
+Any Entity can be stored as either a complete entity or as a  Metadata file and a Bulkdata file.
 
 ### Media Types and File Extentions
 
@@ -99,9 +105,9 @@ Instance.
 
 ### SOP Instance Tree
 
-    path format = root / study / series / instance.dcm ; Sop Instance
-                / root / study / series / instance.md ; instance Metadata
-                / root / study / series / bulkdata.bd ; instance Bulkdata
+    path format = / study / series / instance.dcm ; Sop Instance
+                  / study / series / instance.md ; instance Metadata
+                  / study / series / bulkdata.bd ; instance Bulkdata
 
 Where, root, study, and SeriesUid are strings naming directories, and instance is a string
 naming a file. The study, series and instancUid are strings containing UIDs.
@@ -128,15 +134,22 @@ naming a file. The study and instancUid are strings containing UIDs.
 Where, root, and study are strings naming directories, and instance is a string
 naming a file. The study and instance are strings containing UIDs.
 
-### Combining Mint & Dcm
+### DICOM File System
 
-    path format = / study / instance.md
-                  / study / bulkdata.bd
-                  / study / series / instance.md
-                  / study / series / bulkdata.md
+A DICOM File System can contain Study, Series, or Instance object in any media type.
+
+
+    path format = / study / study.md
+                  / study / study.bd
+                  / study / study.md.json
+                  / study / study.bd.json
+                  / study / series / series.md
+                  / study / series / series.md
                   / study / series / instance.dcm
                   / study / series / instance.md
-                  / study / series / bulkdata.bd
+                  / study / series / instance.bd
+
+
 
 ### Utility Files
 TODO: update

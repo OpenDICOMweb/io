@@ -1,8 +1,9 @@
 name: io
-description: The Open DICOMweb SDK I/O Library
-version: 0.2.0
+description: A starting point for Dart libraries or applications.
+version: 0.1.1
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
-homepage: https://opendicomweb.github.io
+
+homepage: https://github.com/OpenDICOMweb/io
 
 environment:
   sdk: ^1.0.0
@@ -11,7 +12,7 @@ dependencies:
   args: any
   encode:
     path: C:/odw/sdk/convert
-    version: 0.3.3
+    version: 0.3.4
   core:
     path: C:/odw/sdk/core
     version: 0.4.1
@@ -22,6 +23,7 @@ dependencies:
 
 dev_dependencies:
   benchmark_harness: any
-  test: ^0.12.0
   grinder: any
+  test: ^0.12.0
+
 

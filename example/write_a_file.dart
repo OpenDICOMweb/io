@@ -44,7 +44,7 @@ void main() {
   log.info('Writing file: $outFile');
 
   DcmEncoder encode = new DcmEncoder(bytes.length + 1024);
-  encode.encodeSopInstance(instance);
+  encode.writeSopInstance(instance);
   print('writeIndex: ${encode.writeIndex}');
 
   var outBytes = encode.bytes.buffer.asUint8List(0, encode.writeIndex);

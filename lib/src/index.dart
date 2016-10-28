@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dictionary/uid.dart';
-import 'package:io/src/base/file_system_base.dart';
+import 'package:io/src/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 
 /// An interface for an [Index] of a [FileSystem].
@@ -45,7 +45,7 @@ class FSIndex {
 
   /// Return a path to a file in the [FileSystem].
   //TODO: verify this is correct.  If it is move to index.dart
-  String toPath(FileType fType, Uid study, [Uid series, Uid instance, String extension]) {
+  String toPath(FileSubtype fType, Uid study, [Uid series, Uid instance, String extension]) {
     String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
     String part3 = (series == null) ? "" : '/$series';
     return '$path/$study$part3$part4';
