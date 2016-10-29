@@ -4,16 +4,25 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:io';
+
+import 'package:io/io.dart';
+import 'package:path/path.dart' as p;
+
+int _firstDot(String s) => p.basename(s).indexOf('.');
+
+String _extension(String fname) => p.basename(fname).substring(_firstDot(fname));
+
 /// path = root / dir / base
 ///                   / name /ext
 class Filename {
   final String _path;
-  FileType _type;
+  FileSubtype _type;
 
   Filename(this._path);
 
   bool get isDicom => _type.isDicom;
-  bool get isDescriptor => _type.isEntity;
+  bool get isComplete => _type.isComplete;
   bool get isMetadata => _type.isMetadata;
   bool get isBulkdata => _type.isBulkdata;
 
@@ -25,12 +34,22 @@ class Filename {
   String get ext => base.substring(_firstDot(base));
   String get charset => _type.charset;
 
-  FileType get type => _type ??= FileType.parse(_path);
+  FileSubtype get type => _type ??= FileSubtype.parse(_path);
   DcmMediaType get mType => type.mediaType;
-  OType get oType => type.eType;
+  ESubtype get subtype => type.eSubtype;
   String get ext1 => type.ext;
 
   String toString() => _path;
+}
+
+
+Filename convert(File f) {
+String name = f.path;
+String dir = p.dirname(name);
+String ext = _extension(name);
+FileSubtype subtype = FileSubtype.types[ext];
+print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
+  return new Filename(name);
 }
 
 String ext(String s) {
@@ -38,6 +57,16 @@ String ext(String s) {
   var i = base.indexOf('.');
   var ext = base.substring(i);
   return ext;
+}
+
+List<Filename> getDcmFilesFromDirectory(String source) {
+  var dir = new Directory(source);
+  List<FileSystemEntity> files = dir.listSync(recursive: true, followLinks: false);
+  List<Filename> filenames = [];
+  for(File f in files) {
+    filenames.add(new Filename(f.path));
+  }
+  return filenames;
 }
 
 String dcmEntity = 'bas/bar/file.dcm';
@@ -51,6 +80,29 @@ var pathList = [
   dcmEntity, dcmMetadata, jsonEntity, jsonMetadata, xmlEntity, xmlMetadata, bulkdata
 ];
 
+String inRoot = "C:/odw/test_data/sfd/CR";
+
+List flatten(List list) {
+  var flat = [];
+  for(var l in list)
+    if (l is List) {
+      flat.addAll(l);
+    } else {
+      flat.add(l);
+    }
+  return flat;
+}
+
+List getFiles(String path) {
+  Directory dir = new Directory(path);
+  List<FileSystemEntity> entities = dir.listSync(recursive: true);
+  List<File> files = [];
+  for(var e in entities) {
+    if (e is Directory) continue;
+    files.add(e);
+  }
+  return files;
+}
 main() {
 
   for (String s in pathList) {
@@ -61,9 +113,26 @@ main() {
     print('  components:\n    root:${f.root}\n    dir: ${f.dir}\n    base: ${f.base}\n'
               '    name: ${f.name}\n    ext: ${f.ext}');
     print('  mType: ${f.mType}');
-    print('  oType: ${f.oType}');
+    print('  subtype: ${f.subtype}');
     print('  charset: ${f.charset}');
   }
+
+  List<FileSystemEntity> files = getFiles(inRoot);
+  //files = flatten(files);
+  print(files);
+
+  for(var f in files)
+    print('File: $f');
+  List<Filename> fnames = [];
+  for(File f in files) {
+    var fn = new Filename(f.path);
+    fnames.add(fn);
+  }
+
+
+  for(Filename f in fnames)
+    print(f);
+
 
 
 }

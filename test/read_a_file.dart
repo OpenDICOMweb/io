@@ -25,17 +25,18 @@ String file2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
 
 List<String> filesList = [file1, file2];
 
-void main(List<String> args) {
-  Logger log = Logger.init(level: Level.fine);
-  var parser = getArgParser();
-  var results = parser.parse(args);
-  //var source = results['source'];
-  var source = r"C:\odw\test_data\sfd\CR_and_RF";
-  var inDir = new Directory(source);
+Logger log = Logger.init(level: Level.fine);
 
-  var target = results['target'];
+void main(List<String> args) {
+  var results = parse(args);
+  //var source = results['source'];
+  var source = r"C:/odw/test_data/sfd/CR_and_RF";
+  List<DcmFile> files = getDcmFilesFromDirectory(source);
+
+  //var target = results['target'];
+  var target = "C:/odw/sdk/io/example/output";
   var fs = new FileSystem(target);
-  List<FileSystemEntity> files = inDir.listSync(recursive: true, followLinks: false);
+
   // print('files: $files');
 
   for (var fse in files) {
@@ -43,7 +44,8 @@ void main(List<String> args) {
     //  print('f: $fse');
     //  print('target: ${FileType.instance.extension}');
     //  print('actual: "${path.extension(fse.path)}"');
-      if (path.extension(fse.path) == FileSubtype.instance.extension) {
+
+      if (path.extension(fse.path) == FileSubtype.extension) {
         log.config('Reading file: $fse');
         Instance instance = fs.readInstanceSync(fse);
         var output = instance.format(new Formatter(maxDepth: 3));
@@ -60,12 +62,23 @@ void main(List<String> args) {
   //print('Summary:\n ${activeStudies.summary}');
 }
 
-Instance readSopInstance(file) {
-  if (file is String) file = new File(file);
-  if (file is! File) throw new ArgumentError('file ($file) must be a String or File.');
-  Uint8List bytes = file.readAsBytesSync();
-  DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.readSopInstance(file.path);
+List<DcmFile> getDcmFilesFromDirectory(String source) {
+  var dir = new Directory(source);
+  List<File> files = dir.listSync(recursive: true, followLinks: false);
+  List<Filename> dcmFiles = [];
+  for(File f in files) {
+    dcmFiles.add(DcmFile.convert(f));
+  }
+  return dcmFiles;
+}
+Entity readFilenamesSync(String path) {
+  var file = new Filename(path);
+  if (file.existsSync()) {
+    Uint8List bytes = file.readAsBytesSync();
+    DcmDecoder decoder = new DcmDecoder(bytes);
+    return decoder.entity;
+  }
+  return null;
 }
 
 Instance writeSopInstance(Instance instance, file) {
@@ -77,6 +90,12 @@ Instance writeSopInstance(Instance instance, file) {
   DcmDecoder decoder = new DcmDecoder(bytes);
   return decoder.readSopInstance(file.path);
 }
+
+ArgResults parse(List<String> args) {
+  var parser = getArgParser();
+  return parser.parse(args);
+}
+
 ArgParser getArgParser() {
   var parser = new ArgParser()
     ..addOption('source', abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')

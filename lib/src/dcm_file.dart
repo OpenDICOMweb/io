@@ -8,9 +8,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dictionary/uid.dart';
+import 'package:path/path.dart' as path;
 
 import 'file_system.dart';
 import 'file_type.dart';
+
+int _firstDot(String s) => path.basename(s).indexOf('.');
+
+String _extension(String fname) => path.basename(fname).substring(_firstDot(fname));
 
 class DcmFile {
   final FileSystem fs;
@@ -21,12 +26,10 @@ class DcmFile {
 
   DcmFile(this.fs, this.fType, this.study, [this.series, this.instance]);
 
-  DcmFile.fromPath(String path) {
-
-  }
+  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toDcmFile(path);
 
   Directory get directory => fs.directory(study, series);
-  File get file => fs.file(fType, study, series, instance);
+  DcmFile get file => fs.file(fType, study, series, instance);
 
   /// Returns the [File] corresponding to the specified arguments.
   String get path {
@@ -58,6 +61,14 @@ class DcmFile {
   }
 
   static void writeStringSync(String s) {
+
+  }
+
+  static DcmFile convert(File f) {
+    String name = f.path;
+    String dir = path.dirname(name);
+    String ext = _extension(name);
+    FileSubtype subtype = FileSubtype.types[ext];
 
   }
 }
