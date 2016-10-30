@@ -29,6 +29,9 @@ class Filename {
     final String _path;
     FileSubtype __type;
     File _file;
+    String _study;
+    String _series;
+    String _instance;
 
     Filename(String path) : _path = toAbsolute(path);
 

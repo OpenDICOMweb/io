@@ -64,11 +64,4 @@ class DcmFile {
 
   }
 
-  static DcmFile convert(File f) {
-    String name = f.path;
-    String dir = path.dirname(name);
-    String ext = _extension(name);
-    FileSubtype subtype = FileSubtype.subtypes[ext];
-
-  }
 }

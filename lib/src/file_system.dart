@@ -34,7 +34,6 @@ class FileSystem extends FileSystemBase {
         root = FileSystemBase.maybeCreateRootSync(path);
 
 
-
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
   Directory directory(Uid study, [Uid series]) {
     var part3 = (series == null) ? "" : '/$series';
@@ -45,9 +44,8 @@ class FileSystem extends FileSystemBase {
   DcmFile file(FileType fType, Uid study, Uid series, Uid instance) =>
       new DcmFile(this, fType, study, series, instance);
 
-  DcmFile fromPath(String path) {
 
-  }
+  DcmFile toFile(String path) => new DcmFile.fromPath(this, path);
 
   //TODO: implement
   FSIndex get index => new FSIndex(path);

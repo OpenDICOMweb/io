@@ -104,7 +104,7 @@ List getFiles(String path) {
   return files;
 }
 main() {
-
+/*
   for (String s in pathList) {
     Filename f = new Filename(s);
     print('Path: $s');
@@ -128,10 +128,41 @@ main() {
     var fn = new Filename(f.path);
     fnames.add(fn);
   }
+*/
 
+  for (String s in pathList) {
+    String path = (p.isAbsolute(s)) ? s : '${p.current}/$s';
+    path = path.replaceAll('\\', '/');
+    print('path: $path');
+    var dir = p.dirname(path);
+    print('dirname: $dir');
+    var dirs = dir.split('/');
+    print('dirList: $dirs');
 
-  for(Filename f in fnames)
-    print(f);
+    int length = dirs.length;
+    var validUids = 0;
+    for(int i = 1; i < 4; i++) {
+      if (Uid.isValidUid(dirs[length-i])) validUids++;
+
+    }
+    print('last: ${dirs[length-1]}');
+
+    print('last - 1: ${dirs[length-2]}');
+    print('last - 2: ${dirs[length-3]}');
+
+    /*
+    Filename f = new Filename(s);
+    print('Path: $s');
+    print('  fname: $f');
+    print('  type: ${f.type}');
+    print('  components:\n    root:${f.root}\n    dir: ${f.dir}\n    base: ${f.base}\n'
+              '    name: ${f.name}\n    ext: ${f.ext}');
+    print('  mType: ${f.mType}');
+    print('  subtype: ${f.subtype}');
+    print('  charset: ${f.charset}');
+    */
+  }
+
 
 
 
