@@ -15,7 +15,7 @@ dependencies:
   # It should know as little as possible about DICOM.
   encode:
     path: C:/odw/sdk/convert
-    version: 0.3.4
+    version: 0.3.3
   # The I/O package should not use core, but it may used dictionary/common
   #core:
   #  path: C:/odw/sdk/core
