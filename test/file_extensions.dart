@@ -47,7 +47,7 @@ Filename convert(File f) {
 String name = f.path;
 String dir = p.dirname(name);
 String ext = _extension(name);
-FileSubtype subtype = FileSubtype.types[ext];
+FileSubtype subtype = FileSubtype.subtypes[ext];
 print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
   return new Filename(name);
 }

@@ -212,16 +212,18 @@ class FileSubtype {
   const FileSubtype(6, ESubtype.bulkdata, DcmMediaType.json, ".bd.dcm.json");
 
   static const xml =
-  const FileSubtype(1, ESubtype.complete, DcmMediaType.xml, ".dcm.xml");
+  const FileSubtype(7, ESubtype.complete, DcmMediaType.xml, ".dcm.xml");
   static const xmlMD =
-  const FileSubtype(2, ESubtype.metadata, DcmMediaType.xml, ".md.dcm.xml");
+  const FileSubtype(8, ESubtype.metadata, DcmMediaType.xml, ".md.dcm.xml");
   static const xmlBD =
-  const FileSubtype(2, ESubtype.bulkdata, DcmMediaType.xml, ".bd.dcm.xml");
+  const FileSubtype(9, ESubtype.bulkdata, DcmMediaType.xml, ".bd.dcm.xml");
 
-  static parseExt(String ext) => types[ext];
-  static parse(String _path) => types[_extension(_path)];
+  static parseExt(String ext) => subtypes[ext];
+  static parse(String _path) => subtypes[_extension(_path)];
 
-  static const Map<String, FileSubtype> types = const {
+  static bool isValidExtentsion(String ext) => (parseExt(ext) != null);
+
+  static const Map<String, FileSubtype> subtypes = const {
     ".dcm": FileSubtype.dcm,
     ".md.dcm": FileSubtype.dcmMD,
     ".bd.dcm": FileSubtype.dcmBD,

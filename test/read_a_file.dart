@@ -27,6 +27,8 @@ List<String> filesList = [file1, file2];
 
 Logger log = Logger.init(level: Level.fine);
 
+/// A program that takes a random file name and depending on the file extension returns a
+/// [Uint8List] or a [String] depending on the extension.
 void main(List<String> args) {
   var results = parse(args);
   //var source = results['source'];
@@ -45,7 +47,7 @@ void main(List<String> args) {
     //  print('target: ${FileType.instance.extension}');
     //  print('actual: "${path.extension(fse.path)}"');
 
-      if (path.extension(fse.path) == FileSubtype.extension) {
+      if (path.extension(fse.path) == FileSubtype.ext) {
         log.config('Reading file: $fse');
         Instance instance = fs.readInstanceSync(fse);
         var output = instance.format(new Formatter(maxDepth: 3));

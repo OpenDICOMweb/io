@@ -10,15 +10,16 @@ environment:
 
 dependencies:
   args: any
+
+  # The I/O package can should only use the convert/aux.dart library.
+  # It should know as little as possible about DICOM.
   encode:
     path: C:/odw/sdk/convert
     version: 0.3.4
-  core:
-    path: C:/odw/sdk/core
-    version: 0.4.1
-  dictionary:
-    path: C:/odw/sdk/dictionary
-    version: 0.4.1
+  # The I/O package should not use core, but it may used dictionary/common
+  #core:
+  #  path: C:/odw/sdk/core
+  #  version: 0.4.1
   path: any
 
 dev_dependencies:

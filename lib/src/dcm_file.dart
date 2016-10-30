@@ -26,7 +26,7 @@ class DcmFile {
 
   DcmFile(this.fs, this.fType, this.study, [this.series, this.instance]);
 
-  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toDcmFile(path);
+  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toFile(path);
 
   Directory get directory => fs.directory(study, series);
   DcmFile get file => fs.file(fType, study, series, instance);
@@ -68,7 +68,7 @@ class DcmFile {
     String name = f.path;
     String dir = path.dirname(name);
     String ext = _extension(name);
-    FileSubtype subtype = FileSubtype.types[ext];
+    FileSubtype subtype = FileSubtype.subtypes[ext];
 
   }
 }

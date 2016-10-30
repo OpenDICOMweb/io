@@ -1,6 +1,8 @@
 # TODO
 
-1. Examples
+1. Create a global object that knows about all file systems.
+
+2. Examples
     - read a file
     - write a file
     - read a study
