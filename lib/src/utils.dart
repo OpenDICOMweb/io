@@ -265,3 +265,11 @@ void writeStringFileSync(String path, String s) {
   }
 }
 
+// TODO:test
+bool isBinaryDicom(String path) {
+  Uint8List bytes = readBinaryFileSync(path);
+  if (bytes.lengthInBytes < 132) return false;
+  String s = bytes.sublist(128, 132).toString();
+  return (s == "DICM");
+}
+
