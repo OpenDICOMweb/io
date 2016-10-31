@@ -4,6 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -38,7 +39,7 @@ class DcmFile {
     return '${fs.path}/$study/$s/$i.${fType.extension}';
   }
   Uint8List get bytes {
-    if (fType.charset == "octet") {
+    if (fType.subtype.isBinary) {
       File f = new File(path);
       return f.readAsBytesSync();
     } else {
@@ -56,11 +57,16 @@ class DcmFile {
 
   String toString() => 'DcmFile($path)';
 
-  static void writeBytesSync(Uint8List bytes) {
+  Future<bool> write(Uint8List bytes) async {
+    File f = new File(path);
+    await f.writeAsBytes(bytes);
+    return true;
+  }
+  void writeSync(Uint8List bytes) {
 
   }
 
-  static void writeStringSync(String s) {
+  void writeStringSync(String s) {
 
   }
 

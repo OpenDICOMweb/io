@@ -88,7 +88,7 @@ class FileSystem extends FileSystemBase {
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
   List<dynamic> readStudySync(FileSubtype fType, Uid study) =>
-      (fType.charset == "octet")
+      (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study))
       : readStringDirectorySync(toPath(fType, study));
 
@@ -96,7 +96,7 @@ class FileSystem extends FileSystemBase {
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
   List<dynamic> readSeriesSync(FileSubtype fType, Uid study, Uid series) =>
-      (fType.charset == "octet")
+      (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study, series))
       : readStringDirectorySync(toPath(fType, study, series));
 
@@ -104,7 +104,7 @@ class FileSystem extends FileSystemBase {
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
   dynamic readInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance) =>
-      (fType.charset == "octet")
+      (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study, series, instance))
       : readStringDirectorySync(toPath(fType, study, series, instance));
 
@@ -126,7 +126,9 @@ class FileSystem extends FileSystemBase {
   // *** Write Sync  ***
 
   @override
-  void writeInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance, data) {}
+  void writeInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance, data) {
+
+  }
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);

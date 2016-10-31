@@ -12,8 +12,8 @@ import 'package:args/args.dart';
 import 'package:core/core.dart';
 import 'package:encode/encoder.dart';
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
-//import 'package:path/path.dart' as path;
+
+//TODO: cleanup for V0.9.0
 
 /// This program copies DICOM PS3.10 files (i.e. files with an extension of ".dcm") from anywhere
 /// in a source directory to a ODW SOP File System rooted at the destination directory.
@@ -26,8 +26,7 @@ String file2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
 
 List<String> filesList = [file1, file2];
 
-Logger log = Logger.init(level: Level.fine);
-
+//TODO move to utilities
 List<Filename> getDcmFilesFromDirectory(String source) {
   var dir = new Directory(source);
   List<FileSystemEntity> entities = dir.listSync(recursive: true, followLinks: false);
@@ -39,14 +38,15 @@ List<Filename> getDcmFilesFromDirectory(String source) {
   return filenames;
 }
 
+//TODO: cleanup and move to examples
 /// A program that takes a random file name and depending on the file extension returns a
 /// [Uint8List] or a [String] depending on the extension.
 void main(List<String> args) {
-  //var results = parse(args);
-  //var source = results['source'];
-  var source = r"C:/odw/test_data/sfd/CR_and_RF";
+  var results = parse(args);
+  var source = results['source'];
+  //var source = r"C:/odw/test_data/sfd/CR_and_RF";
   List<Filename> files = getDcmFilesFromDirectory(source);
-
+  print(source);
   //var target = results['target'];
   //var target = "C:/odw/sdk/io/example/output";
   //var fs = new FileSystem(target);
@@ -59,8 +59,7 @@ void main(List<String> args) {
       print('Filename: $fn');
       Entity e = DcmDecoder.decode(bytes);
       print('Entity: ${e.format(new Formatter())}');
-
-      //print('Part10: ${bytes.lengthInBytes} length');
+      print(activeStudies.summary);
     } else if (fn.isJson) {
       String s = fn.file.readAsStringSync();
       Entity e = JsonDecoder.decode(s);
@@ -80,10 +79,13 @@ ArgResults parse(List<String> args) {
 
 ArgParser getArgParser() {
   var parser = new ArgParser()
-    ..addOption('source', abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')
+    ..addOption('source',
+                    abbr: 's',
+                    defaultsTo: 'input',
+                    help: 'Specifies the source directory.')
     ..addOption('target',
                     abbr: 't',
-                    defaultsTo: '.',
+                    defaultsTo: 'output',
                     help: 'Specifies the root directory of the target SOP File System.')
     ..addFlag('validate',
                   abbr: 'v',

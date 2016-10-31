@@ -76,14 +76,31 @@ class Filename {
     bool get isBulkdata => _subtype.isBulkdata;
 
 
-    Entity get contents {
+    Entity get contents => read();
+
+    Entity read() {
       if (isBinary) {
         Uint8List bytes = file.readAsBytesSync();
-        DcmDecoder decoder = new DcmDecoder(bytes);
-        return decoder.entity;
+        return DcmDecoder.decode(bytes);
       } else if (isJson) {
         String s = file.readAsStringSync();
         return JsonDecoder.decode(s);
+      } else if (isXml) {
+        String s = file.readAsStringSync();
+        throw "XML Umplemented";
+      }
+      throw "Shouldn't get here";
+    }
+
+    bool write(Entity entity) {
+      if (isBinary) {
+        Uint8List bytes = DcmEncoder.encode(entity);
+        file.writeAsBytesSync(bytes);
+        return true;
+      } else if (isJson) {
+        Uint8List bytes = JsonEncoder.encode(entity);
+        file.writeAsBytesSync(bytes);
+        return true;
       } else if (isXml) {
         String s = file.readAsStringSync();
         throw "XML Umplemented";
