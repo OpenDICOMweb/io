@@ -43,8 +43,8 @@ List<Filename> getDcmFilesFromDirectory(String source) {
 /// [Uint8List] or a [String] depending on the extension.
 void main(List<String> args) {
   var results = parse(args);
-  var source = results['source'];
-  //var source = r"C:/odw/test_data/sfd/CR_and_RF";
+  //var source = results['source'];
+  var source = r"C:/odw/test_data/sfd/CR_and_RF";
   List<Filename> files = getDcmFilesFromDirectory(source);
   print(source);
   //var target = results['target'];
