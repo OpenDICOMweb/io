@@ -35,9 +35,9 @@ class Filename {
     final String _path;
     FileSubtype __type;
     File _file;
-    String _study;
-    String _series;
-    String _instance;
+ //   String _study;
+ //   String _series;
+ //   String _instance;
 
     Filename(String path) : _path = toAbsolute(path);
 
@@ -65,7 +65,7 @@ class Filename {
     // These getters are based on the expectation that the file extension is accurate.
     bool get isDicom => (_subtype != null) && _subtype.isDicom;
     bool get isAscii => (_subtype != null) && _subtype.isAscii;
-    bool get isBinary => (_subtype != null) && _subtype.isBinary;
+    bool get isBinary => (_subtype != null) && mediaType.isBinary;
     bool get isUtf8 => (_subtype != null) && _subtype.isUtf8;
 
     bool get isJson => (_subtype != null) && _subtype.encoding == Encoding.json;
@@ -79,14 +79,17 @@ class Filename {
     Entity get contents => read();
 
     Entity read() {
+      print(this);
+      print('subtype: $subtype');
+      print('isBinary: $isBinary');
       if (isBinary) {
         Uint8List bytes = file.readAsBytesSync();
         return DcmDecoder.decode(bytes);
       } else if (isJson) {
-        String s = file.readAsStringSync();
-        return JsonDecoder.decode(s);
+        Uint8List bytes = file.readAsBytesSync();
+        return JsonDecoder.decode(bytes);
       } else if (isXml) {
-        String s = file.readAsStringSync();
+        // Uint8List bytes = file.readAsBytesSync();
         throw "XML Umplemented";
       }
       throw "Shouldn't get here";
@@ -98,15 +101,19 @@ class Filename {
         file.writeAsBytesSync(bytes);
         return true;
       } else if (isJson) {
-        Uint8List bytes = JsonEncoder.encode(entity);
-        file.writeAsBytesSync(bytes);
-        return true;
+        //Uint8List bytes = JsonEncoder.encode(entity);
+        //file.writeAsBytesSync(bytes);
+        throw "JSON Umplemented";
       } else if (isXml) {
-        String s = file.readAsStringSync();
         throw "XML Umplemented";
       }
       throw "Shouldn't get here";
     }
+
+    String get info => '''
+Filename: $_path;
+Subtype: ${FileSubtype.parse(_path)};
+    ''';
 
     String toString() => _path;
 }

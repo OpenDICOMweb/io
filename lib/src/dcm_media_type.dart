@@ -19,13 +19,21 @@ class DcmMediaType {
 
   bool get isDicom => true;
 
-  bool get isBinary => encoding == Units.binary;
-  bool get isAscii => encoding == Units.ascii;
-  bool get isUtf8 => encoding == Units.utf8;
+  bool get isBinary => units == Units.binary;
+  bool get isAscii => units == Units.ascii;
+  bool get isUtf8 => units == Units.utf8;
 
   bool get isPart10 => encoding == Encoding.part10;
   bool get isJson => encoding == Encoding.json;
   bool get isXml => encoding == Encoding.xml;
+
+  String get info => '''
+DcmMediaType:
+  subType: $subType
+  encoding: $encoding
+  units: $units
+  ''';
+  String toString() => "$type/$subType";
 
   static const dcm = const DcmMediaType("dicom", Encoding.part10, Units.binary);
   static const json = const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
@@ -34,5 +42,6 @@ class DcmMediaType {
   static const xml = const DcmMediaType("dicom+xml", Encoding.xml, Units.utf8);
   static const bytes = const DcmMediaType("octet-stream", Encoding.xml, Units.binary);
 
-  String toString() => "$type/$subType";
+
+
 }

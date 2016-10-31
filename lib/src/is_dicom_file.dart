@@ -4,10 +4,12 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-import 'package:convert/aux.dart';
+import 'dart:typed_data';
 
-import 'filename.dart';
+import 'package:encode/dicom.dart';
+
 import 'file_type.dart';
+import 'filename.dart';
 
 bool isDicomFile(String path) {
   var fname = new Filename(path);
@@ -16,9 +18,12 @@ bool isDicomFile(String path) {
 
   if (fname.isDicom) {
     if (isBinaryDicom(fname)) return true;
+    return false;
   }
+  return false;
 }
 
-bool isBinaryDicom(String path) {
-  var decoder = new DcmDecoder()
+bool isBinaryDicom(Filename fname) {
+  Uint8List bytes = fname.file.readAsBytesSync();
+  DcmDecoder.isBinaryDicom(bytes);
 }

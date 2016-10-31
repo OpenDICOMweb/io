@@ -8,7 +8,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dictionary/uid.dart';
 import 'package:path/path.dart' as path;
 
 import 'file_system.dart';
@@ -21,9 +20,9 @@ String _extension(String fname) => path.basename(fname).substring(_firstDot(fnam
 class DcmFile {
   final FileSystem fs;
   final FileType fType;
-  final Uid study;
-  final Uid series;
-  final Uid instance;
+  final String study;
+  final String series;
+  final String instance;
 
   DcmFile(this.fs, this.fType, this.study, [this.series, this.instance]);
 

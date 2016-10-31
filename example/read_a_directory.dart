@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
-import 'package:logger/logger.dart';
+
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";

@@ -52,7 +52,8 @@ File filter(File f, Filter p ) => (p(f) != null) ? f : null;
 File isFile(f) => (f is File) ? f : null;
 
 /// Returns the [File] if the [predicate] is [true]; otherwise, null.
-File dcmFilter(File f) => filter(f, isDcmFile);
+//TODO: fix
+//File dcmFilter(File f) => filter(f, isDicomFile);
 
 /// Returns a [List] of [File] from the [Directory] specified by [path].
 List getFilesSync(directory, [filter = isFile]) {

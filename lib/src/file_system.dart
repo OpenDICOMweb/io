@@ -35,13 +35,13 @@ class FileSystem extends FileSystemBase {
 
 
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
-  Directory directory(Uid study, [Uid series]) {
+  Directory directory(String study, [String series]) {
     var part3 = (series == null) ? "" : '/$series';
     return new Directory('$path/$study$part3');
   }
 
   /// Returns the [File] corresponding to the specified arguments.
-  DcmFile file(FileType fType, Uid study, Uid series, Uid instance) =>
+  DcmFile file(FileType fType, String study, String series, String instance) =>
       new DcmFile(this, fType, study, series, instance);
 
 
@@ -87,7 +87,7 @@ class FileSystem extends FileSystemBase {
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  List<dynamic> readStudySync(FileSubtype fType, Uid study) =>
+  List<dynamic> readStudySync(FileSubtype fType, String study) =>
       (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study))
       : readStringDirectorySync(toPath(fType, study));
@@ -95,7 +95,7 @@ class FileSystem extends FileSystemBase {
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
-  List<dynamic> readSeriesSync(FileSubtype fType, Uid study, Uid series) =>
+  List<dynamic> readSeriesSync(FileSubtype fType, String study, String series) =>
       (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study, series))
       : readStringDirectorySync(toPath(fType, study, series));
@@ -103,7 +103,7 @@ class FileSystem extends FileSystemBase {
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  dynamic readInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance) =>
+  dynamic readInstanceSync(FileSubtype fType, String study, String series, String instance) =>
       (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study, series, instance))
       : readStringDirectorySync(toPath(fType, study, series, instance));
@@ -126,14 +126,16 @@ class FileSystem extends FileSystemBase {
   // *** Write Sync  ***
 
   @override
-  void writeInstanceSync(FileSubtype fType, Uid study, Uid series, Uid instance, data) {
+  void writeInstanceSync(FileSubtype fType, String study, String series, String instance, data) {
 
   }
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
 
-  static DcmFile parse(String path) {}
+  static DcmFile parse(String path) {
+    //TODO
+  }
 
 }
 

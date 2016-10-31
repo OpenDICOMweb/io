@@ -12,8 +12,10 @@ int _firstDot(String s) => p.basename(s).indexOf('.');
 
 String _extension(String path) {
   var base = p.basename(path);
-  var pos = _firstDot(path);
-  return (pos == -1) ? null : base.substring(pos);
+  var pos = p.extension(path);
+  print('ext: $pos');
+  //return (pos == -1) ? null : base.substring(pos);
+  return pos;
 }
 
 /// The various [FileSubtype]s of DICOM objects
@@ -223,20 +225,25 @@ class FileSubtype {
   static const xmlBD = const FileSubtype(9, ESubtype.bulkdata, DcmMediaType.xml, ".bd.dcm.xml");
 
   static parseExt(String ext) => subtypes[ext];
-  static parse(String _path) => subtypes[_extension(_path)];
+  static parse(String _path) {
+    print('Extension: ${_extension(_path)}');
+    var s = subtypes[_extension(_path)];
+    print('subtype: $s');
+    return s;
+  }
 
   static bool isValidExtentsion(String ext) => (parseExt(ext) != null);
 
   static const Map<String, FileSubtype> subtypes = const {
     ".dcm": FileSubtype.dcm,
-    ".md.dcm": FileSubtype.dcmMD,
-    ".bd.dcm": FileSubtype.dcmBD,
+    ".mddcm": FileSubtype.dcmMD,
+    ".bddcm": FileSubtype.dcmBD,
     ".json": FileSubtype.json,
-    ".dcm.json": FileSubtype.json,
-    ".md.dcm.json": FileSubtype.jsonMD,
+    ".dcmjson": FileSubtype.json,
+    ".mddcmjson": FileSubtype.jsonMD,
     ".xml": FileSubtype.xml,
-    ".dcm.xml": FileSubtype.xml,
-    ".md.dcm.xml": FileSubtype.xmlMD
+    ".dcmxml": FileSubtype.xml,
+    ".mddcmxml": FileSubtype.xmlMD
   };
 
   toString() => '$eSubtype($ext) encoded as $mediaType';

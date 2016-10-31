@@ -26,16 +26,21 @@ void main() {
 
   // Read a File
   Filename inFile = new Filename(inPath);
+  print(inFile.info);
+  print('mediaType: ${inFile.mediaType}');
+  print(inFile.mediaType.info);
+  print('mediaType.isBrinary: ${inFile.mediaType.isBinary}');
+  print('isBinary: ${inFile.isBinary}');
   log.info('Reading file: $inFile');
   Instance instance = inFile.read();
 
-  var fs = new FileSystem('output/dcmfs');
   // Write a File
+  var fs = new FileSystem('output/dcmfs');
+  print('FS: $fs');
   DcmFile outFile = fs.file(FileType.dcmInstance, instance.study.uid, instance.series.uid, uid);
+  print('DcmFile: $outFile');
   log.info('Writing file: $outFile');
-  var ok = fs.w
-
-  Uint8List outBytes = DcmEncoder.encode(instance);
-  write
+  Uint8List bytes = DcmEncoder.encode(instance);
+  outFile.writeSync(bytes);
 
 }
