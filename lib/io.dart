@@ -10,6 +10,7 @@ export 'package:io/src/dcm_file.dart';
 export 'package:io/src/dcm_media_type.dart';
 export 'package:io/src/file_system.dart';
 export 'package:io/src/file_type.dart';
+export 'package:io/src/filename.dart';
 export 'package:io/src/formatter.dart';
 export 'package:io/src/index.dart';
 export 'package:io/src/utils.dart';

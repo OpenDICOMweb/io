@@ -32,7 +32,7 @@ class Filename {
   String get base => p.basename(_path);
   String get name => base.substring(0, _firstDot(base));
   String get ext => base.substring(_firstDot(base));
-  String get charset => _type.charset;
+  Encoding get encoding => _type.encoding;
 
   FileSubtype get type => _type ??= FileSubtype.parse(_path);
   DcmMediaType get mType => type.mediaType;
@@ -103,6 +103,12 @@ List getFiles(String path) {
   }
   return files;
 }
+
+String toAbsolute(String path) {
+  var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
+  return s.replaceAll('\\', '/');
+}
+
 main() {
 /*
   for (String s in pathList) {
@@ -129,27 +135,31 @@ main() {
     fnames.add(fn);
   }
 */
-
+  var root = 'C:/odw/sdk/io/';
   for (String s in pathList) {
-    String path = (p.isAbsolute(s)) ? s : '${p.current}/$s';
-    path = path.replaceAll('\\', '/');
+    String path = toAbsolute(s);
     print('path: $path');
     var dir = p.dirname(path);
     print('dirname: $dir');
+
+    if (dir.indexOf(root) == 0) dir = dir.replaceFirst(root, "");
+    print('without root: $dir');
     var dirs = dir.split('/');
     print('dirList: $dirs');
 
     int length = dirs.length;
-    var validUids = 0;
-    for(int i = 1; i < 4; i++) {
-      if (Uid.isValidUid(dirs[length-i])) validUids++;
-
+    if (length > 2) throw "too many directories: $dir";
+    var series;
+    var study;
+    if (length == 2) {
+      //series = Uid.isValid(dirs[1]);
+      //study = Uid.isValid(dirs[0]);
+      series = dirs[1];
+      study = dirs[0];
+    } else if (length == 1) {
+      var study = dirs[0];
     }
-    print('last: ${dirs[length-1]}');
-
-    print('last - 1: ${dirs[length-2]}');
-    print('last - 2: ${dirs[length-3]}');
-
+    print('study: $study, series: $series');
     /*
     Filename f = new Filename(s);
     print('Path: $s');
@@ -167,3 +177,34 @@ main() {
 
 
 }
+/*
+List<DcmFile> getDcmFilesFromDirectory(String source) {
+  var dir = new Directory(source);
+  List<File> files = dir.listSync(recursive: true, followLinks: false);
+  List<Filename> dcmFiles = [];
+  for(File f in files) {
+    dcmFiles.add(DcmFile.convert(f));
+  }
+  return dcmFiles;
+}
+
+Entity readFilenamesSync(String path) {
+  var file = new Filename(path);
+  if (file.existsSync()) {
+    Uint8List bytes = file.readAsBytesSync();
+    DcmDecoder decoder = new DcmDecoder(bytes);
+    return decoder.entity;
+  }
+  return null;
+}
+
+Instance writeSopInstance(Instance instance, file) {
+  if (file is String) file = new File(file);
+  if (file is! File) throw new ArgumentError('file ($file) must be a String or File.');
+  DcmEncoder encoder = new DcmEncoder(instance.dataset.lengthInBytes);
+  encoder.writeSopInstance(instance);
+  Uint8List bytes = file.readAsBytesSync();
+  DcmDecoder decoder = new DcmDecoder(bytes);
+  return decoder.readSopInstance(file.path);
+}
+*/

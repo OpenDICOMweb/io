@@ -46,5 +46,5 @@ Instance readSopInstance(File f) {
   var bytes = f.readAsBytesSync();
  // print('LengthInBytes: ${bytes.length}');
   DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.readSopInstance(f.path);
+  return decoder.read(f.path);
 }

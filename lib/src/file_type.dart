@@ -10,7 +10,11 @@ import 'dcm_media_type.dart';
 
 int _firstDot(String s) => p.basename(s).indexOf('.');
 
-String _extension(String path) => p.basename(path).substring(_firstDot(path));
+String _extension(String path) {
+  var base = p.basename(path);
+  var pos = _firstDot(path);
+  return (pos == -1) ? null : base.substring(pos);
+}
 
 /// The various [FileSubtype]s of DICOM objects
 ///
@@ -31,14 +35,14 @@ class FileType {
   final EType eType; // Object Type
   final FileSubtype subtype;
 
-
   //TODO: jfp document this
   const FileType(this.index, this.eType, this.subtype);
 
   DcmMediaType get mediaType => subtype.mType;
   EType get objectType => eType;
   String get extension => subtype.ext;
-  String get charset => subtype.mType.charset;
+  Encoding get encoding => subtype.mType.encoding;
+  Units get units => subtype.mType.units;
 
   bool get isDicom => true;
   bool get isComplete => subtype == ESubtype.complete;
@@ -92,7 +96,6 @@ class FileType {
   static const xmlFrames = const FileType(1, EType.frames, FileSubtype.xml);
   static const xmlFramesMD = const FileType(2, EType.frames, FileSubtype.xmlMD);
   static const xmlFramesBD = const FileType(2, EType.frames, FileSubtype.xmlBD);
-
 
   FileType lookup(EType eType, FileSubtype fSubtype) {
     switch (eType) {
@@ -172,12 +175,12 @@ class FileType {
     throw "bad Entity lookup";
   }
 
-
-
   toString() => '$eType encoded as $mediaType';
 }
 
 enum ESubtype { complete, metadata, bulkdata }
+
+enum contentType { bytes, utf8 }
 
 class FileSubtype {
   final int index;
@@ -190,33 +193,34 @@ class FileSubtype {
 
   DcmMediaType get mediaType => mType;
   String get extension => ext;
-  String get charset => mType.charset;
+  Encoding get encoding => mType.encoding;
+  Units get units => mType.units;
 
   bool get isDicom => true;
+
+  bool get isBinary => mType.isBinary;
+  bool get isAscii => mType.isAscii;
+  bool get isUtf8 => mType.isUtf8;
+
+  bool get isPart10 => mType.encoding == Encoding.part10;
+  bool get isJson => mType.encoding == Encoding.json;
+  bool get isXml => mType.encoding == Encoding.xml;
+
   bool get isComplete => eSubtype == ESubtype.complete;
   bool get isMetadata => eSubtype == ESubtype.metadata;
   bool get isBulkdata => eSubtype == ESubtype.bulkdata;
 
-  static const dcm =
-  const FileSubtype(1, ESubtype.complete, DcmMediaType.dcm, ".dcm");
-  static const dcmMD =
-  const FileSubtype(2, ESubtype.metadata, DcmMediaType.dcm, ".md.dcm");
-  static const dcmBD =
-  const FileSubtype(3, ESubtype.bulkdata, DcmMediaType.dcm, ".bd.dcm");
+  static const dcm = const FileSubtype(1, ESubtype.complete, DcmMediaType.dcm, ".dcm");
+  static const dcmMD = const FileSubtype(2, ESubtype.metadata, DcmMediaType.dcm, ".md.dcm");
+  static const dcmBD = const FileSubtype(3, ESubtype.bulkdata, DcmMediaType.dcm, ".bd.dcm");
 
-  static const json =
-  const FileSubtype(4, ESubtype.complete, DcmMediaType.json, ".dcm.json");
-  static const jsonMD =
-  const FileSubtype(5, ESubtype.metadata, DcmMediaType.json, ".md.dcm.json");
-  static const jsonBD =
-  const FileSubtype(6, ESubtype.bulkdata, DcmMediaType.json, ".bd.dcm.json");
+  static const json = const FileSubtype(4, ESubtype.complete, DcmMediaType.json, ".dcm.json");
+  static const jsonMD = const FileSubtype(5, ESubtype.metadata, DcmMediaType.json, ".md.dcm.json");
+  static const jsonBD = const FileSubtype(6, ESubtype.bulkdata, DcmMediaType.json, ".bd.dcm.json");
 
-  static const xml =
-  const FileSubtype(7, ESubtype.complete, DcmMediaType.xml, ".dcm.xml");
-  static const xmlMD =
-  const FileSubtype(8, ESubtype.metadata, DcmMediaType.xml, ".md.dcm.xml");
-  static const xmlBD =
-  const FileSubtype(9, ESubtype.bulkdata, DcmMediaType.xml, ".bd.dcm.xml");
+  static const xml = const FileSubtype(7, ESubtype.complete, DcmMediaType.xml, ".dcm.xml");
+  static const xmlMD = const FileSubtype(8, ESubtype.metadata, DcmMediaType.xml, ".md.dcm.xml");
+  static const xmlBD = const FileSubtype(9, ESubtype.bulkdata, DcmMediaType.xml, ".bd.dcm.xml");
 
   static parseExt(String ext) => subtypes[ext];
   static parse(String _path) => subtypes[_extension(_path)];
@@ -227,12 +231,13 @@ class FileSubtype {
     ".dcm": FileSubtype.dcm,
     ".md.dcm": FileSubtype.dcmMD,
     ".bd.dcm": FileSubtype.dcmBD,
+    ".json": FileSubtype.json,
     ".dcm.json": FileSubtype.json,
     ".md.dcm.json": FileSubtype.jsonMD,
+    ".xml": FileSubtype.xml,
     ".dcm.xml": FileSubtype.xml,
     ".md.dcm.xml": FileSubtype.xmlMD
   };
 
   toString() => '$eSubtype($ext) encoded as $mediaType';
 }
-
