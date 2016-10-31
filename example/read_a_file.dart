@@ -5,7 +5,6 @@
 // See the   AUTHORS file for other contributors.
 
 //import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:args/args.dart';
@@ -26,17 +25,6 @@ String file2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
 
 List<String> filesList = [file1, file2];
 
-//TODO move to utilities
-List<Filename> getDcmFilesFromDirectory(String source) {
-  var dir = new Directory(source);
-  List<FileSystemEntity> entities = dir.listSync(recursive: true, followLinks: false);
-  List<Filename> filenames = [];
-  for(FileSystemEntity f in entities) {
-    filenames.add(new Filename(f.path));
-  }
-  print('Filenames(${filenames.length}): $filenames');
-  return filenames;
-}
 
 //TODO: cleanup and move to examples
 /// A program that takes a random file name and depending on the file extension returns a
@@ -45,7 +33,7 @@ void main(List<String> args) {
   var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CR_and_RF";
-  List<Filename> files = getDcmFilesFromDirectory(source);
+  List<Filename> files = Filename.getFilesFromDirectory(source);
   print(source);
   //var target = results['target'];
   //var target = "C:/odw/sdk/io/example/output";

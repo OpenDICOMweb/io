@@ -5,9 +5,11 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
+import 'package:io/io.dart';
 
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -22,29 +24,30 @@ String outRoot3 = 'test/output/root3';
 
 
 void main() {
-  Logger log = new Logger("read_a_directory", Level.debug);
+  Logger log = new Logger("read_a_directory");
 
   Directory dir = new Directory(inRoot1);
 
-  List<FileSystemEntity> fList = dir.listSync();
-  log.info('File count: ${fList.length}');
-  for (File f in fList)
-    log.info('File: $f');
+  List<Filename> files = Filename.getFilesFromDirectory(inRoot0);
+  log.info('File count: ${files.length}');
+  for (Filename fn in files)
+    log.info('File: $fn');
 
-  Instance instance;
-  for (File file in fList) {
+  List<Instance> instances;
+  for (Filename file in files) {
     print('\nReading file: $file');
-    instance = readSopInstance(file);
-   // print('output:\n${instance.patient.format(new Prefixer())}');
+    Instance instance = readDicomFile(file);
+    instances.add(instance);
+    print(instance.info);
   }
-  print(instance.study.summary);
   print('Active Patients: ${activeStudies}');
 
 }
 
-Instance readSopInstance(File f) {
-  var bytes = f.readAsBytesSync();
- // print('LengthInBytes: ${bytes.length}');
-  DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.read(f.path);
+Instance readDicomFile(file) {
+  if (file is String) file = new File(file);
+  if (file is Filename) file = file.file;
+  if (file is! File) return null;
+  Uint8List bytes = file.readAsBytesSync();
+  return DcmDecoder.decode(bytes);
 }
