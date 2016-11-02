@@ -7,7 +7,6 @@
 //import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:args/args.dart';
 import 'package:core/core.dart';
 import 'package:encode/encoder.dart';
 import 'package:io/io.dart';
@@ -18,38 +17,39 @@ import 'package:io/io.dart';
 /// in a source directory to a ODW SOP File System rooted at the destination directory.
 
 String inRoot = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
-String outRoot = "C:/odw/sdk/io/example/output";
-
-String file1 = "CR.2.16.840.1.114255.393386351.1568457295.17895.5.dcm";
-String file2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
-
-List<String> filesList = [file1, file2];
-
+String outRoot = "C:/odw/sdk/io/bin/output";
 
 //TODO: cleanup and move to examples
-/// A program that takes a random file name and depending on the file extension returns a
-/// [Uint8List] or a [String] depending on the extension.
+/// A program that takes a Directory containing '.dcm' files
+/// in its tree, reads them and then stores them in the appropriate
+/// place in the DICOM [FileSystem].
+//TODO: make this work with arguments. Uncomment the source and target arguments
 void main(List<String> args) {
-  var results = parse(args);
+  //var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CR_and_RF";
   List<Filename> files = Filename.getFilesFromDirectory(source);
-  print(source);
+  print('source: $source');
   //var target = results['target'];
-  //var target = "C:/odw/sdk/io/example/output";
-  //var fs = new FileSystem(target);
+  var target = "C:/odw/sdk/io/example/output";
+  var fs = new FileSystem(target);
 
-  // print('files: $files');
+  print('files: $files');
 
   for (Filename fn in files) {
     if (fn.isPart10) {
       Uint8List bytes = fn.file.readAsBytesSync();
-      print('Filename: $fn');
+      //print('Filename: $fn');
       Entity e = DcmDecoder.decode(bytes);
       print('Entity: ${e.format(new Formatter())}');
-      print(activeStudies.summary);
+
+      DcmFile dcmFile = fs.dcmFile(FileType.dcmInstance, e.dataset.name);
+      print(dcmFile.path);
+      dcmFile.writeSync(bytes);
+
+      // print(activeStudies.summary);
     } else if (fn.isJson) {
-      String s = fn.file.readAsStringSync();
+      Uint8List s = fn.file.readAsBytesSync();
       Entity e = JsonDecoder.decode(s);
       print('Entity: ${e.format(new Formatter())}');
     } else {
@@ -60,27 +60,6 @@ void main(List<String> args) {
   //print('Summary:\n ${activeStudies.summary}');
 }
 
-ArgResults parse(List<String> args) {
-  var parser = getArgParser();
-  return parser.parse(args);
-}
 
-ArgParser getArgParser() {
-  var parser = new ArgParser()
-    ..addOption('source',
-                    abbr: 's',
-                    defaultsTo: 'input',
-                    help: 'Specifies the source directory.')
-    ..addOption('target',
-                    abbr: 't',
-                    defaultsTo: 'output',
-                    help: 'Specifies the root directory of the target SOP File System.')
-    ..addFlag('validate',
-                  abbr: 'v',
-                  defaultsTo: true,
-                  help: 'Specifies whether the source files should be cheched that '
-                      'they contain valid DICOM as they are copied');
 
-  return parser;
-}
 

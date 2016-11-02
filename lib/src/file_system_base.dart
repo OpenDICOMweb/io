@@ -7,7 +7,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dictionary/uid.dart';
+import 'package:core/core.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';
@@ -46,10 +46,10 @@ abstract class FileSystemBase {
   FSIndex get index;
 
   /// Returns the [Directory] corresponding to the specified [root], [Study] and [Series].
-  Directory directory(String study, [String series]);
+  Directory directory(EntityName name);
 
   /// Returns the [File] corresponding to [root] plus the specified arguments.
-  DcmFile file (FileType fType, String study, String series, String instance);
+  DcmFile dcmFile (FileType fType, EntityName name);
 
   // *** Read Async  ***
   //TODO: *** See https://www.dartlang.org/articles/language/await-async

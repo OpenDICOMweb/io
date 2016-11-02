@@ -22,25 +22,19 @@ String outRoot1 = 'test/output/root1';
 String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
-
 void main() {
-  Logger log = new Logger("read_a_directory");
 
-  Directory dir = new Directory(inRoot1);
-
+  // Get the files in the directory
   List<Filename> files = Filename.getFilesFromDirectory(inRoot0);
-  log.info('File count: ${files.length}');
-  for (Filename fn in files)
-    log.info('File: $fn');
+  stdout.writeln('File count: ${files.length}');
 
-  List<Instance> instances;
+  // Read, parse, and print a summary of each file.
   for (Filename file in files) {
     print('\nReading file: $file');
-    Instance instance = readDicomFile(file);
-    instances.add(instance);
+    Instance instance = file.readSync();
     print(instance.info);
   }
-  print('Active Patients: ${activeStudies}');
+
 
 }
 

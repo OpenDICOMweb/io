@@ -13,7 +13,10 @@ enum Units {
   ascii,
 
   /// The encoding units are 8-bit UTF8 code units.
-  utf8
+  utf8,
+
+  /// The encoding units are [unknown].
+  unknown
 }
 
 /// The DICOM object encoding.
@@ -38,7 +41,10 @@ enum Encoding {
   /// The representation (object) is encoded in the DIas specified in
   /// [PS3.19, Annex A.1](http://dicom.nema.org/medical/dicom/current/output/html/part19
   /// .html#sect_A.1).
-  xml
+  xml,
+
+  /// The Encoding is [unknown].
+  unknown
 }
 
 /// DICOM Media Type.
@@ -58,7 +64,7 @@ class DcmMediaType {
   /// The media type [type] of DICOM Media Types
   String get type => "application";
 
-  bool get isDicom => true;
+  bool get isDicom => name != "Unknown";
 
   /// Returns [true] if the representation is encoded in [Units.binary].
   bool get isBinary => units == Units.binary;
@@ -95,5 +101,6 @@ DcmMediaType:
   static const fastJson = const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
   static const pureJson = const DcmMediaType("json", Encoding.json, Units.utf8);
   static const xml = const DcmMediaType("dicom+xml", Encoding.xml, Units.utf8);
-  static const bytes = const DcmMediaType("octet-stream", Encoding.xml, Units.binary);
+  static const octets = const DcmMediaType("octet-stream", Encoding.xml, Units.binary);
+  static const unknown = const DcmMediaType("Unknown", Encoding.unknown, Units.unknown);
 }

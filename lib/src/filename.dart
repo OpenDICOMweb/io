@@ -4,6 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -35,11 +36,11 @@ class Filename {
   FileSubtype _subtype;
   File _file;
 
-  //   String _study;
-  //   String _series;
-  //   String _instance;
+  Filename(String path)
+      : _path = toAbsolute(path);
 
-  Filename(String path) : _path = toAbsolute(path);
+  Filename.withType(String path, this._subtype)
+      : _path = toAbsolute(path);
 
   Filename.fromFile(File file)
       : _file = file,
@@ -56,7 +57,7 @@ class Filename {
 
   // Path component accessors.
   String get path => _path;
-  String get root => p.rootPrefix(_path);
+  String get rootPrefix => p.rootPrefix(_path);
   String get dir => p.dirname(_path);
   String get base => p.basename(_path);
   String get name => base.substring(0, _firstDot(base));
@@ -64,6 +65,8 @@ class Filename {
 
   // These getters are based on the expectation that the file extension is accurate.
 
+  /// Returns [true] if a DICOM file type.
+  bool get isDicom => subtype.isDicom;
   /// The file extension for this [FileSubtype].
   String get extension => ext;
 
@@ -71,25 +74,25 @@ class Filename {
   DcmMediaType get mediaType => subtype.mediaType;
 
   /// Returns [true] if the encoding units are bytes.
-  bool get isBinary => subtype.mType.isBinary;
+  bool get isBinary => subtype.mType?.isBinary ?? null;
 
   /// Returns [true] if the encoding units are 7-bit US-ASCII.
-  bool get isAscii => subtype.mType.isAscii;
+  bool get isAscii => subtype.mType?.isAscii;
 
   /// Returns [true] if the encoding (code) units are UTF8.
-  bool get isUtf8 => subtype.mType.isUtf8;
+  bool get isUtf8 => subtype.mType?.isUtf8;
 
   /// Returns [true] if the representation encoding is [encoding.part10].
-  bool get isPart10 => subtype.mType.encoding == Encoding.part10;
+  bool get isPart10 => subtype.mType?.encoding == Encoding.part10;
 
   /// Returns [true] if the representation encoding is [encoding.json].
-  bool get isJson => subtype.mType.encoding == Encoding.json;
+  bool get isJson => subtype.mType?.encoding == Encoding.json;
 
   /// Returns [true] if the representation encoding is [encoding.xml].
-  bool get isXml => subtype.mType.encoding == Encoding.xml;
+  bool get isXml => subtype.mType?.encoding == Encoding.xml;
 
   /// The DICOM object [Encoding].
-  Encoding get encoding => subtype.mType.encoding;
+  Encoding get encoding => subtype.mType?.encoding;
 
   /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
@@ -104,12 +107,10 @@ class Filename {
   /// Returns [true] if this is a [Bulkdata] object.
   bool get isBulkdata => subtype.oType == OType.bulkdata;
 
-  Entity get contents => read();
+  Future<Entity> get contents => read();
 
-  Entity read() {
-    print(this);
-    print('subtype: $subtype');
-    print('isBinary: $isBinary');
+  //TODO: should this return the bytes or a parsed Entity
+  Entity readSync() {
     if (isBinary) {
       Uint8List bytes = file.readAsBytesSync();
       return DcmDecoder.decode(bytes);
@@ -123,7 +124,23 @@ class Filename {
     throw "Shouldn't get here";
   }
 
-  bool write(Entity entity) {
+  Future<Entity> read() async {
+    if (isBinary) {
+      Uint8List bytes = await file.readAsBytesSync();
+      return await DcmDecoder.decode(bytes);
+    } else if (isJson) {
+      Uint8List bytes = await file.readAsBytesSync();
+      return await JsonDecoder.decode(bytes);
+    } else if (isXml) {
+      // Uint8List bytes = file.readAsBytesSync();
+      throw "XML Umplemented";
+    } else if (subtype.isUnknown) {
+      throw "Unknown FileType: $path";
+    }
+    throw "Shouldn't get here";
+  }
+
+  bool writeSync(Entity entity) {
     if (isBinary) {
       Uint8List bytes = DcmEncoder.encode(entity);
       file.writeAsBytesSync(bytes);
@@ -136,6 +153,11 @@ class Filename {
       throw "XML Umplemented";
     }
     throw "Shouldn't get here";
+  }
+
+  bool write(Entity entity) {
+    //TODO: finish
+    throw "Unimplemented";
   }
 
   String get info => '''

@@ -13,6 +13,7 @@ export 'package:io/src/file_type.dart';
 export 'package:io/src/filename.dart';
 export 'package:io/src/formatter.dart';
 export 'package:io/src/index.dart';
+export 'package:io/src/std_arg_parser.dart';
 export 'package:io/src/utils.dart';
 
 

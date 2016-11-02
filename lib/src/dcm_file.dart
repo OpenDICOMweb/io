@@ -8,35 +8,28 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:path/path.dart' as path;
+import 'package:dictionary/uid.dart';
 
 import 'file_system.dart';
 import 'file_type.dart';
 
-int _firstDot(String s) => path.basename(s).indexOf('.');
-
-String _extension(String fname) => path.basename(fname).substring(_firstDot(fname));
 
 class DcmFile {
   final FileSystem fs;
   final FileType fType;
-  final String study;
-  final String series;
-  final String instance;
+  final EntityName name;
 
-  DcmFile(this.fs, this.fType, this.study, [this.series, this.instance]);
+  DcmFile(this.fs, this.fType, this.name);
 
-  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toFile(path);
+  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toDcmFile(path);
 
-  Directory get directory => fs.directory(study, series);
-  DcmFile get file => fs.file(fType, study, series, instance);
+  Directory get directory => fs.directory(name);
+
+  DcmFile get file => fs.dcmFile(fType, name);
 
   /// Returns the [File] corresponding to the specified arguments.
-  String get path {
-    var s = (series == null) ? "" : '/$series';
-    var i = (instance == null) ? "" : '/$instance';
-    return '${fs.path}/$study/$s/$i.${fType.extension}';
-  }
+  String get path => '${fs.path}${name.path}${fType.extension}';
+
   Uint8List get bytes {
     if (fType.subtype.isBinary) {
       File f = new File(path);
@@ -47,11 +40,11 @@ class DcmFile {
   }
 
   String get json {
-
+    throw "Unimplemented";
   }
 
   String get xml {
-
+    throw "Unimplemented";
   }
 
   String toString() => 'DcmFile($path)';
@@ -62,7 +55,18 @@ class DcmFile {
     return true;
   }
   void writeSync(Uint8List bytes) {
+    print("writeSync: path:$path");
+    File f = new File(path);
+    if (f.existsSync()) {
+      throw "File $f already exists";
+    } else {
+      print('Creating: $f');
+      f.createSync(recursive: true);
+    }
 
+    try {
+      f.writeAsBytesSync(bytes, );
+    } catch (e) {throw 'caught $e'; }
   }
 
   void writeStringSync(String s) {

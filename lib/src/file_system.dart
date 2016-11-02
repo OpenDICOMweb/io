@@ -15,6 +15,7 @@ import 'package:io/src/file_system_base.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';
+import 'filename.dart';
 import 'index.dart';
 import 'utils.dart';
 
@@ -33,19 +34,15 @@ class FileSystem extends FileSystemBase {
       : path = path,
         root = FileSystemBase.maybeCreateRootSync(path);
 
-
+  //TODO: should check that it is a valid [name] for directory
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
-  Directory directory(String study, [String series]) {
-    var part3 = (series == null) ? "" : '/$series';
-    return new Directory('$path/$study$part3');
-  }
+  Directory directory(EntityName name) => new Directory('$path$name');
 
   /// Returns the [File] corresponding to the specified arguments.
-  DcmFile file(FileType fType, String study, String series, String instance) =>
-      new DcmFile(this, fType, study, series, instance);
+  DcmFile dcmFile(FileType fType, EntityName name) =>
+      new DcmFile(this, fType, name);
 
-
-  DcmFile toFile(String path) => new DcmFile.fromPath(this, path);
+  DcmFile toDcmFile(String path) => new DcmFile.fromPath(this, path);
 
   //TODO: implement
   FSIndex get index => new FSIndex(path);
@@ -134,7 +131,9 @@ class FileSystem extends FileSystemBase {
       dir.list(recursive: true, followLinks: false);
 
   static DcmFile parse(String path) {
+    Filename fname = new Filename(path);
     //TODO
+    throw 'Unimplemented';
   }
 
 }

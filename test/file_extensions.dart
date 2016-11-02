@@ -9,44 +9,17 @@ import 'dart:io';
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
-int _firstDot(String s) => p.basename(s).indexOf('.');
+//int _firstDot(String s) => p.basename(s).indexOf('.');
 
-String _extension(String fname) => p.basename(fname).substring(_firstDot(fname));
+//String _extension(String fname) => p.basename(fname).substring(_firstDot(fname));
 
 /// path = root / dir / base
 ///                   / name /ext
-class Filename {
-  final String _path;
-  FileSubtype _type;
-
-  Filename(this._path);
-
-  bool get isDicom => _type.isDicom;
-  bool get isComplete => _type.isComplete;
-  bool get isMetadata => _type.isMetadata;
-  bool get isBulkdata => _type.isBulkdata;
-
-  String get path => _path;
-  String get root => p.rootPrefix(_path);
-  String get dir => p.dirname(_path);
-  String get base => p.basename(_path);
-  String get name => base.substring(0, _firstDot(base));
-  String get ext => base.substring(_firstDot(base));
-  Encoding get encoding => _type.encoding;
-
-  FileSubtype get type => _type ??= FileSubtype.parse(_path);
-  DcmMediaType get mType => type.mediaType;
-  OType get subtype => type.oType;
-  String get ext1 => type.ext;
-
-  String toString() => _path;
-}
-
 
 Filename convert(File f) {
 String name = f.path;
 String dir = p.dirname(name);
-String ext = _extension(name);
+String ext = p.extension(name);
 FileSubtype subtype = FileSubtype.subtypes[ext];
 print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
   return new Filename(name);
@@ -70,12 +43,12 @@ List<Filename> getDcmFilesFromDirectory(String source) {
 }
 
 String dcmEntity = 'bas/bar/file.dcm';
-String dcmMetadata = 'bas/bar/file.md.dcm';
-String jsonEntity = 'bas/bar/file.dcm.json';
-String jsonMetadata = 'bas/json/file.md.dcm.json';
-String xmlEntity = 'bas/bar/file.dcm.xml';
-String xmlMetadata = 'bas/bar/file.md.dcm.xml';
-String bulkdata = 'bas/bar/file.bd.dcm';
+String dcmMetadata = 'bas/bar/file.mddcm';
+String jsonEntity = 'bas/bar/file.dcmjson';
+String jsonMetadata = 'bas/json/file.mddcmjson';
+String xmlEntity = 'bas/bar/file.dcmxml';
+String xmlMetadata = 'bas/bar/file.mddcmxml';
+String bulkdata = 'bas/bar/file.bddcm';
 var pathList = [
   dcmEntity, dcmMetadata, jsonEntity, jsonMetadata, xmlEntity, xmlMetadata, bulkdata
 ];
@@ -110,33 +83,10 @@ String toAbsolute(String path) {
 }
 
 main() {
-/*
-  for (String s in pathList) {
-    Filename f = new Filename(s);
-    print('Path: $s');
-    print('  fname: $f');
-    print('  type: ${f.type}');
-    print('  components:\n    root:${f.root}\n    dir: ${f.dir}\n    base: ${f.base}\n'
-              '    name: ${f.name}\n    ext: ${f.ext}');
-    print('  mType: ${f.mType}');
-    print('  subtype: ${f.subtype}');
-    print('  charset: ${f.charset}');
-  }
 
-  List<FileSystemEntity> files = getFiles(inRoot);
-  //files = flatten(files);
-  print(files);
-
-  for(var f in files)
-    print('File: $f');
-  List<Filename> fnames = [];
-  for(File f in files) {
-    var fn = new Filename(f.path);
-    fnames.add(fn);
-  }
-*/
-  var root = 'C:/odw/sdk/io/';
+  //var root = 'C:/odw/sdk/io/';
   for (String s in pathList) {
+    /*
     String path = toAbsolute(s);
     print('path: $path');
     var dir = p.dirname(path);
@@ -160,17 +110,23 @@ main() {
       var study = dirs[0];
     }
     print('study: $study, series: $series');
-    /*
+*/
     Filename f = new Filename(s);
-    print('Path: $s');
-    print('  fname: $f');
-    print('  type: ${f.type}');
-    print('  components:\n    root:${f.root}\n    dir: ${f.dir}\n    base: ${f.base}\n'
-              '    name: ${f.name}\n    ext: ${f.ext}');
-    print('  mType: ${f.mType}');
-    print('  subtype: ${f.subtype}');
-    print('  charset: ${f.charset}');
-    */
+    print('''
+Path: $s
+  components:
+    rootPrefix:${f.rootPrefix}
+    dir: ${f.dir}
+    base: ${f.base}
+    name: ${f.name}
+    ext: ${f.ext}
+  subtype:
+    mediaType: ${f.mediaType}
+    units: ${f.units}
+    encoding: ${f.encoding}
+    objectType: ${f.objectType}
+''');
+
   }
 
 
