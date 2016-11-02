@@ -43,7 +43,7 @@ void main(List<String> args) {
       Entity e = DcmDecoder.decode(bytes);
       print('Entity: ${e.format(new Formatter())}');
 
-      DcmFile dcmFile = fs.dcmFile(FileType.dcmInstance, e.dataset.name);
+      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, e.dataset.name);
       print(dcmFile.path);
       dcmFile.writeSync(bytes);
 

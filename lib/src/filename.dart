@@ -111,7 +111,8 @@ class Filename {
 
   //TODO: should this return the bytes or a parsed Entity
   Entity readSync() {
-    if (isBinary) {
+    print('subtype: $subtype');
+    if (isPart10) {
       Uint8List bytes = file.readAsBytesSync();
       return DcmDecoder.decode(bytes);
     } else if (isJson) {

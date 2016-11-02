@@ -100,21 +100,21 @@ class FileType {
   bool get isUnknown => this == unknown;
 
   //TODO: fix indices
-  static const dcmStudy = const FileType(1, EntityType.study, FileSubtype.part10);
-  static const dcmStudyMD = const FileType(2, EntityType.study, FileSubtype.part10MD);
-  static const dcmStudyBD = const FileType(2, EntityType.study, FileSubtype.bulkdata);
+  static const part10Study = const FileType(1, EntityType.study, FileSubtype.part10);
+  static const part10StudyMD = const FileType(2, EntityType.study, FileSubtype.part10MD);
+  static const part10StudyBD = const FileType(2, EntityType.study, FileSubtype.bulkdata);
 
-  static const dcmSeries = const FileType(1, EntityType.series, FileSubtype.part10);
-  static const dcmSeriesMD = const FileType(2, EntityType.series, FileSubtype.part10MD);
-  static const dcmSeriesBD = const FileType(2, EntityType.series, FileSubtype.bulkdata);
+  static const part10Series = const FileType(1, EntityType.series, FileSubtype.part10);
+  static const part10SeriesMD = const FileType(2, EntityType.series, FileSubtype.part10MD);
+  static const part10SeriesBD = const FileType(2, EntityType.series, FileSubtype.bulkdata);
 
-  static const dcmInstance = const FileType(1, EntityType.instance, FileSubtype.part10);
-  static const dcmInstanceMD = const FileType(2, EntityType.instance, FileSubtype.part10MD);
-  static const dcmInstanceBD = const FileType(2, EntityType.instance, FileSubtype.bulkdata);
+  static const part10Instance = const FileType(1, EntityType.instance, FileSubtype.part10);
+  static const part10InstanceMD = const FileType(2, EntityType.instance, FileSubtype.part10MD);
+  static const part10InstanceBD = const FileType(2, EntityType.instance, FileSubtype.bulkdata);
 
-  static const dcmFrames = const FileType(1, EntityType.frames, FileSubtype.part10);
-  static const dcmFramesMD = const FileType(2, EntityType.frames, FileSubtype.part10MD);
-  static const dcmFramesBD = const FileType(2, EntityType.frames, FileSubtype.bulkdata);
+  static const part10Frames = const FileType(1, EntityType.frames, FileSubtype.part10);
+  static const part10FramesMD = const FileType(2, EntityType.frames, FileSubtype.part10MD);
+  static const part10FramesBD = const FileType(2, EntityType.frames, FileSubtype.bulkdata);
 
   static const jsonStudy = const FileType(1, EntityType.study, FileSubtype.json);
   static const jsonStudyMD = const FileType(2, EntityType.study, FileSubtype.jsonMD);
@@ -155,11 +155,11 @@ class FileType {
       case EntityType.study:
         switch (fSubtype) {
           case FileSubtype.part10:
-            return dcmStudy;
+            return part10Study;
           case FileSubtype.part10MD:
-            return dcmStudyMD;
+            return part10StudyMD;
           case FileSubtype.bulkdata:
-            return dcmStudyBD;
+            return part10StudyBD;
           case FileSubtype.json:
             return jsonStudy;
           case FileSubtype.jsonMD:
@@ -173,11 +173,11 @@ class FileType {
       case EntityType.series:
         switch (fSubtype) {
           case FileSubtype.part10:
-            return dcmSeries;
+            return part10Series;
           case FileSubtype.part10MD:
-            return dcmSeriesMD;
+            return part10SeriesMD;
           case FileSubtype.bulkdata:
-            return dcmSeriesBD;
+            return part10SeriesBD;
           case FileSubtype.json:
             return jsonSeries;
           case FileSubtype.jsonMD:
@@ -191,11 +191,11 @@ class FileType {
       case EntityType.instance:
         switch (fSubtype) {
           case FileSubtype.part10:
-            return dcmInstance;
+            return part10Instance;
           case FileSubtype.part10MD:
-            return dcmInstanceMD;
+            return part10InstanceMD;
           case FileSubtype.bulkdata:
-            return dcmInstanceBD;
+            return part10InstanceBD;
           case FileSubtype.json:
             return jsonInstance;
           case FileSubtype.jsonMD:
@@ -209,11 +209,11 @@ class FileType {
       case EntityType.frames:
         switch (fSubtype) {
           case FileSubtype.part10:
-            return dcmFrames;
+            return part10Frames;
           case FileSubtype.part10MD:
-            return dcmFramesMD;
+            return part10FramesMD;
           case FileSubtype.bulkdata:
-            return dcmFramesBD;
+            return part10FramesBD;
           case FileSubtype.json:
             return jsonFrames;
           case FileSubtype.jsonMD:

@@ -17,12 +17,12 @@ String crf2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
 
 void main() {
   // Read a File
-  Filename fnIn = new Filename(crf1);
+  Filename fnIn = new Filename('$inputDir$crf1');
   Instance instance = fnIn.readSync();
   print(instance.info);
 
   // Write a File
-  Filename fnOut = new Filename.withType(crf1, FileType.dcmInstance);
+  Filename fnOut = new Filename.withType(crf1, FileSubtype.part10);
   fnOut.writeSync(instance);
 
 }

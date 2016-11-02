@@ -25,7 +25,7 @@ class DcmFile {
 
   Directory get directory => fs.directory(name);
 
-  DcmFile get file => fs.dcmFile(fType, name);
+  File get file => new File(path);
 
   /// Returns the [File] corresponding to the specified arguments.
   String get path => '${fs.path}${name.path}${fType.extension}';

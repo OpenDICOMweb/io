@@ -30,9 +30,13 @@ void main() {
 
   // Read, parse, and print a summary of each file.
   for (Filename file in files) {
-    print('\nReading file: $file');
-    Instance instance = file.readSync();
-    print(instance.info);
+    if (file.isDicom) {
+      print('Reading file: $file');
+      Instance instance = file.readSync();
+      print(instance.info);
+    } else {
+      print('Skipping ... $file');
+    }
   }
 
 

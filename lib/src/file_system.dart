@@ -15,7 +15,6 @@ import 'package:io/src/file_system_base.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';
-import 'filename.dart';
 import 'index.dart';
 import 'utils.dart';
 
@@ -130,11 +129,8 @@ class FileSystem extends FileSystemBase {
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
 
-  static DcmFile parse(String path) {
-    Filename fname = new Filename(path);
-    //TODO
-    throw 'Unimplemented';
-  }
+  DcmFile parse(String path) => toDcmFile(path);
+
 
 }
 
