@@ -4,21 +4,25 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
+import 'package:core/entity.dart';
 import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';
 
-int _firstDot(String s) => p.basename(s).indexOf('.');
+// Flush later.
+//int _firstDot(String s) => p.basename(s).indexOf('.');
 
+/* flush later when fully debugged and final.
 String _extension(String path) {
-  var base = p.basename(path);
-  var pos = p.extension(path);
-  print('ext: $pos');
+ // var base = p.basename(path);
+  var ext = p.extension(path);
+  print('ext: $ext');
   //return (pos == -1) ? null : base.substring(pos);
-  return pos;
+  return ext;
 }
+*/
 
-/// The various [FileSubtype]s of DICOM objects
+/// The various [FileType]s and [FileSubtype]s of DICOM objects
 ///
 /// The file extensions are structured from most specific to least specific.
 /// The are three types of objects that can be stored:
@@ -30,84 +34,127 @@ String _extension(String path) {
 
 ///
 /// The object type, encoding, media type, and file extension for a File.
-enum EType { study, series, instance, frames }
+///
 
 class FileType {
   final int index;
-  final EType eType; // Object Type
+  final EntityType eType; // Object Type
   final FileSubtype subtype;
 
   //TODO: jfp document this
   const FileType(this.index, this.eType, this.subtype);
 
+  bool get isDicom => true;
+
+  // Entity Type
+  EntityType get entityType => eType;
+  bool get isPatient => eType.isPatient;
+  bool get isStudy => eType.isStudy;
+  bool get isSeries => eType.isSeries;
+  bool get isInstance => eType.isInstance;
+  bool get isFrames => eType.isFrames;
+  bool get isDataset => eType.isDataset;
+
+  // Subtype
+  /// The file extension for this [FileSubtype].
+  String get extension => subtype.extension;
+
+  // Media Type  and associated accessors.
+  /// The IANA Media Type of the associated [Filename].
   DcmMediaType get mediaType => subtype.mType;
-  EType get objectType => eType;
-  String get extension => subtype.ext;
+
+  /// Returns [true] if the encoding units are bytes.
+  bool get isBinary => subtype.mType.isBinary;
+
+  /// Returns [true] if the encoding units are 7-bit US-ASCII.
+  bool get isAscii => subtype.mType.isAscii;
+
+  /// Returns [true] if the encoding (code) units are UTF8.
+  bool get isUtf8 => subtype.mType.isUtf8;
+
+  /// Returns [true] if the representation encoding is [encoding.part10].
+  bool get isPart10 => subtype.mType.encoding == Encoding.part10;
+
+  /// Returns [true] if the representation encoding is [encoding.json].
+  bool get isJson => subtype.mType.encoding == Encoding.json;
+
+  /// Returns [true] if the representation encoding is [encoding.xml].
+  bool get isXml => subtype.mType.encoding == Encoding.xml;
+
+  /// The DICOM object [Encoding].
   Encoding get encoding => subtype.mType.encoding;
+
+  /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
 
-  bool get isDicom => true;
-  bool get isComplete => subtype == ESubtype.complete;
-  bool get isMetadata => subtype == ESubtype.metadata;
-  bool get isBulkdata => subtype == ESubtype.bulkdata;
+  /// Returns [true] if the Dataset is [OType.complete], that is, it contains no Bulkdata
+  /// References.
+  bool get isComplete => subtype.oType == OType.complete;
 
-  static const dcmStudy = const FileType(1, EType.study, FileSubtype.dcm);
-  static const dcmStudyMD = const FileType(2, EType.study, FileSubtype.dcmMD);
-  static const dcmStudyBD = const FileType(2, EType.study, FileSubtype.dcmBD);
+  /// Returns [true] if the Dataset is [Metadata], that is, it contains Bulkdata References.
+  bool get isMetadata => subtype.oType == OType.metadata;
 
-  static const dcmSeries = const FileType(1, EType.series, FileSubtype.dcm);
-  static const dcmSeriesMD = const FileType(2, EType.series, FileSubtype.dcmMD);
-  static const dcmSeriesBD = const FileType(2, EType.series, FileSubtype.dcmBD);
+  /// Returns [true] if this is a [Bulkdata] object.
+  bool get isBulkdata => subtype.oType == OType.bulkdata;
 
-  static const dcmInstance = const FileType(1, EType.instance, FileSubtype.dcm);
-  static const dcmInstanceMD = const FileType(2, EType.instance, FileSubtype.dcmMD);
-  static const dcmInstanceBD = const FileType(2, EType.instance, FileSubtype.dcmBD);
 
-  static const dcmFrames = const FileType(1, EType.frames, FileSubtype.dcm);
-  static const dcmFramesMD = const FileType(2, EType.frames, FileSubtype.dcmMD);
-  static const dcmFramesBD = const FileType(2, EType.frames, FileSubtype.dcmBD);
+  static const dcmStudy = const FileType(1, EntityType.study, FileSubtype.part10);
+  static const dcmStudyMD = const FileType(2, EntityType.study, FileSubtype.part10MD);
+  static const dcmStudyBD = const FileType(2, EntityType.study, FileSubtype.part10BD);
 
-  static const jsonStudy = const FileType(1, EType.study, FileSubtype.json);
-  static const jsonStudyMD = const FileType(2, EType.study, FileSubtype.jsonMD);
-  static const jsonStudyBD = const FileType(2, EType.study, FileSubtype.jsonBD);
+  static const dcmSeries = const FileType(1, EntityType.series, FileSubtype.part10);
+  static const dcmSeriesMD = const FileType(2, EntityType.series, FileSubtype.part10MD);
+  static const dcmSeriesBD = const FileType(2, EntityType.series, FileSubtype.part10BD);
 
-  static const jsonSeries = const FileType(1, EType.series, FileSubtype.json);
-  static const jsonSeriesMD = const FileType(2, EType.series, FileSubtype.jsonMD);
-  static const jsonSeriesBD = const FileType(2, EType.series, FileSubtype.jsonBD);
+  static const dcmInstance = const FileType(1, EntityType.instance, FileSubtype.part10);
+  static const dcmInstanceMD = const FileType(2, EntityType.instance, FileSubtype.part10MD);
+  static const dcmInstanceBD = const FileType(2, EntityType.instance, FileSubtype.part10BD);
 
-  static const jsonInstance = const FileType(1, EType.instance, FileSubtype.json);
-  static const jsonInstanceMD = const FileType(2, EType.instance, FileSubtype.jsonMD);
-  static const jsonInstanceBD = const FileType(2, EType.instance, FileSubtype.jsonBD);
+  static const dcmFrames = const FileType(1, EntityType.frames, FileSubtype.part10);
+  static const dcmFramesMD = const FileType(2, EntityType.frames, FileSubtype.part10MD);
+  static const dcmFramesBD = const FileType(2, EntityType.frames, FileSubtype.part10BD);
 
-  static const jsonFrames = const FileType(1, EType.frames, FileSubtype.json);
-  static const jsonFramesMD = const FileType(2, EType.frames, FileSubtype.jsonMD);
-  static const jsonFramesBD = const FileType(2, EType.frames, FileSubtype.jsonBD);
+  static const jsonStudy = const FileType(1, EntityType.study, FileSubtype.json);
+  static const jsonStudyMD = const FileType(2, EntityType.study, FileSubtype.jsonMD);
+  static const jsonStudyBD = const FileType(2, EntityType.study, FileSubtype.jsonBD);
 
-  static const xmlStudy = const FileType(1, EType.study, FileSubtype.xml);
-  static const xmlStudyMD = const FileType(2, EType.study, FileSubtype.xmlMD);
-  static const xmlStudyBD = const FileType(2, EType.study, FileSubtype.xmlBD);
+  static const jsonSeries = const FileType(1, EntityType.series, FileSubtype.json);
+  static const jsonSeriesMD = const FileType(2, EntityType.series, FileSubtype.jsonMD);
+  static const jsonSeriesBD = const FileType(2, EntityType.series, FileSubtype.jsonBD);
 
-  static const xmlSeries = const FileType(1, EType.series, FileSubtype.xml);
-  static const xmlSeriesMD = const FileType(2, EType.series, FileSubtype.xmlMD);
-  static const xmlSeriesBD = const FileType(2, EType.series, FileSubtype.xmlBD);
+  static const jsonInstance = const FileType(1, EntityType.instance, FileSubtype.json);
+  static const jsonInstanceMD = const FileType(2, EntityType.instance, FileSubtype.jsonMD);
+  static const jsonInstanceBD = const FileType(2, EntityType.instance, FileSubtype.jsonBD);
 
-  static const xmlInstance = const FileType(1, EType.instance, FileSubtype.xml);
-  static const xmlInstanceMD = const FileType(2, EType.instance, FileSubtype.xmlMD);
-  static const xmlInstanceBD = const FileType(2, EType.instance, FileSubtype.xmlBD);
+  static const jsonFrames = const FileType(1, EntityType.frames, FileSubtype.json);
+  static const jsonFramesMD = const FileType(2, EntityType.frames, FileSubtype.jsonMD);
+  static const jsonFramesBD = const FileType(2, EntityType.frames, FileSubtype.jsonBD);
 
-  static const xmlFrames = const FileType(1, EType.frames, FileSubtype.xml);
-  static const xmlFramesMD = const FileType(2, EType.frames, FileSubtype.xmlMD);
-  static const xmlFramesBD = const FileType(2, EType.frames, FileSubtype.xmlBD);
+  static const xmlStudy = const FileType(1, EntityType.study, FileSubtype.xml);
+  static const xmlStudyMD = const FileType(2, EntityType.study, FileSubtype.xmlMD);
+  static const xmlStudyBD = const FileType(2, EntityType.study, FileSubtype.xmlBD);
 
-  FileType lookup(EType eType, FileSubtype fSubtype) {
+  static const xmlSeries = const FileType(1, EntityType.series, FileSubtype.xml);
+  static const xmlSeriesMD = const FileType(2, EntityType.series, FileSubtype.xmlMD);
+  static const xmlSeriesBD = const FileType(2, EntityType.series, FileSubtype.xmlBD);
+
+  static const xmlInstance = const FileType(1, EntityType.instance, FileSubtype.xml);
+  static const xmlInstanceMD = const FileType(2, EntityType.instance, FileSubtype.xmlMD);
+  static const xmlInstanceBD = const FileType(2, EntityType.instance, FileSubtype.xmlBD);
+
+  static const xmlFrames = const FileType(1, EntityType.frames, FileSubtype.xml);
+  static const xmlFramesMD = const FileType(2, EntityType.frames, FileSubtype.xmlMD);
+  static const xmlFramesBD = const FileType(2, EntityType.frames, FileSubtype.xmlBD);
+
+  FileType lookup(EntityType eType, FileSubtype fSubtype) {
     switch (eType) {
-      case EType.study:
+      case EntityType.study:
         switch (fSubtype) {
-          case FileSubtype.dcm:
+          case FileSubtype.part10:
             return dcmStudy;
-          case FileSubtype.dcmMD:
+          case FileSubtype.part10MD:
             return dcmStudyMD;
-          case FileSubtype.dcmBD:
+          case FileSubtype.part10BD:
             return dcmStudyBD;
           case FileSubtype.json:
             return jsonStudy;
@@ -119,13 +166,13 @@ class FileType {
             return xmlStudyMD;
         }
         throw "bad study lookup";
-      case EType.series:
+      case EntityType.series:
         switch (fSubtype) {
-          case FileSubtype.dcm:
+          case FileSubtype.part10:
             return dcmSeries;
-          case FileSubtype.dcmMD:
+          case FileSubtype.part10MD:
             return dcmSeriesMD;
-          case FileSubtype.dcmBD:
+          case FileSubtype.part10BD:
             return dcmSeriesBD;
           case FileSubtype.json:
             return jsonSeries;
@@ -137,13 +184,13 @@ class FileType {
             return xmlSeriesMD;
         }
         throw "bad series lookup";
-      case EType.instance:
+      case EntityType.instance:
         switch (fSubtype) {
-          case FileSubtype.dcm:
+          case FileSubtype.part10:
             return dcmInstance;
-          case FileSubtype.dcmMD:
+          case FileSubtype.part10MD:
             return dcmInstanceMD;
-          case FileSubtype.dcmBD:
+          case FileSubtype.part10BD:
             return dcmInstanceBD;
           case FileSubtype.json:
             return jsonInstance;
@@ -155,13 +202,13 @@ class FileType {
             return xmlInstanceMD;
         }
         throw "bad instance lookup";
-      case EType.frames:
+      case EntityType.frames:
         switch (fSubtype) {
-          case FileSubtype.dcm:
+          case FileSubtype.part10:
             return dcmFrames;
-          case FileSubtype.dcmMD:
+          case FileSubtype.part10MD:
             return dcmFramesMD;
-          case FileSubtype.dcmBD:
+          case FileSubtype.part10BD:
             return dcmFramesBD;
           case FileSubtype.json:
             return jsonFrames;
@@ -180,64 +227,105 @@ class FileType {
   toString() => '$eType encoded as $mediaType';
 }
 
-enum ESubtype { complete, metadata, bulkdata }
+/// The DICOM Object Type [OType].
+enum OType {
+  /// The Complete DICOM object [Dataset].
+  ///
+  /// A [Dataset] that contains all Data [Element]s along with their values.
+  /// In Particular,it contains no Bulkdata References.
+  complete,
 
-enum contentType { bytes, utf8 }
+  /// A Metadata object.
+  ///
+  /// A [Dataset] that contains all Data [Element]s, but
+  /// some of the values are Bulkdata References.
+  metadata,
+
+  /// A Bulkdata object.
+  ///
+  /// An object that contains large binary values that were removed
+  /// from, and are referenced by a Metadata object.
+  bulkdata
+}
 
 class FileSubtype {
   final int index;
-  final ESubtype eSubtype;
+  final OType oType;
   final DcmMediaType mType; // SubType
   final String ext; // File Extension
 
   //TODO: jfp document this
-  const FileSubtype(this.index, this.eSubtype, this.mType, this.ext);
-
-  DcmMediaType get mediaType => mType;
-  String get extension => ext;
-  Encoding get encoding => mType.encoding;
-  Units get units => mType.units;
+  const FileSubtype(this.index, this.oType, this.mType, this.ext);
 
   bool get isDicom => true;
 
+  /// The file extension for this [FileSubtype].
+  String get extension => ext;
+
+  // Media Type  and associated accessors.
+  /// The IANA Media Type of the associated [Filename].
+  DcmMediaType get mediaType => mType;
+
+  /// Returns [true] if the encoding units are bytes.
   bool get isBinary => mType.isBinary;
+
+  /// Returns [true] if the encoding units are 7-bit US-ASCII.
   bool get isAscii => mType.isAscii;
+
+  /// Returns [true] if the encoding (code) units are UTF8.
   bool get isUtf8 => mType.isUtf8;
 
+  /// Returns [true] if the representation encoding is [encoding.part10].
   bool get isPart10 => mType.encoding == Encoding.part10;
+
+  /// Returns [true] if the representation encoding is [encoding.json].
   bool get isJson => mType.encoding == Encoding.json;
+
+  /// Returns [true] if the representation encoding is [encoding.xml].
   bool get isXml => mType.encoding == Encoding.xml;
 
-  bool get isComplete => eSubtype == ESubtype.complete;
-  bool get isMetadata => eSubtype == ESubtype.metadata;
-  bool get isBulkdata => eSubtype == ESubtype.bulkdata;
+  /// The DICOM object [Encoding].
+  Encoding get encoding => mType.encoding;
 
-  static const dcm = const FileSubtype(1, ESubtype.complete, DcmMediaType.dcm, ".dcm");
-  static const dcmMD = const FileSubtype(2, ESubtype.metadata, DcmMediaType.dcm, ".md.dcm");
-  static const dcmBD = const FileSubtype(3, ESubtype.bulkdata, DcmMediaType.dcm, ".bd.dcm");
+  /// The [Encoding] [Units].
+  Units get units => mType.units;
 
-  static const json = const FileSubtype(4, ESubtype.complete, DcmMediaType.json, ".dcm.json");
-  static const jsonMD = const FileSubtype(5, ESubtype.metadata, DcmMediaType.json, ".md.dcm.json");
-  static const jsonBD = const FileSubtype(6, ESubtype.bulkdata, DcmMediaType.json, ".bd.dcm.json");
+  /// Returns [true] if the Dataset is [OType.complete], that is, it contains no Bulkdata
+  /// References.
+  bool get isComplete => oType == OType.complete;
 
-  static const xml = const FileSubtype(7, ESubtype.complete, DcmMediaType.xml, ".dcm.xml");
-  static const xmlMD = const FileSubtype(8, ESubtype.metadata, DcmMediaType.xml, ".md.dcm.xml");
-  static const xmlBD = const FileSubtype(9, ESubtype.bulkdata, DcmMediaType.xml, ".bd.dcm.xml");
+  /// Returns [true] if the Dataset is [Metadata], that is, it contains Bulkdata References.
+  bool get isMetadata => oType == OType.metadata;
+
+  /// Returns [true] if this is a [Bulkdata] object.
+  bool get isBulkdata => oType == OType.bulkdata;
+
+  static const part10 = const FileSubtype(1, OType.complete, DcmMediaType.part10, ".dcm");
+  static const part10MD = const FileSubtype(2, OType.metadata, DcmMediaType.part10, ".mddcm");
+  static const part10BD = const FileSubtype(3, OType.bulkdata, DcmMediaType.part10, ".bddcm");
+
+  static const json = const FileSubtype(4, OType.complete, DcmMediaType.json, ".dcmjson");
+  static const jsonMD = const FileSubtype(5, OType.metadata, DcmMediaType.json, ".mddcmjson");
+  static const jsonBD = const FileSubtype(6, OType.bulkdata, DcmMediaType.json, ".bddcmjson");
+
+  static const xml = const FileSubtype(7, OType.complete, DcmMediaType.xml, ".dcmxml");
+  static const xmlMD = const FileSubtype(8, OType.metadata, DcmMediaType.xml, ".mddcm.xml");
+  static const xmlBD = const FileSubtype(9, OType.bulkdata, DcmMediaType.xml, ".bddcmxml");
 
   static parseExt(String ext) => subtypes[ext];
   static parse(String _path) {
-    print('Extension: ${_extension(_path)}');
-    var s = subtypes[_extension(_path)];
-    print('subtype: $s');
+  //Flush: print('Extension: ${p.extension(_path)}');
+    var s = subtypes[p.extension(_path)];
+  //Flush:  print('subtype: $s');
     return s;
   }
 
-  static bool isValidExtentsion(String ext) => (parseExt(ext) != null);
+  static bool isValidExtension(String ext) => (parseExt(ext) != null);
 
   static const Map<String, FileSubtype> subtypes = const {
-    ".dcm": FileSubtype.dcm,
-    ".mddcm": FileSubtype.dcmMD,
-    ".bddcm": FileSubtype.dcmBD,
+    ".dcm": FileSubtype.part10,
+    ".mddcm": FileSubtype.part10MD,
+    ".bddcm": FileSubtype.part10BD,
     ".json": FileSubtype.json,
     ".dcmjson": FileSubtype.json,
     ".mddcmjson": FileSubtype.jsonMD,
@@ -246,5 +334,5 @@ class FileSubtype {
     ".mddcmxml": FileSubtype.xmlMD
   };
 
-  toString() => '$eSubtype($ext) encoded as $mediaType';
+  toString() => '$oType($ext) encoded as $mediaType';
 }

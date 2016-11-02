@@ -36,7 +36,7 @@ class Filename {
 
   FileSubtype get type => _type ??= FileSubtype.parse(_path);
   DcmMediaType get mType => type.mediaType;
-  ESubtype get subtype => type.eSubtype;
+  OType get subtype => type.oType;
   String get ext1 => type.ext;
 
   String toString() => _path;

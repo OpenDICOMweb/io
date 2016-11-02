@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Open DICOMweb Project. All rights reserved.
 // Use of this source code is governed by the open source license
 // that can be found in the LICENSE file.
-// Author: Jim Philbin <jfphilbin@gmail.edu> - 
+// Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
 import 'dart:io';
@@ -15,12 +15,11 @@ import 'dcm_media_type.dart';
 import 'file_type.dart';
 //import 'dart:convert';
 
-
 int _firstDot(String s) => p.basename(s).indexOf('.');
 
 String toAbsolute(String path) {
-    var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
-    return s.replaceAll('\\', '/');
+  var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
+  return s.replaceAll('\\', '/');
 }
 
 // flushString _extension(String fname) => p.basename(fname).substring(_firstDot(fname));
@@ -33,7 +32,7 @@ String toAbsolute(String path) {
 /// This is a file from a non-DICOM File System.
 class Filename {
   final String _path;
-  FileSubtype __type;
+  FileSubtype _subtype;
   File _file;
 
   //   String _study;
@@ -46,37 +45,64 @@ class Filename {
       : _file = file,
         _path = toAbsolute(file.path);
 
-  // Potentially lazy
+  // lazy if created with [Filename].
   File get file => _file ??= new File(_path);
 
   // Lazy [type] getter.
-  FileSubtype get _subtype => __type ??= FileSubtype.parse(_path);
+  FileSubtype get subtype => _subtype ??= FileSubtype.parse(_path);
 
-  DcmMediaType get mediaType => _subtype.mediaType;
-  ESubtype get subtype => _subtype.eSubtype;
-  String get typeExt => _subtype.ext;
+  OType get objectType => subtype.oType;
+  String get typeExt => subtype.ext;
 
+  // Path component accessors.
   String get path => _path;
   String get root => p.rootPrefix(_path);
   String get dir => p.dirname(_path);
   String get base => p.basename(_path);
   String get name => base.substring(0, _firstDot(base));
-  String get ext => base.substring(_firstDot(base));
-  Encoding get encoding => _subtype.encoding;
-  Units get units => _subtype.units;
+  String get ext => p.extension(_path);
 
   // These getters are based on the expectation that the file extension is accurate.
-  bool get isDicom => (_subtype != null) && _subtype.isDicom;
-  bool get isAscii => (_subtype != null) && _subtype.isAscii;
-  bool get isBinary => (_subtype != null) && mediaType.isBinary;
-  bool get isUtf8 => (_subtype != null) && _subtype.isUtf8;
 
-  bool get isJson => (_subtype != null) && _subtype.encoding == Encoding.json;
-  bool get isPart10 => (_subtype != null) && _subtype.encoding == Encoding.part10;
-  bool get isXml => (_subtype != null) && _subtype.encoding == Encoding.xml;
-  bool get isComplete => _subtype.isComplete;
-  bool get isMetadata => _subtype.isMetadata;
-  bool get isBulkdata => _subtype.isBulkdata;
+  /// The file extension for this [FileSubtype].
+  String get extension => ext;
+
+  /// The IANA Media Type of the associated this [Filename].
+  DcmMediaType get mediaType => subtype.mediaType;
+
+  /// Returns [true] if the encoding units are bytes.
+  bool get isBinary => subtype.mType.isBinary;
+
+  /// Returns [true] if the encoding units are 7-bit US-ASCII.
+  bool get isAscii => subtype.mType.isAscii;
+
+  /// Returns [true] if the encoding (code) units are UTF8.
+  bool get isUtf8 => subtype.mType.isUtf8;
+
+  /// Returns [true] if the representation encoding is [encoding.part10].
+  bool get isPart10 => subtype.mType.encoding == Encoding.part10;
+
+  /// Returns [true] if the representation encoding is [encoding.json].
+  bool get isJson => subtype.mType.encoding == Encoding.json;
+
+  /// Returns [true] if the representation encoding is [encoding.xml].
+  bool get isXml => subtype.mType.encoding == Encoding.xml;
+
+  /// The DICOM object [Encoding].
+  Encoding get encoding => subtype.mType.encoding;
+
+  /// The [Encoding] [Units].
+  Units get units => subtype.mType.units;
+
+  /// Returns [true] if the Dataset is [OType.complete], that is, it contains no Bulkdata
+  /// References.
+  bool get isComplete => subtype.oType == OType.complete;
+
+  /// Returns [true] if the Dataset is [Metadata], that is, it contains Bulkdata References.
+  bool get isMetadata => subtype.oType == OType.metadata;
+
+  /// Returns [true] if this is a [Bulkdata] object.
+  bool get isBulkdata => subtype.oType == OType.bulkdata;
 
   Entity get contents => read();
 
