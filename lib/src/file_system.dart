@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:core/entity.dart';
 import 'package:dictionary/uid.dart';
 import 'package:io/src/file_system_base.dart';
 

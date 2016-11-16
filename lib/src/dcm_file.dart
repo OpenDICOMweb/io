@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dictionary/uid.dart';
+import 'package:core/entity.dart';
 
 import 'file_system.dart';
 import 'file_type.dart';

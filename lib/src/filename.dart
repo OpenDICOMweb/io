@@ -144,6 +144,7 @@ class Filename {
   bool writeSync(Entity entity) {
     if (isBinary) {
       Uint8List bytes = DcmEncoder.encode(entity);
+      print('encoded Bytes length: ${bytes.lengthInBytes}');
       file.writeAsBytesSync(bytes);
       return true;
     } else if (isJson) {

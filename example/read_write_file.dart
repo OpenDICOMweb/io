@@ -16,20 +16,24 @@ String outPath = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 void main(List<String> args) {
 
+
     Filename fn = new Filename(inPath);
     Uint8List bytes = fn.file.readAsBytesSync();
+    print('read ${bytes.length} bytes');
     Instance instance = DcmDecoder.decode(bytes);
-    print(instance.format(new Formatter()));
+    print(instance.format(new Formatter(maxDepth: -1)));
 
     // Write a File
     Filename fnOut = new Filename.withType(outPath, FileSubtype.part10);
     fnOut.writeSync(instance);
 
+    // Now read the file we just wrote.
     Filename result = new Filename(outPath);
 
-    bytes = fn.file.readAsBytesSync();
+    print('reading: $result');
+    bytes = result.file.readAsBytesSync();
     instance = DcmDecoder.decode(bytes);
-    print(instance.format(new Formatter()));
+    print(instance.format(new Formatter(maxDepth: -1)));
 
 }
 

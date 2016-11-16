@@ -4,7 +4,6 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -25,13 +24,13 @@ class FSIndex {
         super();
 
   /// Asynchronously retrieves and returns a stored [Index].
-  Future<List<String>> load() {}
+//  Future<List<String>> load() {}
 
   /// Synchronously retrieves and returns a stored [Index].
-  List<String> loadSync() {}
+//  List<String> loadSync() {}
 
   /// Asynchronously stores an [Index].
-  Future<Null> store() {}
+//  Future<Null> store() {}
 
   /// Synchronously stores an [Index].
   void storeSync() {}

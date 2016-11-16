@@ -5,24 +5,24 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
+import 'dart:typed_data';
+
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
 import 'package:io/io.dart';
 
-String inputDir = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
-String outputDir = "C:/odw/sdk/convert/test_output/";
-
-String crf1 = "CR.2.16.840.1.114255.393386351.1568457295.17895.5.dcm";
-String crf2 = "CR.2.16.840.1.114255.393386351.1568457295.48879.7.dcm";
+String inPath = 'C:/odw/test_data/IM-0001-0001.dcm';
+String outPath = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 void main() {
   // Read a File
-  Filename fnIn = new Filename('$inputDir$crf1');
-  Instance instance = fnIn.readSync();
-  print(instance.info);
+  Filename fnIn = new Filename(inPath);
+  Uint8List bytes = fnIn.file.readAsBytesSync();
+  Instance instance = DcmDecoder.decode(bytes);
+  print(instance.format(new Formatter(maxDepth: -1)));
 
   // Write a File
-  Filename fnOut = new Filename.withType(crf1, FileSubtype.part10);
+  Filename fnOut = new Filename.withType(outPath, FileSubtype.part10);
   fnOut.writeSync(instance);
 
 }
