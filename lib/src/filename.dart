@@ -111,7 +111,7 @@ class Filename {
 
   //TODO: should this return the bytes or a parsed Entity
   Entity readSync() {
-    print('subtype: $subtype');
+   // print('subtype: $subtype');
     if (isPart10) {
       Uint8List bytes = file.readAsBytesSync();
       return DcmDecoder.decode(bytes);
@@ -178,10 +178,10 @@ Subtype: ${FileSubtype.parse(_path)};
       if (e is File) {
         filenames.add(new Filename(e.path));
       } else {
-        print('Skipipng ${e.runtimeType}: ${e.path}');
+        print('Skipping ${e.runtimeType}: ${e.path}');
       }
     }
-    print('Filenames(${filenames.length}): $filenames');
+    // print('Filenames(${filenames.length}): $filenames');
     return filenames;
   }
 }

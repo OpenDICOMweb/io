@@ -55,12 +55,12 @@ class DcmFile {
     return true;
   }
   void writeSync(Uint8List bytes) {
-    print("writeSync: path:$path");
+  //  print("writeSync: path:$path");
     File f = new File(path);
     if (f.existsSync()) {
       throw "File $f already exists";
     } else {
-      print('Creating: $f');
+  //    print('Creating: $f');
       f.createSync(recursive: true);
     }
 

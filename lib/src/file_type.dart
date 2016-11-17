@@ -336,9 +336,9 @@ class FileSubtype {
   static parseExt(String ext) => lookup(ext);
 
   static parse(String _path) {
-    print('Extension: ${p.extension(_path)}');
+  //  print('Extension: ${p.extension(_path)}');
     FileSubtype s = parseExt(p.extension(_path));
-    print('subtype: $s');
+  //  print('subtype: $s');
     return s;
   }
 

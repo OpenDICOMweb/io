@@ -15,6 +15,7 @@ String inPath = 'C:/odw/test_data/IM-0001-0001.dcm';
 String outPath = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 void main() {
+
   // Read a File
   Filename fnIn = new Filename(inPath);
   Uint8List bytes = fnIn.file.readAsBytesSync();
