@@ -4,19 +4,6 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-import 'package:args/args.dart';
-import 'package:core/core.dart';
-
-void main(List<String> args) {
-    ArgParser parser = getArgParser();
-
-}
-
-ArgParser getParser() {
-
-}
-
-
 import 'dart:io';
 import 'dart:typed_data';
 

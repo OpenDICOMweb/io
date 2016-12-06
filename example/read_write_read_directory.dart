@@ -35,7 +35,7 @@ void main(List<String> args) {
 
 
   // Read, parse, and print a summary of each file.
-  for (int i = 0; i < files.length; i++) {
+  for (var i = 0; i < files.length; i++) {
     var fn = files[i];
     if (fn.isDicom) {
       print('Reading file $i: $fn');

@@ -15,7 +15,7 @@ void printIt(Uint8List bytes, int offset, int count) {
   for (int i = 0; i < count; i += 4) {
     int first = bd.getUint16(offset + i);
     int second = bd.getUint16(offset + i + 2);
-    print('${Int.toHex(first)},${Int.toHex(second)}');
+    print('${Int.hex(first)},${Int.hex(second)}');
   }
 }
 
