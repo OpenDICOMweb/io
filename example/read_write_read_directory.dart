@@ -42,7 +42,7 @@ void main(List<String> args) {
 
       Uint8List bytes = fn.file.readAsBytesSync();
       print('read ${bytes.length} bytes');
-      Instance instance = DcmDecoder.decode(bytes);
+      Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
       print(instance.info);
       //print(instance.format(new Formatter(maxDepth: -1)));
 
@@ -58,7 +58,7 @@ void main(List<String> args) {
 
       print('Re-reading file $i: $result');
       bytes = result.file.readAsBytesSync();
-      instance = DcmDecoder.decode(bytes);
+      instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
       print(instance.info);
       //print(instance.format(new Formatter(maxDepth: -1)));
     } else {

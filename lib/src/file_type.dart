@@ -228,7 +228,8 @@ class FileType {
     throw "bad Entity lookup";
   }
 
-  toString() => '$eType encoded as $mediaType';
+  @override
+  String toString() => '$eType encoded as $mediaType';
 }
 
 /// The DICOM Object Type [OType].
@@ -310,7 +311,8 @@ class FileSubtype {
 
   bool get isUnknown => mediaType == DcmMediaType.unknown;
 
-  toString() => '$runtimeType: $name encoded as $mediaType';
+  @override
+  String toString() => '$runtimeType: $name encoded as $mediaType';
 
   static const part10 = const FileSubtype(1, "Part10", OType.complete, DcmMediaType.part10, ".dcm");
   static const part10MD =
@@ -333,9 +335,9 @@ class FileSubtype {
   static const unknown =
   const FileSubtype(9, "Unknown", OType.unknown, DcmMediaType.unknown, "");
 
-  static parseExt(String ext) => lookup(ext);
+  static FileSubtype parseExt(String ext) => lookup(ext);
 
-  static parse(String _path) {
+  static FileSubtype parse(String _path) {
   //  print('Extension: ${p.extension(_path)}');
     FileSubtype s = parseExt(p.extension(_path));
   //  print('subtype: $s');
@@ -344,7 +346,7 @@ class FileSubtype {
 
   static bool isValidExtension(String ext) => (parseExt(ext) != null);
 
-  static lookup(String ext) =>  subtypes[ext] ?? FileSubtype.unknown;
+  static FileSubtype lookup(String ext) =>  subtypes[ext] ?? FileSubtype.unknown;
 
   static const Map<String, FileSubtype> subtypes = const {
     ".dcm": FileSubtype.part10,

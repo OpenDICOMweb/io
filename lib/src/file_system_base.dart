@@ -30,12 +30,12 @@ abstract class FileSystemBase {
 
   /// The path to the [root] directory.
   //TODO: verify that this is the absolute path.
-  String path;
+  String get path;
 
   /// The root [Directory] of the file system.
   //TODO: if [root.path] and [path] are always the same make path get root.path.
   //TODO: if there is no value to making [root] a [Directory] eliminate it.
-  Directory root;
+  Directory get root;
 
   /// Returns an [Index] to the files in this [FileSystem].
   ///

@@ -27,7 +27,9 @@ import 'utils.dart';
 class FileSystem extends FileSystemBase {
   //static const FSType type = FSType.sop;
   static const String version = "0.1.0";
+  @override
   final Directory root;
+  @override
   final String path;
 
   FileSystem(String path)
@@ -36,15 +38,18 @@ class FileSystem extends FileSystemBase {
 
   //TODO: should check that it is a valid [name] for directory
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
+  @override
   Directory directory(EntityName name) => new Directory('$path$name');
 
   /// Returns the [File] corresponding to the specified arguments.
+  @override
   DcmFile dcmFile(FileType fType, EntityName name) =>
       new DcmFile(this, fType, name);
 
   DcmFile toDcmFile(String path) => new DcmFile.fromPath(this, path);
 
   //TODO: implement
+  @override
   FSIndex get index => new FSIndex(path);
 
   //TODO: if needed, openStudy(Uid study);
@@ -84,7 +89,7 @@ class FileSystem extends FileSystemBase {
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  List<dynamic> readStudySync(FileSubtype fType, String study) =>
+  List<Uint8List> readStudySync(FileSubtype fType, String study) =>
       (fType.isBinary)
       ? readBinaryDirectorySync(toPath(fType, study))
       : readStringDirectorySync(toPath(fType, study));

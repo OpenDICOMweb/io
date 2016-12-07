@@ -20,11 +20,11 @@ String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 
 void main(List<String> args) {
 
-  Filename fn = new Filename(path3);
+  Filename fn = new Filename(path0);
   Uint8List bytes = fn.file.readAsBytesSync();
-  Entity e = DcmDecoder.decode(bytes);
-  print('e: $e');
-  print('dataset length: ${e.dataset.length} elements');
-  print(e.format(new Formatter(maxDepth: 146, width: 4)));
+  Entity e = DcmDecoder.decode(new DSSource(bytes, fn.path));
+  log.debug('e: $e');
+  log.debug('dataset length: ${e.dataset.length} elements');
+  log.debug(e.format(new Formatter(maxDepth: 146)));
 
 }

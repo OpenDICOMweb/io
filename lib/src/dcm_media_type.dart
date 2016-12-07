@@ -93,6 +93,7 @@ DcmMediaType:
   ''';
 
   /// Returns the IANA media type [String].
+  @override
   String toString() => "$type/$name";
 
   //TODO: finish documenting these

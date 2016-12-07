@@ -19,7 +19,7 @@ void main() {
   // Read a File
   Filename fnIn = new Filename(inPath);
   Uint8List bytes = fnIn.file.readAsBytesSync();
-  Instance instance = DcmDecoder.decode(bytes);
+  Instance instance = DcmDecoder.decode(new DSSource(bytes, inPath));
   print(instance.format(new Formatter(maxDepth: -1)));
 
   // Write a File

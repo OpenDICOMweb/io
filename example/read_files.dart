@@ -22,27 +22,33 @@ import 'package:io/io.dart';
 void main(List<String> args) {
   //var results = parse(args);
   //var source = results['source'];
-  var source = r"C:/odw/test_data/sfd/CR_and_RF";
+  var source = r"C:/odw/test_data/sfd/CT";
   List<Filename> files = Filename.getFilesFromDirectory(source);
 
   for (Filename fn in files) {
+    print('*** Starting $fn');
     if (fn.isPart10) {
       Uint8List bytes = fn.file.readAsBytesSync();
-      Entity e = DcmDecoder.decode(bytes);
-      print(e.info);
+      RootDataset e = DcmDecoder.decode(new DSSource(bytes, fn.path));
+      if (e == null) {
+        log.debug('*** Skipping Invalid Transfer Syntax: $fn ');
+      } else {
+        log.debug(e.info);
+      }
     } else if (fn.isJson) {
       //TODO: can't read JSON yet
       Uint8List s = fn.file.readAsBytesSync();
       Entity e = JsonDecoder.decode(s);
-      print(e.info);
+      log.debug(e.info);
     } else if (fn.isXml) {
       //TODO: can't read XML yet
       Uint8List s = fn.file.readAsBytesSync();
       Entity e = JsonDecoder.decode(s);
-      print(e.info);
+      log.debug(e.info);
     } else {
-      print('Skipping none ".dcm" file: $fn');
+      log.debug('*** Skipping none ".dcm" file: $fn');
     }
+    print('*** Finished $fn');
   }
 }
 

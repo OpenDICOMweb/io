@@ -47,6 +47,7 @@ class DcmFile {
     throw "Unimplemented";
   }
 
+  @override
   String toString() => 'DcmFile($path)';
 
   Future<bool> write(Uint8List bytes) async {

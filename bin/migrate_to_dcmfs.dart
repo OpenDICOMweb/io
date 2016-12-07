@@ -40,7 +40,8 @@ void main(List<String> args) {
     if (fn.isPart10) {
       Uint8List bytes = fn.file.readAsBytesSync();
       //print('Filename: $fn');
-      Entity e = DcmDecoder.decode(bytes);
+
+      Entity e = DcmDecoder.decode(new DSSource(bytes, fn.path));
       print('Entity: ${e.format(new Formatter())}');
 
       DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, e.dataset.name);

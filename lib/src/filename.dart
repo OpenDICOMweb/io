@@ -114,7 +114,7 @@ class Filename {
    // print('subtype: $subtype');
     if (isPart10) {
       Uint8List bytes = file.readAsBytesSync();
-      return DcmDecoder.decode(bytes);
+      return DcmDecoder.decode(new DSSource(bytes, path));
     } else if (isJson) {
       Uint8List bytes = file.readAsBytesSync();
       return JsonDecoder.decode(bytes);
@@ -128,7 +128,7 @@ class Filename {
   Future<Entity> read() async {
     if (isBinary) {
       Uint8List bytes = await file.readAsBytesSync();
-      return await DcmDecoder.decode(bytes);
+      return await DcmDecoder.decode(new DSSource(bytes, path));
     } else if (isJson) {
       Uint8List bytes = await file.readAsBytesSync();
       return await JsonDecoder.decode(bytes);
@@ -167,6 +167,7 @@ Filename: $_path;
 Subtype: ${FileSubtype.parse(_path)};
     ''';
 
+  @override
   String toString() => _path;
 
   //TODO move to utilities

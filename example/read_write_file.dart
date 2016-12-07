@@ -29,7 +29,7 @@ void main(List<String> args) {
     print('reading: $fn');
     Uint8List bytes = fn.file.readAsBytesSync();
     print('read ${bytes.length} bytes');
-    Instance instance = DcmDecoder.decode(bytes);
+    Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
     print(instance.format(new Formatter(maxDepth: -1)));
 
     print('0070 0010 ${instance.dataset.lookup(0x00700010)}');
@@ -43,7 +43,7 @@ void main(List<String> args) {
     print('Re-reading: $result');
     bytes = result.file.readAsBytesSync();
     print('read ${bytes.length} bytes');
-    instance = DcmDecoder.decode(bytes);
+    instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
     print(instance.format(new Formatter(maxDepth: -1)));
 
 }

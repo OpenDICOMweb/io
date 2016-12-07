@@ -82,7 +82,7 @@ String toAbsolute(String path) {
   return s.replaceAll('\\', '/');
 }
 
-main() {
+void main() {
 
   //var root = 'C:/odw/sdk/io/';
   for (String s in pathList) {

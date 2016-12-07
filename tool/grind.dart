@@ -4,57 +4,59 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:async';
+
 import 'package:grinder/grinder.dart';
 
-main(args) => grind(args);
+Future main(args) => grind(args);
 
 @Task('Initializing...')
-init() {
+void init() {
   log("Initializing stuff...");
 }
 
 @Task('Cleaning...')
-clean() {
+void clean() {
   log("Cleaning...");
 }
 
 @DefaultTask('Build the project.')
-build() {
+void build() {
   log("Building...");
 }
 
 @Task('Testing JavaScript...')
 @Depends(build)
-testJavaScript() {
+void testJavaScript() {
   new PubApp.local('test').run([]);
 }
 
 @Task('Testing JavaScript...')
-test() {
+void test() {
   new PubApp.local('test').run([]);
 }
 
 @Task('Formating Source...')
-format() {
+void format() {
   DartFmt.dryRun('lib', lineLength: 100);
   log("Formatting Source...");
 }
 
 @Task('Compiling...')
 @Depends(init)
-compile() {
+void compile() {
   log("Compiling...");
 }
 
 
 
 @Task('DartDoc')
-dartdoc() {
+void dartdoc() {
   log('Generating Documentation...');
 }
 
 @Task('Clean Deployment stuff.')
 @Depends(clean, compile, build, test)
-deploy() {
+void deploy() {
   log("Deploying...");
 }

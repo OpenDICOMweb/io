@@ -20,7 +20,7 @@ void printIt(Uint8List bytes, int offset, int count) {
 }
 
 
-printBytes(TypedData list, int length) {
+void printBytes(TypedData list, int length) {
   print('list.length(${list.lengthInBytes}, length($length)');
   Uint32List l32 = list.buffer.asUint32List();
   for (int i = 0; i < 64; i += 16) {

@@ -47,5 +47,5 @@ Instance readDicomFile(file) {
   if (file is Filename) file = file.file;
   if (file is! File) return null;
   Uint8List bytes = file.readAsBytesSync();
-  return DcmDecoder.decode(bytes);
+  return DcmDecoder.decode(new DSSource(bytes, file.path));
 }
