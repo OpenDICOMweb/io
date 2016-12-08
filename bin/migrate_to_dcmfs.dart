@@ -41,10 +41,10 @@ void main(List<String> args) {
       Uint8List bytes = fn.file.readAsBytesSync();
       //print('Filename: $fn');
 
-      Entity e = DcmDecoder.decode(new DSSource(bytes, fn.path));
-      print('Entity: ${e.format(new Formatter())}');
+      RootDataset ds = DcmDecoder.decode(new DSSource(bytes, fn.path));
+      print('Entity: ${ds.format(new Formatter())}');
 
-      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, e.dataset.name);
+      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, ds.name);
       print(dcmFile.path);
       dcmFile.writeSync(bytes);
 
