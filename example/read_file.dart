@@ -22,9 +22,9 @@ void main(List<String> args) {
 
   Filename fn = new Filename(path0);
   Uint8List bytes = fn.file.readAsBytesSync();
-  Entity e = DcmDecoder.decode(new DSSource(bytes, fn.path));
-  log.debug('e: $e');
-  log.debug('dataset length: ${e.dataset.length} elements');
-  log.debug(e.format(new Formatter(maxDepth: 146)));
+  RootDataset ds = DcmDecoder.decode(new DSSource(bytes, fn.path));
+  log.debug('e: $ds');
+  log.debug('dataset length: ${ds.length} elements');
+  log.debug(ds.format(new Formatter(maxDepth: 146)));
 
 }
