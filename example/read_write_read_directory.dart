@@ -15,7 +15,16 @@ String inputDir = 'C:/odw/sdk/io/example/input';
 String outputDir = 'C:/odw/sdk/io/example/output';
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory', logLevel: Level.debug);
+  final log = new Logger('read_write_read_directory', logLevel: Level.info);
+
+  //FLush begin
+  int i0 = 0x0a8b1844; // 0000 1010 1000 1011
+  int i1 = 0x2fc43c44; // 0010 1111 1100 0100
+  double d0 = i0.toDouble();
+  double d1 = i1.toDouble();
+  print('i0($i0), d0($d0)');
+  print('i1($i1), d0($d1)');
+  //Flush end
 
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inputDir);
@@ -25,6 +34,8 @@ void main(List<String> args) {
   for (var i = 0; i < files.length; i++) {
     var input = files[i];
     if (input.isDicom) {
+      log.info('*** File $i');
+      log.down;
       log.info('Reading file $i: $input');
       log.down;
       Uint8List bytes0 = input.file.readAsBytesSync();
@@ -51,41 +62,51 @@ void main(List<String> args) {
       Filename resultFn = new Filename(outPath);
       log.info('Reading Result file $i: $resultFn');
       log.down;
-      bytes0 = resultFn.readAsBytesSync();
-      int resultLength = bytes0.lengthInBytes;
-      log.info('read ${bytes0.length} bytes');
+      Uint8List bytes2 = resultFn.readAsBytesSync();
+      int resultLength = bytes2.lengthInBytes;
+      log.info('read ${bytes2.length} bytes');
       if (originalLength == resultLength) {
         log.info('Both files have length($originalLength)');
       } else {
         log.error('Files have different lengths: '
-            'original($originalLength), result ($resultLength)');
+                      'original($originalLength), result ($resultLength)');
       }
-      Instance instance1 = DcmDecoder.decode(new DSSource(bytes0, input.path));
+      Instance instance1 = DcmDecoder.decode(new DSSource(bytes2, input.path));
       log.debug1('Instance: 1 ${instance1.info}');
       log.debug2(instance1.format(new Formatter(maxDepth: -1)));
       log.up;
 
       // Compare Datasets
       log.logLevel = Level.info;
+      log.info("Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
+      log.down;
       var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
-      comparitor.result;
+      comparitor.run;
+      log.down;
       if (comparitor.hasDifference) {
         log.info('Result: ${comparitor.bad}');
         throw "stop";
+      } else {
+        log.info("Dataset are identical");
       }
       log.up2;
 
       log.logLevel = Level.debug;
       // Compare input and output
-      log.info('Comparing Bytes:');
+      log.info('Comparing Files by Bytes:');
       log.down;
-      log.info('Original: ${input.path}');
-      log.info('Result: ${output.path}');
+      log.debug('Original: ${input.path}');
+      log.debug('Result: ${output.path}');
       List result = compareFiles(input.path, output.path);
-      log.info('$result');
+      if (result.length == 0) {
+          log.info('Files are identical');
+        } else {
+        log.info('Files have differences at: $result');
+      }
       log.up;
     } else {
       log.info('Skipping ... $input');
     }
+    log.up;
   }
 }

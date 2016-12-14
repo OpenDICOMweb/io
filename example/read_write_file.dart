@@ -28,36 +28,47 @@ String out1 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.201
     "2.16.840.1.114255.1870665029.949635505.39523.169/"
     "output.dcm";
 
+String in3 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/2.16.840.1.114255.1870665029.949635505.39523.169/2.16.840.1.114255.1870665029.949635505.25169.170.dcm";
+
+String out3 = "C:/odw/sdk/io/example/output/2.16.840.1.114255.1870665029.949635505.25169.170.dcm";
+
+String outX = "C:/odw/sdk/io/example/output/foo.dcm";
+
 final log = new Logger("read_write_file", logLevel: Level.info);
 
 void main(List<String> args) {
-  Filename fn = new Filename(in2);
+  Filename fn = new Filename(in3);
   log.info('reading: $fn');
-  Uint8List bytes = fn.file.readAsBytesSync();
-  log.info('read ${bytes.length} bytes');
-  Instance instance0 = DcmDecoder.decode(new DSSource(bytes, fn.path));
-  log.info(instance0.format(new Formatter(maxDepth: -1)));
+  Uint8List bytes0 = fn.file.readAsBytesSync();
+  log.info('read ${bytes0.length} bytes');
+  Instance instance0 = DcmDecoder.decode(new DSSource(bytes0, fn.path));
+  log.info(instance0);
+  log.debug(instance0.format(new Formatter(maxDepth: -1)));
 
-  log.info('0070 0080 ${instance0.dataset.lookup(0x00700080)}');
-  log.info('0070 0081 ${instance0.dataset.lookup(0x00700081)}');
+  log.info('0070 0010 ${instance0.dataset.lookup(0x00700010)}');
+  log.info('0070 0011 ${instance0.dataset.lookup(0x00700011)}');
+  log.info('0070 0010 ${instance0.dataset.lookup(0x00700010)}');
+  log.info('0070 0014 ${instance0.dataset.lookup(0x00700014)}');
 
   // Write a File
-  Filename fnOut = new Filename.withType(out1, FileSubtype.part10);
+
+  Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
   fnOut.writeSync(instance0);
 
   // Now read the file we just wrote.
-  Filename result = new Filename(out1);
+  //Filename result = new Filename(fnOut);
 
-  log.info('Re-reading: $result');
-  bytes = result.readAsBytesSync();
-  log.info('read ${bytes.length} bytes');
-  Instance instance1 = DcmDecoder.decode(new DSSource(bytes, fn.path));
-  log.info(instance1.format(new Formatter(maxDepth: -1)));
+  log.info('Re-reading: $fnOut');
+  Uint8List bytes1 = fnOut.readAsBytesSync();
+  log.info('read ${bytes1.length} bytes');
+  Instance instance1 = DcmDecoder.decode(new DSSource(bytes1, fn.path));
+  log.info(instance1);
+  log.debug(instance1.format(new Formatter(maxDepth: -1)));
 
   // Compare Datasets
   log.logLevel = Level.info;
   var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
-  comparitor.result;
+  comparitor.run;
   if (comparitor.hasDifference) {
     log.info('Result: ${comparitor.bad}');
     throw "stop";
@@ -68,8 +79,8 @@ void main(List<String> args) {
   log.info('Comparing Bytes:');
   log.down;
   log.info('Original: ${fn.path}');
-  log.info('Result: ${result.path}');
-  List<List> out = compareFiles(fn.path, result.path);
+  log.info('Result: ${fnOut.path}');
+  List<List> out = compareFiles(fn.path, fnOut.path);
   log.info('$out');
   log.up;
 }
