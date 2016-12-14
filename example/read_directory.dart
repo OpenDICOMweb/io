@@ -25,7 +25,7 @@ String outRoot3 = 'test/output/root3';
 void main() {
 
   // Get the files in the directory
-  List<Filename> files = Filename.getFilesFromDirectory(inRoot0);
+  List<Filename> files = Filename.listFromDirectory(inRoot0);
   stdout.writeln('File count: ${files.length}');
 
   // Read, parse, and print a summary of each file.

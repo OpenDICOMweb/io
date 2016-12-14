@@ -28,7 +28,7 @@ void main(List<String> args) {
   //var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CR_and_RF";
-  List<Filename> files = Filename.getFilesFromDirectory(source);
+  List<Filename> files = Filename.listFromDirectory(source);
   print('source: $source');
   //var target = results['target'];
   var target = "C:/odw/sdk/io/example/output";
@@ -41,10 +41,10 @@ void main(List<String> args) {
       Uint8List bytes = fn.file.readAsBytesSync();
       //print('Filename: $fn');
 
-      RootDataset ds = DcmDecoder.decode(new DSSource(bytes, fn.path));
-      print('Entity: ${ds.format(new Formatter())}');
+      Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
+      print('Entity: ${instance.format(new Formatter())}');
 
-      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, ds.name);
+      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, instance.name);
       print(dcmFile.path);
       dcmFile.writeSync(bytes);
 

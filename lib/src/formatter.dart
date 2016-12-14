@@ -16,7 +16,7 @@ class FSFormatter {
 
   String get sp => "".padRight(indent * level, " ");
 
-  String fmt(Object o) => '${sp}$count: $o';
+  String fmt(Object o) => '$sp$count: $o';
 
   String call(FileSystemEntity fse, [String output = ""]) {
     var s = fmt(fse);

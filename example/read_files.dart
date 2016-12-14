@@ -23,17 +23,17 @@ void main(List<String> args) {
   //var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CT";
-  List<Filename> files = Filename.getFilesFromDirectory(source);
+  List<Filename> files = Filename.listFromDirectory(source);
 
   for (Filename fn in files) {
     print('*** Starting $fn');
     if (fn.isPart10) {
       Uint8List bytes = fn.file.readAsBytesSync();
-      RootDataset e = DcmDecoder.decode(new DSSource(bytes, fn.path));
-      if (e == null) {
+      Instance  instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
+      if (instance == null) {
         log.debug('*** Skipping Invalid Transfer Syntax: $fn ');
       } else {
-        log.debug(e.info);
+        log.debug(instance.info);
       }
     } else if (fn.isJson) {
       //TODO: can't read JSON yet

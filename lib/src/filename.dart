@@ -14,7 +14,9 @@ import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';
 import 'file_type.dart';
-//import 'dart:convert';
+import 'utils.dart';
+
+//TODO: make everything async
 
 int _firstDot(String s) => p.basename(s).indexOf('.');
 
@@ -31,7 +33,9 @@ String toAbsolute(String path) {
 /// A hopefully DICOM Filename, but not guaranteed.
 ///
 /// This is a file from a non-DICOM File System.
+//TODO: change this so it is based on [File] rather than [path].
 class Filename {
+  static final log = new Logger('Filename');
   final String _path;
   FileSubtype _subtype;
   File _file;
@@ -63,7 +67,10 @@ class Filename {
   String get name => base.substring(0, _firstDot(base));
   String get ext => p.extension(_path);
 
-  // These getters are based on the expectation that the file extension is accurate.
+  bool get isDirectory => FileSystemEntity.isDirectorySync(_path);
+
+  bool get isFile => FileSystemEntity.isFileSync(_path);
+  //*** These getters are based on the expectation that the file extension is accurate.
 
   /// Returns [true] if a DICOM file type.
   bool get isDicom => subtype.isDicom;
@@ -125,6 +132,9 @@ class Filename {
     throw "Shouldn't get here";
   }
 
+  //TODO: should this return the bytes or a parsed Entity
+  Uint8List readAsBytesSync() => file.readAsBytesSync();
+
   Future<Entity> read() async {
     if (isBinary) {
       Uint8List bytes = await file.readAsBytesSync();
@@ -144,7 +154,7 @@ class Filename {
   bool writeSync(Entity entity) {
     if (isBinary) {
       Uint8List bytes = DcmEncoder.encode(entity);
-      print('encoded Bytes length: ${bytes.lengthInBytes}');
+      log.debug('Writing ${bytes.lengthInBytes} bytes.');
       file.writeAsBytesSync(bytes);
       return true;
     } else if (isJson) {
@@ -155,6 +165,12 @@ class Filename {
       throw "XML Umplemented";
     }
     throw "Shouldn't get here";
+  }
+
+  bool writeAsBytesSync(Uint8List bytes) {
+    log.debug('Writing ${bytes.lengthInBytes} bytes.');
+    file.writeAsBytesSync(bytes);
+    return true;
   }
 
   bool write(Entity entity) {
@@ -171,18 +187,11 @@ Subtype: ${FileSubtype.parse(_path)};
   String toString() => _path;
 
   //TODO move to utilities
-  static List<Filename> getFilesFromDirectory(String source, [String ext = ".dcm"]) {
-    var dir = new Directory(source);
-    List<FileSystemEntity> entities = dir.listSync(recursive: true, followLinks: false);
-    List<Filename> filenames = [];
-    for (FileSystemEntity e in entities) {
-      if (e is File) {
-        filenames.add(new Filename(e.path));
-      } else {
-        print('Skipping ${e.runtimeType}: ${e.path}');
-      }
-    }
-    // print('Filenames(${filenames.length}): $filenames');
-    return filenames;
+  static List<Filename> listFromDirectory(String source, [String ext = ".dcm"]) {
+    List<File> files = getFilesFromDirectory(source, ext);
+    List<Filename> fNames = new List(files.length);
+    for (int i = 0; i < files.length; i++)
+      fNames[i] = new Filename(files[i].path);
+    return fNames;
   }
 }
