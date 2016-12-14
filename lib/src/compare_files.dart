@@ -44,16 +44,29 @@ List<List> compareFiles(String path0, String path1) {
 
   log.down;
   for (int i = 0; i < limit; i++) {
-    if (bytes0[i] == bytes1[i]) continue;
-    if ((bytes0[i] == 0 && bytes1[i] == 32) || (bytes0[i] == 32 && bytes1[i] == 0) ) {
-      result.add([i, bytes0[i], bytes1[i]]);
-      log.debug('found ${bytes0[i]} in f0 and ${bytes1[i]}  in f1');
+    int byte0 = bytes0[i];
+    int byte1 = bytes1[i];
+    if (byte0== byte1) continue;
+    if ((byte0== 0 && byte1== 32) || (byte0== 32 && byte1== 0) ) {
+      result.add([i, byte0, byte1]);
+      log.debug('Found ${byte0} in f0 and ${byte1}  in f1');
+      continue;
+    }
+
+    //Test for uppercase & lowercase
+    if (byte0== toLowercaseChar(byte1)) {
+      result.add([i, byte0, byte1]);
+      var s0 = new String.fromCharCode(byte0);
+      var s1 = new String.fromCharCode(byte1);
+      log.debug('Found Uppercase "$s0" (${byte0}) in f0 and "$s1"(${byte1}) in f1');
       continue;
     }
     //Test for uppercase & lowercase
-    if ((bytes0[i] == charbytes1[i] == 32) || (bytes0[i] == 32 && bytes1[i] == 0) ) {
-      result.add([i, bytes0[i], bytes1[i]]);
-      log.debug('found ${bytes0[i]} in f0 and ${bytes1[i]}  in f1');
+    if (byte0== toUppercaseChar(byte1)) {
+      result.add([i, byte0, byte1]);
+      var s0 = new String.fromCharCode(byte0);
+      var s1 = new String.fromCharCode(byte1);
+      log.debug('Found Lowercase "$s0" (${byte0}) in f0 and "$s1"(${byte1}) in f1');
       continue;
     }
     _foundProblem(bytes0, bytes1, i, 20, 20);

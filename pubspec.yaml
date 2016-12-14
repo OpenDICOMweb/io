@@ -13,6 +13,9 @@ dependencies:
 
   # The I/O package can should only use the convert/aux.dart library.
   # It should know as little as possible about DICOM.
+  dictionary:
+    path: C:/odw/sdk/dictionary
+    version: 0.4.7
   encode:
     path: C:/odw/sdk/convert
     version: 0.3.4
