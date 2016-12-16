@@ -55,5 +55,5 @@ class Encoding {
   static const pureJsonMetadata = const Encoding(11, "Metadata", "json", "desc.json", "utf8");
   static const pureJsonBulkdata = const Encoding(12, "Bulkdata", "json", "bd.json", "utf8");
 
-  toString() => '$oType encoded as $mediaType';
+  String toString() => '$oType encoded as $mediaType';
 }
