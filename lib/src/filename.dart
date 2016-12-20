@@ -189,6 +189,7 @@ Subtype: ${FileSubtype.parse(_path)};
   //TODO move to utilities
   static List<Filename> listFromDirectory(String source, [String ext = ".dcm"]) {
     List<File> files = getFilesFromDirectory(source, ext);
+    print('Total FSEntities: ${files.length}');
     List<Filename> fNames = new List(files.length);
     for (int i = 0; i < files.length; i++)
       fNames[i] = new Filename(files[i].path);

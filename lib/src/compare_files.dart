@@ -25,7 +25,8 @@ import 'package:io/io.dart';
 final log = new Logger('FileCompare', logLevel: Level.info);
 
 /// Compare two files byte by byte and report the first significant difference.
-List<List> compareFiles(String path0, String path1) {
+List<List> compareFiles(String path0, String path1, [logLevel = Level.info]) {
+  log.logLevel = logLevel;
   final List<List> result = [];
   bool hasProblems = false;
   bool contiguous = false;
@@ -94,6 +95,7 @@ List<List> compareFiles(String path0, String path1) {
     log.debug('**** File are different and have problems');
     log.debug(resultToString(result));
     log.up;
+    return result;
   } else {
     log.debug('Warning Files are different but result is correct');
     log.debug(resultToString(result));
