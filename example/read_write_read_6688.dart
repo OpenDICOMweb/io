@@ -18,20 +18,22 @@ String inputDir3 = 'C:/dicom/6688';
 String outputDir = 'C:/odw/sdk/io/example/output';
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory', logLevel: Level.info);
+  final log = new Logger('read_write_read_directory', logLevel: Level.config);
   int filesTotal = 0;
   int filesRead = 0;
 
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inputDir3);
   filesTotal = files.length;
-  log.info('Total File count: $filesTotal');
+  log.config('Total File count: $filesTotal');
+  Timestamp startTime = new Timestamp("Start Time:");
+  log.config('Starting tests at $startTime ...');
 
   // Read, parse, and log a summary of each file.
-  for (var i = 0; i < files.length; i++) {
+  for (int i = 47900; i < files.length; i++) {
     Filename inFN = files[i];
 
-    log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
+    log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
     // Read at least the FMI to get the Transfer Syntax
     Uint8List bytes0 = inFN.file.readAsBytesSync();
     log.down;
@@ -102,5 +104,9 @@ void main(List<String> args) {
     }
     log.up2;
   }
+  Timestamp endTime = new Timestamp("End Time:");
+  log.config('Completed tests at $endTime ...');
+  Duration elapsed = endTime.dt.difference(startTime.dt);
+  log.config('ElapsedTime: $elapsed');
 }
 

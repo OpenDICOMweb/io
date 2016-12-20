@@ -35,6 +35,8 @@ String in6 = 'C:/dicom/6688/12/0B009D38/DC418F0F/0691E2EF';
 String in7 = 'C:/odw/test_data/sfd/CT/Patient_16_CT_Maxillofacial_-_Wegners/1_DICOM_Original'
     '/IM000001.dcm';
 
+String in8 = 'C:/dicom/6688/21/21/02CB05C5/04B82189/04B821C5';
+
 String out1 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/"
     "2.16.840.1.114255.1870665029.949635505.39523.169/"
     "output.dcm";
@@ -46,7 +48,7 @@ String outX = "C:/odw/sdk/io/example/output/foo.dcm";
 final log = new Logger("read_write_file", logLevel: Level.info);
 
 void main(List<String> args) {
-  Filename fn = new Filename(in7);
+  Filename fn = new Filename(in8);
   log.info('Reading: $fn');
   Uint8List bytes0 = fn.file.readAsBytesSync();
   log.info('  ${bytes0.length} bytes');
