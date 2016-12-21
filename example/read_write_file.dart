@@ -24,11 +24,22 @@ String in1 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.2012
 String in2 = 'C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/2.16.840'
     '.1.114255.1870665029.949635505.39523.169/2.16.840.1.114255.1870665029.949635505.10220.175.dcm';
 
+String in3 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/2.16.840.1.114255.1870665029.949635505.39523.169/2.16.840.1.114255.1870665029.949635505.25169.170.dcm";
+
+String in4 = 'C:/dicom/6688/12/0B009D38/0B009D3D/9E163B22';
+
+String in5 = 'C:/odw/test_data/sfd/CT/Patient_8_Non_ossifying_fibroma/1_DICOM_Original/IM002102.dcm';
+
+String in6 = 'C:/dicom/6688/12/0B009D38/DC418F0F/0691E2EF';
+
+String in7 = 'C:/odw/test_data/sfd/CT/Patient_16_CT_Maxillofacial_-_Wegners/1_DICOM_Original'
+    '/IM000001.dcm';
+
+String in8 = 'C:/dicom/6688/21/21/02CB05C5/04B82189/04B821C5';
+
 String out1 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/"
     "2.16.840.1.114255.1870665029.949635505.39523.169/"
     "output.dcm";
-
-String in3 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/2.16.840.1.114255.1870665029.949635505.39523.169/2.16.840.1.114255.1870665029.949635505.25169.170.dcm";
 
 String out3 = "C:/odw/sdk/io/example/output/2.16.840.1.114255.1870665029.949635505.25169.170.dcm";
 
@@ -37,21 +48,18 @@ String outX = "C:/odw/sdk/io/example/output/foo.dcm";
 final log = new Logger("read_write_file", logLevel: Level.info);
 
 void main(List<String> args) {
-  Filename fn = new Filename(in3);
-  log.info('reading: $fn');
+  Filename fn = new Filename(in8);
+  log.info('Reading: $fn');
   Uint8List bytes0 = fn.file.readAsBytesSync();
-  log.info('read ${bytes0.length} bytes');
+  log.info('  ${bytes0.length} bytes');
+  log.logLevel = Level.debug;
   Instance instance0 = DcmDecoder.decode(new DSSource(bytes0, fn.path));
-  log.info(instance0);
+  log.logLevel = Level.info;
+  log.info('Decoded: $instance0');
   log.debug(instance0.format(new Formatter(maxDepth: -1)));
-
-  log.info('0070 0010 ${instance0.dataset.lookup(0x00700010)}');
-  log.info('0070 0011 ${instance0.dataset.lookup(0x00700011)}');
-  log.info('0070 0010 ${instance0.dataset.lookup(0x00700010)}');
-  log.info('0070 0014 ${instance0.dataset.lookup(0x00700014)}');
-
+  log.info('${instance0[kFileMetaInformationGroupLength].info}');
+  log.info('${instance0[kFileMetaInformationVersion].info}');
   // Write a File
-
   Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
   fnOut.writeSync(instance0);
 
@@ -81,6 +89,12 @@ void main(List<String> args) {
   log.info('Original: ${fn.path}');
   log.info('Result: ${fnOut.path}');
   List<List> out = compareFiles(fn.path, fnOut.path);
-  log.info('$out');
+  if (out.length == 0) {
+    log.info('Files are identical.');
+  } else {
+    log.info('Files are different!');
+    log.info('$out');
+  }
+
   log.up;
 }
