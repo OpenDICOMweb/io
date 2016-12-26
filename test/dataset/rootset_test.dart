@@ -5,11 +5,12 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:core/dataset.dart';
 import 'package:core/core.dart';
 import 'package:encode/dicom.dart';
 import 'package:io/io.dart';
+import 'package:encode/encoder.dart';
 
 import "package:test/test.dart";
 
@@ -31,21 +32,44 @@ void main() {
   stdout.writeln('File count: ${files.length}');
 
   group("Data set", () {
-    test("Create a data set object from map",(){
-
+    test("Create a data set object from map", () {
       // Read, parse, and print a summary of each file.
       for (Filename file in files) {
-        if (file.isDicom && file.base!="ct.0.dcm") {
+        if (file.isDicom) {
           print('Reading file: $file');
-          Instance  instance = file.readSync();
-          print(instance.info);
+
+          DSSource dsSource = new DSSource(file.readAsBytesSync(), file.path);
+
+          DcmReader reader = new DcmReader(dsSource);
+
+          RootDataset rds =
+              reader.readRootDataset((dsSource.lengthInBytes / 64).round());
+
+          if (rds[0x00020010] != null) {
+            print(
+                'File name ${file.base} with Transfer Syntax UID: ${rds[0x00020010].values[0]}');
+          }
+
+          if (rds[0x7FE00010] != null && rds[0x7FE00010].values != null) {
+            print('         Pixel Data: ${rds[0x7FE00010].values[0]}');
+          }
+
+          if (rds[0x00280008] != null && rds[0x00280008].values != null) {
+            print('          Number of Frames: ${rds[0x00280008]?.values[0]}');
+          }
+
+          if (rds[0x00143012] != null&&rds[0x00143012].values != null) {
+            print('          Number of frames integrated: ${rds[0x00143012]?.values[0]}');
+          }
+
+          if (rds[0x00143073] != null&&rds[0x00143073].values != null) {
+            print(
+                '            Number of Frames Used for Integration: ${rds[0x00143073]?.values[0]}');
+          }
         } else {
           print('Skipping ... $file');
         }
       }
-
     });
-
   });
-
 }
