@@ -5,15 +5,18 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:io/io.dart';
 
 
 Future main()  async {
   String root = r"C:\odw\test_data\sfd\CR_and_RF";
-  List<String> tree = await getFilesSync(root);
-  Formatter format  = new Formatter();
-  var out = format(tree);
+  Directory dir = new Directory(root);
+  //List<String> tree = await getFilesSync(root, isDcmFile);
+  print(root);
+  FSFormatter format  = new FSFormatter();
+  var out = format(dir);
 
   print('Tree:\n$out');
 }

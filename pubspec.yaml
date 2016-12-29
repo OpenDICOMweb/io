@@ -2,24 +2,32 @@ name: io
 description: A starting point for Dart libraries or applications.
 version: 0.1.1
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
-homepage: https://opendicomweb.github.io
+
+homepage: https://github.com/OpenDICOMweb/io
 
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: ^1.0.0
 
 dependencies:
-  bytebuf:
-    path: C:/odw/sdk/bytebuf
-  convert:
+  args: any
+
+  # The I/O package can should only use the convert/aux.dart library.
+  # It should know as little as possible about DICOM.
+  dictionary:
+    path: C:/odw/sdk/dictionary
+    version: 0.4.7
+  encode:
     path: C:/odw/sdk/convert
-  core:
-    path: C:/odw/sdk/core
-  path: any
-  uuid:
-    path: C:/odw/sdk/uuid
+    version: 0.3.4
+  # The I/O package should not use core, but it may used dictionary/common
+  #core:
+  #  path: C:/odw/sdk/core
+  #  version: 0.4.1
   path: any
 
 dev_dependencies:
-  test: '>=0.12.0 <0.13.0'
+  benchmark_harness: any
   grinder: any
+  test: ^0.12.0
+
 
