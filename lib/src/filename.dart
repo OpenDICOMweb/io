@@ -50,6 +50,11 @@ class Filename {
       : _file = file,
         _path = toAbsolute(file.path);
 
+  factory Filename.withExt(Filename fn, [String ext = 'out']) {
+    var path = p.basenameWithoutExtension(fn.path) + '.$ext';
+    return new Filename(path);
+  }
+
   // lazy if created with [Filename].
   File get file => _file ??= new File(_path);
 
@@ -74,6 +79,9 @@ class Filename {
 
   /// Returns [true] if a DICOM file type.
   bool get isDicom => subtype.isDicom;
+
+  bool get isNotDicom => ! isDicom;
+
   /// The file extension for this [FileSubtype].
   String get extension => ext;
 
@@ -185,6 +193,13 @@ Subtype: ${FileSubtype.parse(_path)};
 
   @override
   String toString() => _path;
+
+  static Filename toFilename(obj) {
+    if (obj is Filename) return obj;
+    if (obj is String) return new Filename(obj);
+    if (obj is File) return new Filename.fromFile(obj);
+    return null;
+  }
 
   //TODO move to utilities
   static List<Filename> listFromDirectory(String source, [String ext = ".dcm"]) {

@@ -24,12 +24,54 @@ import 'package:io/io.dart';
 
 final log = new Logger('FileCompare', logLevel: Level.info);
 
+class FileCompareResult {
+  Filename infile;
+  Filename outfile;
+  bool sameLength;
+  bool hasProblems;
+  List<FileByteDiff> diffs;
+
+  FileCompareResult(this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
+
+  String get lengthS => (sameLength) ? "Equal lengths" : '** Different Lengths';
+
+  String get fmtDiffs {
+    var out = 'Differences';
+    for (FileByteDiff d in diffs)
+      out += '$d';
+    return out;
+  }
+
+  @override
+  String toString() => '''
+File comparison result:
+  in: $infile
+  out: $outfile
+  $lengthS
+
+  ''';
+}
+
+class FileByteDiff {
+  int pos;
+  String type;
+  int byte0;
+  int byte1;
+  String info;
+
+  FileByteDiff(this.pos, this.type, this.byte0, this.byte1, this.info);
+
+  @override
+  String toString() => '    $pos: $type, byte0($byte0), byte1($byte1)\n $info';
+}
+
 /// Compare two files byte by byte and report the first significant difference.
-List<List> compareFiles(String path0, String path1, [logLevel = Level.config]) {
-  log.logLevel = logLevel;
-  final List<List> result = [];
+FileCompareResult compareFiles(String path0, String path1, [Logger log, logLevel = Level.config]) {
+  final List<FileByteDiff> diffs = [];
+  final maxProblems = 3;
   bool hasProblems = false;
   bool contiguous = false;
+  log.logLevel = logLevel;
 
   log.down;
   Filename fn0 = new Filename(path0);
@@ -41,11 +83,10 @@ List<List> compareFiles(String path0, String path1, [logLevel = Level.config]) {
   Uint8List bytes1 = fn1.file.readAsBytesSync();
   int length1 = bytes1.length;
   log.debug('fn1 read $length1 bytes');
-
-  result.add(["length", bytes0.length, bytes1.length]);
-  int limit = (length0 > length1) ? length1 : length0;
+  bool isLengthEqual = (length0 == length1);
 
   log.down;
+  int limit = (length0 > length1) ? length1 : length0;
   for (int i = 0; i < limit; i++) {
     int byte0 = bytes0[i];
     int byte1 = bytes1[i];
@@ -56,62 +97,49 @@ List<List> compareFiles(String path0, String path1, [logLevel = Level.config]) {
     String s0 = new String.fromCharCode(byte0);
     String s1 = new String.fromCharCode(byte1);
     if ((byte0 == 0 && byte1 == 32) || (byte0 == 32 && byte1 == 0)) {
-      result.add(["Null/Space", i, byte0, byte1, '$s0($byte0)', '$s1($byte1)']);
+      diffs.add(new FileByteDiff(i, "Null/Space", byte0, byte1, ""));
       log.debug('Found $s0($byte0) in f0 and $s1($byte1) in f1');
       contiguous = true;
       continue;
     }
     //Test for uppercase & lowercase
     if (byte0 == toLowercaseChar(byte1)) {
-      result.add(["Lower To Upper case", i, byte0, byte1, '$s0($byte0)', '$s1($byte1)']);
+      diffs.add(new FileByteDiff(i, "Lower To Upper case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
       log.debug('Found Uppercase "$s0" ($byte0) in f0 and "$s1"($byte1) in f1');
       contiguous = true;
       continue;
     }
     //Test for uppercase & lowercase
     if (byte0 == toUppercaseChar(byte1)) {
-      result.add(["Upper To Lower case", i, byte0, byte1, '$s0($byte0)', '$s1($byte1)']);
+      diffs.add(new FileByteDiff(i, "Upper To Lower case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
       log.debug('Found Lowercase "$s0" ($byte0) in f0 and "$s1"($byte1) in f1');
       contiguous = true;
       continue;
     }
-    if (!contiguous) {
-      log.logLevel = Level.debug;
-      result.add(["Problem", i, byte0, byte1, '$s0($byte0)', '$s1($byte1)']);
-      _foundProblem(bytes0, bytes1, i, 20, 20);
+    if (!contiguous && diffs.length < maxProblems) {
+      var problem = _foundProblem(bytes0, bytes1, i, 20, 20);
+      diffs.add(new FileByteDiff(i, "Problem", byte0, byte1, problem));
       hasProblems == true;
-      log.logLevel = Level.info;
     }
     contiguous = true;
     //log.fatal("Stop");
   }
   log.up;
 
-  if (result.length == 1) {
-    log.debug('Files are identical');
+  if (diffs.length != 0) {
+    var result = new FileCompareResult(fn0, fn1, isLengthEqual, hasProblems, diffs);
+    if (hasProblems) {
+      log.debug('**** File are different and have problems');
+    } else {
+      log.debug('** Warning Files are different but result is correct');
+    }
     log.up;
-    return [];
-  } else if (hasProblems) {
-    log.debug('**** File are different and have problems');
-    log.debug(resultToString(result));
-    log.up;
-    return result;
-  } else {
-    log.debug('Warning Files are different but result is correct');
-    log.debug(resultToString(result));
-    log.up;
+    log.debug(result);
     return result;
   }
-}
-
-String resultToString(List<List> result) {
-  String out = 'compareFiles Result:\n';
-  for (List v in result) {
-    var v0 = '${v[0]}'.padLeft(3, ' ');
-    var v1 = '${v[1]}'.padLeft(3, ' ');
-    out += '${v[0]}: $v0, $v1';
-  }
-  return out;
+  log.debug('Files are identical');
+  log.up;
+  return null;
 }
 
 String _charToString(int c) {
@@ -125,10 +153,9 @@ String _charToString(int c) {
 String _toDecimal(int i) => i.toRadixString(10).padLeft(4, ' ');
 String _toHex(int i) => i.toRadixString(16).padLeft(2, "0").padLeft(4, ' ');
 
-
-void _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
-  log.error('Found a Problem at index $i');
-  log.error('$i: ${bytes0[i]} != ${bytes1[i]}');
+String _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
+  var out = 'Found a Problem at index $i\n';
+  out += '  $i: ${bytes0[i]} != ${bytes1[i]}\n';
 
   List<String> count = [];
   List<String> index = [];
@@ -188,14 +215,13 @@ void _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int af
     char1.add(_charToString(v1));
   }
 
-  log.debug(' k: $count');
-  log.debug(' i: $index');
-  log.debug('D0: $dec0');
-  log.debug('D1: $dec1');
-  log.debug('H0: $hex0');
-  log.debug('H1: $hex1');
-  log.debug('C0: $char0');
-  log.debug('C1: $char1');
+  out += ' k: $count';
+  out += ' i: $index';
+  out += 'D0: $dec0';
+  out += 'D1: $dec1';
+  out += 'H0: $hex0';
+  out += 'H1: $hex1';
+  out += 'C0: $char0';
+  out += 'C1: $char1';
+  return out;
 }
-
-

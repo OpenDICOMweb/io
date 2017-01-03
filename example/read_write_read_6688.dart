@@ -30,7 +30,7 @@ void main(List<String> args) {
   log.config('Starting tests at $startTime ...');
 
   // Read, parse, and log a summary of each file.
-  for (int i = 47900; i < files.length; i++) {
+  for (int i = 0; i < files.length; i++) {
     Filename inFN = files[i];
 
     log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
@@ -96,8 +96,8 @@ void main(List<String> args) {
     log.down;
     log.debug('Original: ${inFN.path}');
     log.debug('Result: ${outFN.path}');
-    List result = compareFiles(inFN.path, outFN.path, Level.info);
-    if (result.length == 0) {
+    FileCompareResult result = compareFiles(inFN.path, outFN.path, log);
+    if (result == null) {
       log.info('Files are identical');
     } else {
       log.info('Files have differences at: $result');

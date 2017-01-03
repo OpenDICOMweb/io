@@ -20,6 +20,7 @@ import 'package:io/io.dart';
 /// DICOM file extension and print's out some information about the
 /// [Dataset] contained in the file.
 void main(List<String> args) {
+  final Logger log = new Logger('read_files.dart');
   //var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CT";

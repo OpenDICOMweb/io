@@ -7,9 +7,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:convert/dicom.dart';
-import 'package:core/dicom.dart';
-import 'package:logger/logger.dart';
+import 'package:core/base.dart';
+import 'package:encode/dicom.dart';
+//import 'package:core/dicom.dart';
+
 
 const String inputDir = "C:/odw/test_data/problems/";
 
@@ -21,7 +22,7 @@ String p4 = inputDir + "d1faaaaa-edf8-450e-8f62-35ebe592ca1b.dcm";
 List<String> filesList = [p2];
 
 void main() {
-  Logger log = Logger.init(level: Level.fine);
+  Logger log = new Logger("read_a_problem_file", logLevel: Level.debug);
 
   for (String path in filesList) {
     print('Reading file: $path');

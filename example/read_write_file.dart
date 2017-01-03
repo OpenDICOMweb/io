@@ -37,6 +37,13 @@ String in7 = 'C:/odw/test_data/sfd/CT/Patient_16_CT_Maxillofacial_-_Wegners/1_DI
 
 String in8 = 'C:/dicom/6688/21/21/02CB05C5/04B82189/04B821C5';
 
+String in9 = 'C:/odw/test_data/sfd/CT/Patient_8_Non_ossifying_fibroma/1_DICOM_Original/IM002102'
+    '.dcm';
+
+String in10 = 'C:/odw/test_data/sfd/CT/PID_TESTCT1/1_DICOM_Original/0034C9BE.dcm';
+
+String in11 = 'C:/odw/test_data/sfd/CT/Patient_3_Cardiac_CTA/1_DICOM_Original/IM008679.dcm';
+
 String out1 = "C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/"
     "2.16.840.1.114255.1870665029.949635505.39523.169/"
     "output.dcm";
@@ -45,26 +52,22 @@ String out3 = "C:/odw/sdk/io/example/output/2.16.840.1.114255.1870665029.9496355
 
 String outX = "C:/odw/sdk/io/example/output/foo.dcm";
 
-final log = new Logger("read_write_file", logLevel: Level.info);
+final log = new Logger("read_write_file", logLevel: Level.debug);
 
 void main(List<String> args) {
-  Filename fn = new Filename(in8);
+  Filename fn = new Filename(in10);
   log.info('Reading: $fn');
   Uint8List bytes0 = fn.file.readAsBytesSync();
   log.info('  ${bytes0.length} bytes');
-  log.logLevel = Level.debug;
   Instance instance0 = DcmDecoder.decode(new DSSource(bytes0, fn.path));
-  log.logLevel = Level.info;
   log.info('Decoded: $instance0');
+  if (instance0 == null) return null;
   log.debug(instance0.format(new Formatter(maxDepth: -1)));
   log.info('${instance0[kFileMetaInformationGroupLength].info}');
   log.info('${instance0[kFileMetaInformationVersion].info}');
   // Write a File
   Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
   fnOut.writeSync(instance0);
-
-  // Now read the file we just wrote.
-  //Filename result = new Filename(fnOut);
 
   log.info('Re-reading: $fnOut');
   Uint8List bytes1 = fnOut.readAsBytesSync();
@@ -73,28 +76,24 @@ void main(List<String> args) {
   log.info(instance1);
   log.debug(instance1.format(new Formatter(maxDepth: -1)));
 
-  // Compare Datasets
-  log.logLevel = Level.info;
+  // Compare [Dataset]s
   var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
   comparitor.run;
   if (comparitor.hasDifference) {
-    log.info('Result: ${comparitor.bad}');
-    throw "stop";
-  }
+    log.fatal('Result: ${comparitor.info}');
 
-  log.logLevel = Level.debug;
+  }
   // Compare input and output
   log.info('Comparing Bytes:');
   log.down;
   log.info('Original: ${fn.path}');
   log.info('Result: ${fnOut.path}');
-  List<List> out = compareFiles(fn.path, fnOut.path);
-  if (out.length == 0) {
+  FileCompareResult out = compareFiles(fn.path, fnOut.path, log);
+  if (out == null) {
     log.info('Files are identical.');
   } else {
     log.info('Files are different!');
-    log.info('$out');
+    log.fatal('$out');
   }
-
   log.up;
 }

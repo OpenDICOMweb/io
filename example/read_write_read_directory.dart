@@ -16,31 +16,67 @@ String inputDir2 = 'C:/odw/test_data/sfd/CT';
 
 String outputDir = 'C:/odw/sdk/io/example/output';
 
+class FileTestError {
+  Filename inFile;
+  Filename outFile;
+  String read;
+  String reRead;
+  String dsCompare;
+  FileCompareResult result;
+
+  FileTestError(this.inFile, this.outFile);
+
+  String toString() => '''
+File Text Error:
+     in: $inFile
+    out: $outFile
+     ds: $dsCompare
+  bytes: $result
+  ''';
+}
+
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory',  logLevel: Level.info);
+  final log = new Logger('read_write_read_directory',  logLevel: Level.config);
+  Stopwatch watch = new Stopwatch();
   int filesTotal = 0;
   int filesRead = 0;
 
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inputDir2);
+  List<List> output = [];
   filesTotal = files.length;
-  log.info('Total File count: $filesTotal');
+  log.config('Total File count: $filesTotal');
+  watch.start();
+  Duration begin = watch.elapsed;
+  Duration end;
+  List<FileTestError> errors;
 
   // Read, parse, and log.debug a summary of each file.
   for (var i = 0; i < files.length; i++) {
     Filename inFN = files[i];
+    FileTestError error;
+
     if (!inFN.isDicom) {
-      log.debug('Skipping File $i Non-Dicom File:$inFN');
+      log.info('Skipping File $i Non-Dicom File:$inFN');
       continue;
     } else if (inFN.isDicom) {
       // Read at least the FMI to get the Transfer Syntax
       Uint8List bytes0 = inFN.file.readAsBytesSync();
       Instance instance0 = DcmDecoder.decode(new DSSource(bytes0, inFN.path));
       if (instance0 == null) {
-        log.debug('Skipping File $i Bad TS: $inFN');
+        log.info('Skipping File $i Bad TS: $inFN');
         continue;
       }
+
+      if ((i % 1000) == 0) {
+       Duration end = watch.elapsed;
+       Duration time = end - begin;
+       print('$time $i files ok');
+       begin = end;
+      }
       filesRead++;
+
+      log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
       log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
       log.down;
       log.debug('Reading $i: $inFN');
@@ -87,7 +123,11 @@ void main(List<String> args) {
       comparitor.run;
       log.down;
       if (comparitor.hasDifference) {
-        log.debug('Result: ${comparitor.bad}');
+        log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
+        log.config('Result: ${comparitor.info}');
+        log.debug(comparitor.toString());
+        error = new FileTestError(inFN, outFN);
+        error.dsCompare = comparitor.info;
         throw "stop";
       } else {
         log.debug("Dataset are identical");
@@ -100,15 +140,23 @@ void main(List<String> args) {
       log.down;
       log.debug1('Original: ${inFN.path}');
       log.debug1('Result: ${outFN.path}');
-      List result = compareFiles(inFN.path, outFN.path);
-      if (result.length == 0) {
+      FileCompareResult result = compareFiles(inFN.path, outFN.path);
+      if (result == null) {
           log.debug('Files are identical');
         } else {
-        log.debug('Files have differences at: $result');
+        log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
+        log.debug('Files have differences at : $result');
+        error = error ??=  new FileTestError(inFN, outFN);
+        error.result = result;
       }
       log.up;
     } else {
       throw "Fall-through error";
+    }
+    if (error != null) {
+      errors.add(error);
+      print(error);
+      error = null;
     }
     log.up;
   }
