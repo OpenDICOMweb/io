@@ -18,7 +18,7 @@ dependencies:
     version: 0.4.7
   encode:
     path: C:/odw/sdk/convert
-    version: 0.3.4
+    version: 0.4.0
   # The I/O package should not use core, but it may used dictionary/common
   #core:
   #  path: C:/odw/sdk/core
