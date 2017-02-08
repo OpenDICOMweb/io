@@ -1,12 +1,10 @@
 
 import 'dart:io';
 
-import 'package:core/dataset.dart';
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/dicom.dart';
+import 'package:core/dataset.dart';
 import 'package:io/io.dart';
-import 'package:encode/encoder.dart';
-
 import "package:test/test.dart";
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";

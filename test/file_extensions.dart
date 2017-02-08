@@ -161,6 +161,6 @@ Instance writeSopInstance(Instance instance, file) {
   encoder.writeSopInstance(instance);
   Uint8List bytes = file.readAsBytesSync();
   DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.readSopInstance(file.path);
+  return decoder.readInstance(file.path);
 }
 */

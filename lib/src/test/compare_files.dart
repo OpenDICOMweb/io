@@ -33,7 +33,7 @@ class FileCompareResult {
 
   FileCompareResult(this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
 
-  String get lengthS => (sameLength) ? "Equal lengths" : '** Different Lengths';
+  String get lengthMsg => (sameLength) ? "Equal lengths" : '** Different Lengths';
 
   String get fmtDiffs {
     var out = 'Differences';
@@ -47,7 +47,7 @@ class FileCompareResult {
 File comparison result:
   in: $infile
   out: $outfile
-  $lengthS
+  $lengthMsg
 
   ''';
 }

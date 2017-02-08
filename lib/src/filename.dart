@@ -8,8 +8,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/encoder.dart';
 import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';

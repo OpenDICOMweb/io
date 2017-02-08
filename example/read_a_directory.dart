@@ -6,6 +6,7 @@
 
 import 'dart:io';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -20,7 +21,7 @@ String outRoot3 = 'test/output/root3';
 
 
 void main() {
-  Logger log = new Logger("read_a_directory", Level.debug);
+  Logger log = new Logger("read_a_directory");
 
   Directory dir = new Directory(inRoot1);
 
@@ -32,17 +33,17 @@ void main() {
   Instance instance;
   for (File file in fList) {
     print('\nReading file: $file');
-    instance = readSopInstance(file);
+    instance = readInstance(file);
    // print('output:\n${instance.patient.format(new Prefixer())}');
   }
   print(instance.study.summary);
-  print('Active Patients: ${activeStudies}');
+  print('Active Patients: $activeStudies');
 
 }
 
-Instance readSopInstance(File f) {
+Instance readInstance(File f) {
   var bytes = f.readAsBytesSync();
  // print('LengthInBytes: ${bytes.length}');
-  DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.readSopInstance(f.path);
+  DcmDecoder decoder = new DcmDecoder(new DSSource(bytes, f.path));
+  return decoder.readInstance();
 }

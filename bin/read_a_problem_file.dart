@@ -7,8 +7,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:core/base.dart';
-import 'package:encode/dicom.dart';
+import 'package:convertX/convert.dart';
+import 'package:core/core.dart';
 //import 'package:core/dicom.dart';
 
 
@@ -28,16 +28,17 @@ void main() {
     print('Reading file: $path');
     log.config('Reading file: $path');
 
-    Instance instance = readSopInstance(path);
+    Instance instance = readInstance(path);
     print('***patient:\n${instance.patient.format(new Formatter(maxDepth:5))}');
   }
 
   print('Active Patients: ${activeStudies.stats}');
 }
 
-Instance readSopInstance(String path) {
+Instance readInstance(String path) {
   var file = new File(path);
   Uint8List bytes = file.readAsBytesSync();
-  DcmDecoder decoder = new DcmDecoder(bytes);
-  return decoder.readSopInstance(file.path);
+
+  DcmDecoder decoder = new DcmDecoder(new DSSource(bytes, path));
+  return decoder.readInstance();
 }

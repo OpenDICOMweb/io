@@ -15,24 +15,33 @@ void init() {
   log("Initializing stuff...");
 }
 
+@DefaultTask('Running Default Tasks...')
+void myDefault() {
+  log('Running Defaults...');
+  test();
+  // testformat();
+}
+
+@Task('Testing Dart...')
+void test() {
+  log('Running Unit Tests');
+  new PubApp.local('test').run([]);
+}
+
 @Task('Cleaning...')
 void clean() {
   log("Cleaning...");
 }
 
-@DefaultTask('Build the project.')
+@Task('Build the project.')
 void build() {
   log("Building...");
+  log('TODO unimplemented');
 }
 
 @Task('Testing JavaScript...')
 @Depends(build)
 void testJavaScript() {
-  new PubApp.local('test').run([]);
-}
-
-@Task('Testing JavaScript...')
-void test() {
   new PubApp.local('test').run([]);
 }
 
@@ -47,8 +56,6 @@ void format() {
 void compile() {
   log("Compiling...");
 }
-
-
 
 @Task('DartDoc')
 void dartdoc() {

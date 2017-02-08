@@ -6,7 +6,7 @@
 
 import 'dart:typed_data';
 
-import 'package:dictionary/common.dart';
+import 'package:common/common.dart';
 
 void printIt(Uint8List bytes, int offset, int count) {
   int length = bytes.length;

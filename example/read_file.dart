@@ -6,8 +6,8 @@
 
 import 'dart:typed_data';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/encoder.dart';
 import 'package:io/io.dart';
 
 String path0 = 'C:/odw/test_data/IM-0001-0001.dcm';

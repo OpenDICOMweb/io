@@ -6,10 +6,10 @@
 
 import 'dart:typed_data';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/encoder.dart';
 import 'package:io/io.dart';
-import 'package:io/src/compare_files.dart';
+import 'package:io/src/test/compare_files.dart';
 
 //String inPath = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath = 'C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/'
@@ -63,8 +63,8 @@ void main(List<String> args) {
   log.info('Decoded: $instance0');
   if (instance0 == null) return null;
   log.debug(instance0.format(new Formatter(maxDepth: -1)));
-  log.info('${instance0[kFileMetaInformationGroupLength].info}');
-  log.info('${instance0[kFileMetaInformationVersion].info}');
+  log.info('${instance0[Tag.kFileMetaInformationGroupLength].info}');
+  log.info('${instance0[Tag.kFileMetaInformationVersion].info}');
   // Write a File
   Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
   fnOut.writeSync(instance0);

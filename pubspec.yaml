@@ -15,10 +15,10 @@ dependencies:
   # It should know as little as possible about DICOM.
   dictionary:
     path: C:/odw/sdk/dictionary
-    version: 0.4.7
-  encode:
+    version: ^0.5.0
+  convertX:
     path: C:/odw/sdk/convert
-    version: 0.4.0
+    version: ^0.5.0
   # The I/O package should not use core, but it may used dictionary/common
   #core:
   #  path: C:/odw/sdk/core
@@ -26,8 +26,8 @@ dependencies:
   path: any
 
 dev_dependencies:
-  benchmark_harness: any
-  grinder: any
+  benchmark_harness: ^1.0.4
+  grinder: ^0.8.0
   test: ^0.12.0
 
 

@@ -10,6 +10,7 @@ import 'package:grinder/grinder.dart';
 
 
 var dartdocDir = new Directory('doc');
+
 void cleanDocs() {
   delete(dartdocDir);
 }

@@ -7,8 +7,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/dicom.dart';
 import 'package:io/io.dart';
 
 

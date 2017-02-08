@@ -7,8 +7,8 @@
 //import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/encoder.dart';
 import 'package:io/io.dart';
 
 //TODO: cleanup for V0.9.0

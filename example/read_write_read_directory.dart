@@ -6,10 +6,10 @@
 
 import 'dart:typed_data';
 
+import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:encode/encoder.dart';
 import 'package:io/io.dart';
-import 'package:io/src/compare_files.dart';
+import 'package:io/src/test/compare_files.dart';
 
 String inputDir = 'C:/odw/sdk/io/example/input';
 String inputDir2 = 'C:/odw/test_data/sfd/CT';
@@ -26,6 +26,7 @@ class FileTestError {
 
   FileTestError(this.inFile, this.outFile);
 
+  @override
   String toString() => '''
 File Text Error:
      in: $inFile
@@ -43,12 +44,10 @@ void main(List<String> args) {
 
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inputDir2);
-  List<List> output = [];
   filesTotal = files.length;
   log.config('Total File count: $filesTotal');
   watch.start();
   Duration begin = watch.elapsed;
-  Duration end;
   List<FileTestError> errors;
 
   // Read, parse, and log.debug a summary of each file.
