@@ -13,21 +13,21 @@ dependencies:
   path: any
   common:
     git:
-      url: https://github.com/OpenDICOMweb/common
+      url: https://github.com/OpenDICOMweb/common.git
       ref: develop
       version: ^0.5.2
    #   path: C:/odw/sdk/common
    #   version: ^0.5.2
   core:
     git:
-      url: https://github.com/OpenDICOMweb/core
+      url: https://github.com/OpenDICOMweb/core.git
       ref: develop
       version: ^0.5.1
     #  path: C:/odw/sdk/core
     #  version: ^0.5.1
   convertX:
     git:
-      url: https://github.com/OpenDICOMweb/convert
+      url: https://github.com/OpenDICOMweb/convert.git
       ref: develop
       version: ^0.5.0
   #  path: C:/odw/sdk/core
