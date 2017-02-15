@@ -18,13 +18,6 @@ dependencies:
       version: ^0.5.2
    #   path: C:/odw/sdk/common
    #   version: ^0.5.2
- # dictionary:
- #   git:
- #     url: https://github.com/OpenDICOMweb/dictionary
- #     ref: develop
- #     version: ^0.5.1
-    #  path: C:/odw/sdk/dictionary
-    #  version: ^0.5.1
   core:
     git:
       url: https://github.com/OpenDICOMweb/core
