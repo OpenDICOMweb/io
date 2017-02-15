@@ -32,6 +32,13 @@ dependencies:
       version: ^0.5.1
     #  path: C:/odw/sdk/core
     #  version: ^0.5.1
+  convertX:
+    git:
+      url: https://github.com/OpenDICOMweb/convert
+      ref: develop
+      version: ^0.5.0
+  #  path: C:/odw/sdk/core
+  #  version: ^0.5.1
 
 dev_dependencies:
   benchmark_harness: ^1.0.4
