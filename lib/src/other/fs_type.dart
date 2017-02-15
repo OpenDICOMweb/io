@@ -16,5 +16,6 @@ class FSType {
   static const msd = const FSType("Multi-Series DICOM", ".msd");
   static const mint = const FSType("Mint Normalized FS", ".mint");
 
-  toString() => '$runtimeType($name)';
+  @override
+  String toString() => '$runtimeType($name)';
 }
