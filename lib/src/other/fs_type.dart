@@ -18,4 +18,5 @@ class FSType {
 
   @override
   String toString() => '$runtimeType($name)';
+
 }
