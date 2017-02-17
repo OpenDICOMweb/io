@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
-import 'package:core/core.dart';
+import 'package:dictionary/dictionary.dart';
 import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';
@@ -38,26 +38,23 @@ String _extension(String path) {
 
 class FileType {
   final int index;
-  final EntityType eType; // Object Type
+  final IELevel level; // Object Type
   final FileSubtype subtype;
 
   //TODO: jfp document this
-  const FileType(this.index, this.eType, this.subtype);
+  const FileType(this.index, this.level, this.subtype);
 
   bool get isDicom => subtype != FileSubtype.unknown;
 
-  // Entity Type
-  EntityType get entityType => eType;
+  bool get isPatient => level.isPatient;
 
-  bool get isPatient => eType.isPatient;
+  bool get isStudy => level.isStudy;
 
-  bool get isStudy => eType.isStudy;
+  bool get isSeries => level.isSeries;
 
-  bool get isSeries => eType.isSeries;
+  bool get isInstance => level.isInstance;
 
-  bool get isInstance => eType.isInstance;
-
-  bool get isDataset => eType.isDataset;
+  bool get isDataset => level.isDataset;
 
   // Subtype
   /// The file extension for this [FileSubtype].
@@ -104,59 +101,59 @@ class FileType {
   bool get isUnknown => this == unknown;
 
   //TODO: fix indices
-  static const part10Study = const FileType(1, EntityType.study, FileSubtype.part10);
-  static const part10StudyMD = const FileType(2, EntityType.study, FileSubtype.part10MD);
-  static const part10StudyBD = const FileType(2, EntityType.study, FileSubtype.bulkdata);
+  static const part10Study = const FileType(1, IELevel.study, FileSubtype.part10);
+  static const part10StudyMD = const FileType(2, IELevel.study, FileSubtype.part10MD);
+  static const part10StudyBD = const FileType(2, IELevel.study, FileSubtype.bulkdata);
 
-  static const part10Series = const FileType(1, EntityType.series, FileSubtype.part10);
-  static const part10SeriesMD = const FileType(2, EntityType.series, FileSubtype.part10MD);
-  static const part10SeriesBD = const FileType(2, EntityType.series, FileSubtype.bulkdata);
+  static const part10Series = const FileType(1, IELevel.series, FileSubtype.part10);
+  static const part10SeriesMD = const FileType(2, IELevel.series, FileSubtype.part10MD);
+  static const part10SeriesBD = const FileType(2, IELevel.series, FileSubtype.bulkdata);
 
-  static const part10Instance = const FileType(1, EntityType.instance, FileSubtype.part10);
-  static const part10InstanceMD = const FileType(2, EntityType.instance, FileSubtype.part10MD);
-  static const part10InstanceBD = const FileType(2, EntityType.instance, FileSubtype.bulkdata);
+  static const part10Instance = const FileType(1, IELevel.instance, FileSubtype.part10);
+  static const part10InstanceMD = const FileType(2, IELevel.instance, FileSubtype.part10MD);
+  static const part10InstanceBD = const FileType(2, IELevel.instance, FileSubtype.bulkdata);
 
-  // static const part10Frames = const FileType(1, EntityType.frames, FileSubtype.part10);
-  // static const part10FramesMD = const FileType(2, EntityType.frames, FileSubtype.part10MD);
-  // static const part10FramesBD = const FileType(2, EntityType.frames, FileSubtype.bulkdata);
+  // static const part10Frames = const FileType(1, IELevel.frames, FileSubtype.part10);
+  // static const part10FramesMD = const FileType(2, IELevel.frames, FileSubtype.part10MD);
+  // static const part10FramesBD = const FileType(2, IELevel.frames, FileSubtype.bulkdata);
 
-  static const jsonStudy = const FileType(1, EntityType.study, FileSubtype.json);
-  static const jsonStudyMD = const FileType(2, EntityType.study, FileSubtype.jsonMD);
-  static const jsonStudyBD = const FileType(2, EntityType.study, FileSubtype.jsonBD);
+  static const jsonStudy = const FileType(1, IELevel.study, FileSubtype.json);
+  static const jsonStudyMD = const FileType(2, IELevel.study, FileSubtype.jsonMD);
+  static const jsonStudyBD = const FileType(2, IELevel.study, FileSubtype.jsonBD);
 
-  static const jsonSeries = const FileType(1, EntityType.series, FileSubtype.json);
-  static const jsonSeriesMD = const FileType(2, EntityType.series, FileSubtype.jsonMD);
-  static const jsonSeriesBD = const FileType(2, EntityType.series, FileSubtype.jsonBD);
+  static const jsonSeries = const FileType(1, IELevel.series, FileSubtype.json);
+  static const jsonSeriesMD = const FileType(2, IELevel.series, FileSubtype.jsonMD);
+  static const jsonSeriesBD = const FileType(2, IELevel.series, FileSubtype.jsonBD);
 
-  static const jsonInstance = const FileType(1, EntityType.instance, FileSubtype.json);
-  static const jsonInstanceMD = const FileType(2, EntityType.instance, FileSubtype.jsonMD);
-  static const jsonInstanceBD = const FileType(2, EntityType.instance, FileSubtype.jsonBD);
+  static const jsonInstance = const FileType(1, IELevel.instance, FileSubtype.json);
+  static const jsonInstanceMD = const FileType(2, IELevel.instance, FileSubtype.jsonMD);
+  static const jsonInstanceBD = const FileType(2, IELevel.instance, FileSubtype.jsonBD);
 
-//  static const jsonFrames = const FileType(1, EntityType.frames, FileSubtype.json);
-//  static const jsonFramesMD = const FileType(2, EntityType.frames, FileSubtype.jsonMD);
-//  static const jsonFramesBD = const FileType(2, EntityType.frames, FileSubtype.jsonBD);
+//  static const jsonFrames = const FileType(1, IELevel.frames, FileSubtype.json);
+//  static const jsonFramesMD = const FileType(2, IELevel.frames, FileSubtype.jsonMD);
+//  static const jsonFramesBD = const FileType(2, IELevel.frames, FileSubtype.jsonBD);
 
-  static const xmlStudy = const FileType(1, EntityType.study, FileSubtype.xml);
-  static const xmlStudyMD = const FileType(2, EntityType.study, FileSubtype.xmlMD);
-  static const xmlStudyBD = const FileType(2, EntityType.study, FileSubtype.xmlBD);
+  static const xmlStudy = const FileType(1, IELevel.study, FileSubtype.xml);
+  static const xmlStudyMD = const FileType(2, IELevel.study, FileSubtype.xmlMD);
+  static const xmlStudyBD = const FileType(2, IELevel.study, FileSubtype.xmlBD);
 
-  static const xmlSeries = const FileType(1, EntityType.series, FileSubtype.xml);
-  static const xmlSeriesMD = const FileType(2, EntityType.series, FileSubtype.xmlMD);
-  static const xmlSeriesBD = const FileType(2, EntityType.series, FileSubtype.xmlBD);
+  static const xmlSeries = const FileType(1, IELevel.series, FileSubtype.xml);
+  static const xmlSeriesMD = const FileType(2, IELevel.series, FileSubtype.xmlMD);
+  static const xmlSeriesBD = const FileType(2, IELevel.series, FileSubtype.xmlBD);
 
-  static const xmlInstance = const FileType(1, EntityType.instance, FileSubtype.xml);
-  static const xmlInstanceMD = const FileType(2, EntityType.instance, FileSubtype.xmlMD);
-  static const xmlInstanceBD = const FileType(2, EntityType.instance, FileSubtype.xmlBD);
+  static const xmlInstance = const FileType(1, IELevel.instance, FileSubtype.xml);
+  static const xmlInstanceMD = const FileType(2, IELevel.instance, FileSubtype.xmlMD);
+  static const xmlInstanceBD = const FileType(2, IELevel.instance, FileSubtype.xmlBD);
 
-//  static const xmlFrames = const FileType(1, EntityType.frames, FileSubtype.xml);
-//  static const xmlFramesMD = const FileType(2, EntityType.frames, FileSubtype.xmlMD);
-//  static const xmlFramesBD = const FileType(2, EntityType.frames, FileSubtype.xmlBD);
+//  static const xmlFrames = const FileType(1, IELevel.frames, FileSubtype.xml);
+//  static const xmlFramesMD = const FileType(2, IELevel.frames, FileSubtype.xmlMD);
+//  static const xmlFramesBD = const FileType(2, IELevel.frames, FileSubtype.xmlBD);
 
   static const unknown = const FileType(2, null, FileSubtype.unknown);
 
-  FileType lookup(EntityType eType, FileSubtype fSubtype) {
+  FileType lookup(IELevel eType, FileSubtype fSubtype) {
     switch (eType) {
-      case EntityType.study:
+      case IELevel.study:
         switch (fSubtype) {
           case FileSubtype.part10:
             return part10Study;
@@ -174,7 +171,7 @@ class FileType {
             return xmlStudyMD;
         }
         throw "bad study lookup";
-      case EntityType.series:
+      case IELevel.series:
         switch (fSubtype) {
           case FileSubtype.part10:
             return part10Series;
@@ -192,7 +189,7 @@ class FileType {
             return xmlSeriesMD;
         }
         throw "bad series lookup";
-      case EntityType.instance:
+      case IELevel.instance:
         switch (fSubtype) {
           case FileSubtype.part10:
             return part10Instance;
@@ -211,7 +208,7 @@ class FileType {
         }
         throw "bad instance lookup";
 /*
-      case EntityType.frames:
+      case IELevel.frames:
         switch (fSubtype) {
           case FileSubtype.part10:
             return part10Frames;
@@ -235,7 +232,7 @@ class FileType {
   }
 
   @override
-  String toString() => '$eType encoded as $mediaType';
+  String toString() => '$level encoded as $mediaType';
 }
 
 
