@@ -40,11 +40,9 @@ class Filename {
   FileSubtype _subtype;
   File _file;
 
-  Filename(String path)
-      : _path = toAbsolute(path);
+  Filename(String path) : _path = toAbsolute(path);
 
-  Filename.withType(String path, this._subtype)
-      : _path = toAbsolute(path);
+  Filename.withType(String path, this._subtype) : _path = toAbsolute(path);
 
   Filename.fromFile(File file)
       : _file = file,
@@ -80,7 +78,7 @@ class Filename {
   /// Returns [true] if a DICOM file type.
   bool get isDicom => subtype.isDicom;
 
-  bool get isNotDicom => ! isDicom;
+  bool get isNotDicom => !isDicom;
 
   /// The file extension for this [FileSubtype].
   String get extension => ext;
@@ -126,7 +124,7 @@ class Filename {
 
   //TODO: should this return the bytes or a parsed Entity
   Entity readSync() {
-   // print('subtype: $subtype');
+    // print('subtype: $subtype');
     if (isPart10) {
       Uint8List bytes = file.readAsBytesSync();
       return DcmDecoder.decode(new DSSource(bytes, path));
@@ -202,7 +200,9 @@ Subtype: ${FileSubtype.parse(_path)};
   }
 
   //TODO move to utilities
-  static List<Filename> listFromDirectory(String source, [String ext = ".dcm"]) {
+  static List<Filename> listFromDirectory(String source,
+      [String ext = ".dcm"]) {
+    print('source: $source');
     List<File> files = getFilesFromDirectory(source, ext);
     print('Total FSEntities: ${files.length}');
     List<Filename> fNames = new List(files.length);
