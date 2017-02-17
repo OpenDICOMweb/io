@@ -5,21 +5,22 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:grinder/grinder.dart';
 
 Future main(args) => grind(args);
 
-@Task('Initializing...')
-void init() {
-  log("Initializing stuff...");
-}
+/// The dartdoc [Directory].
+Directory dartdocDir = new Directory('doc/api');
 
 @DefaultTask('Running Default Tasks...')
 void myDefault() {
-  log('Running Defaults...');
+  log('Running Grind Defaults...');
+  log('  Running Tests...');
   test();
-  // testformat();
+  log('  Running format...');
+  format();
 }
 
 @Task('Testing Dart...')
@@ -33,26 +34,27 @@ void clean() {
   log("Cleaning...");
 }
 
-@Task('Build the project.')
-void build() {
-  log("Building...");
-  log('TODO unimplemented');
-}
-
-@Task('Testing JavaScript...')
-@Depends(build)
-void testJavaScript() {
-  new PubApp.local('test').run([]);
+@Task('Dry Run of Formating Source...')
+void testformat() {
+  log("Test Formatting Source...");
+  DartFmt.dryRun('lib', lineLength: 80);
+  // DartFmt.dryRun('bin', lineLength: 80);
+  DartFmt.dryRun('example', lineLength: 80);
+  DartFmt.dryRun('test', lineLength: 80);
+  DartFmt.dryRun('tool', lineLength: 80);
 }
 
 @Task('Formating Source...')
 void format() {
-  DartFmt.dryRun('lib', lineLength: 100);
   log("Formatting Source...");
+  DartFmt.format('lib', lineLength: 80);
+  // DartFmt.format('bin', lineLength: 80);
+  DartFmt.format('example', lineLength: 80);
+  DartFmt.format('test', lineLength: 80);
+  DartFmt.format('tool', lineLength: 80);
 }
 
 @Task('Compiling...')
-@Depends(init)
 void compile() {
   log("Compiling...");
 }
@@ -60,6 +62,20 @@ void compile() {
 @Task('DartDoc')
 void dartdoc() {
   log('Generating Documentation...');
+  DartDoc.doc();
+}
+
+@Task('Build the project.')
+void build() {
+  log("Building(debug)...");
+  Pub.get();
+  Pub.build(mode: "debug");
+}
+
+@Task('Testing JavaScript...')
+@Depends(build)
+void testJavaScript() {
+  new PubApp.local('test').run([]);
 }
 
 @Task('Clean Deployment stuff.')
