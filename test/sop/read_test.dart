@@ -29,21 +29,17 @@ void main() {
   stdout.writeln('File count: ${files.length}');
 
   group("Data set", () {
-    test("Create a data set object from map",(){
-
+    test("Create a data set object from map", () {
       // Read, parse, and print a summary of each file.
       for (Filename file in files) {
-        if (file.isDicom && file.base!="ct.0.dcm") {
+        if (file.isDicom && file.base != "ct.0.dcm") {
           print('Reading file: $file');
-          Instance  instance = file.readSync();
+          Instance instance = file.readSync();
           print(instance.info);
         } else {
           print('Skipping ... $file');
         }
       }
-
     });
-
   });
-
 }

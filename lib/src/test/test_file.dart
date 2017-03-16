@@ -39,7 +39,8 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     //           log.debug.up('...')
     log.down;
     log.debug1('Read ${sourceBytes.length} bytes');
-    sourceInstance = DcmDecoder.decode(new DSSource(sourceBytes, sourceFN.path));
+    sourceInstance =
+        DcmDecoder.decode(new DSSource(sourceBytes, sourceFN.path));
 
     //TODO: instance should have StatusReport
     if (sourceInstance != null) {
@@ -54,15 +55,16 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   // Write result file
   try {
     // Open output file.
-    resultFN =
-        (outFile == null) ? new Filename.withExt(inFile) : Filename.toFilename(outFile);
+    resultFN = (outFile == null)
+        ? new Filename.withExt(inFile)
+        : Filename.toFilename(outFile);
 
     log.debug('Writing file $resultFN');
     log.down;
     resultBytes = DcmEncoder.encode(sourceInstance);
     resultFN.writeAsBytesSync(resultBytes);
     if (haveEqualLengths(sourceBytes, resultBytes))
-    log.debug1('Wrote ${resultBytes.length} bytes');
+      log.debug1('Wrote ${resultBytes.length} bytes');
     ActiveStudies.removeStudyIfPresent(sourceInstance.study.uid);
     log.up;
   } catch (e) {}
@@ -82,12 +84,15 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   // Compare [Dataset]s
   //log.logLevel = Level.info;
   try {
-    log.debug("Comparing Datasets: 0: ${sourceInstance.dataset}, 1: ${result.dataset}");
+    log.debug(
+        "Comparing Datasets: 0: ${sourceInstance.dataset}, 1: ${result.dataset}");
     log.down;
-    var comparitor = new DatasetComparitor(sourceInstance.dataset, result.dataset);
+    var comparitor =
+        new DatasetComparitor(sourceInstance.dataset, result.dataset);
     comparitor.run;
     if (comparitor.hasDifference) {
-      log.config('Comparing Datasets: ${sourceInstance.dataset}, ${result.dataset}');
+      log.config(
+          'Comparing Datasets: ${sourceInstance.dataset}, ${result.dataset}');
       log.config('Result: ${comparitor.info}');
       log.debug(comparitor.toString());
       error = new FileTestError(sourceFN, resultFN);

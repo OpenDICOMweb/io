@@ -97,11 +97,16 @@ DcmMediaType:
   String toString() => "$type/$name";
 
   //TODO: finish documenting these
-  static const part10 = const DcmMediaType("dicom", Encoding.part10, Units.binary);
-  static const json = const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
-  static const fastJson = const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
+  static const part10 =
+      const DcmMediaType("dicom", Encoding.part10, Units.binary);
+  static const json =
+      const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
+  static const fastJson =
+      const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
   static const pureJson = const DcmMediaType("json", Encoding.json, Units.utf8);
   static const xml = const DcmMediaType("dicom+xml", Encoding.xml, Units.utf8);
-  static const octets = const DcmMediaType("octet-stream", Encoding.xml, Units.binary);
-  static const unknown = const DcmMediaType("Unknown", Encoding.unknown, Units.unknown);
+  static const octets =
+      const DcmMediaType("octet-stream", Encoding.xml, Units.binary);
+  static const unknown =
+      const DcmMediaType("Unknown", Encoding.unknown, Units.unknown);
 }

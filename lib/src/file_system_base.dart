@@ -13,7 +13,6 @@ import 'dcm_file.dart';
 import 'file_type.dart';
 import 'index.dart';
 
-
 //TODO: Implement all async IO calls
 
 /// Goals:
@@ -49,7 +48,7 @@ abstract class FileSystemBase {
   Directory directory(EntityName name);
 
   /// Returns the [File] corresponding to [root] plus the specified arguments.
-  DcmFile dcmFile (FileType fType, EntityName name);
+  DcmFile dcmFile(FileType fType, EntityName name);
 
   // *** Read Async  ***
   //TODO: *** See https://www.dartlang.org/articles/language/await-async
@@ -87,8 +86,8 @@ abstract class FileSystemBase {
 
   /// Returns a [Uint8List] or [String] (depending on the [FileSubtype]) containing the
   /// target SOP Instance in the specified [FileSubtype].
-  dynamic readInstanceSync(FileSubtype fType, String study, String series, String instance);
-
+  dynamic readInstanceSync(
+      FileSubtype fType, String study, String series, String instance);
 
   // *** Write Async  ***
   /* TODO: implement async calls
@@ -113,10 +112,12 @@ abstract class FileSystemBase {
 
   /// Writes the [Uint8List] or [String] contained in the bytes argument, to the
   /// file specified by by the [FileSubtype], [Study], [Series], and [Instance] [String]s.
-  void writeInstanceSync(FileSubtype fType, String study, String series, String instance, bytes);
+  void writeInstanceSync(
+      FileSubtype fType, String study, String series, String instance, bytes);
 
   /// Return a path to a file in the [FileSystem]
-  String toPath(FileSubtype fType, String study, [String series, String instance, String extension]) {
+  String toPath(FileSubtype fType, String study,
+      [String series, String instance, String extension]) {
     String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
     String part3 = (series == null) ? "" : '/$series';
     return '$path/$study$part3$part4';
@@ -141,5 +142,4 @@ abstract class FileSystemBase {
     if (!root.existsSync()) root.createSync(recursive: true);
     return root;
   }
-
 }

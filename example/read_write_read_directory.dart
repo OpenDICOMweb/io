@@ -37,7 +37,7 @@ File Text Error:
 }
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory',  logLevel: Level.config);
+  final log = new Logger('read_write_read_directory',  watermark: Severity.config);
   Stopwatch watch = new Stopwatch();
   int filesTotal = 0;
   int filesRead = 0;
@@ -68,10 +68,10 @@ void main(List<String> args) {
       }
 
       if ((i % 1000) == 0) {
-       Duration end = watch.elapsed;
-       Duration time = end - begin;
-       print('$time $i files ok');
-       begin = end;
+        Duration end = watch.elapsed;
+        Duration time = end - begin;
+        print('$time $i files ok');
+        begin = end;
       }
       filesRead++;
 
@@ -87,7 +87,8 @@ void main(List<String> args) {
       log.up2;
 
       // Write a File
-      Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+      Filename outFN =
+          new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
       log.debug('Writing file $i: $outFN');
       log.down;
 
@@ -107,7 +108,8 @@ void main(List<String> args) {
       if (length0 == length2) {
         log.debug('Both files have length($length0)');
       } else {
-        log.error('Files have different lengths: original($length0), result ($length2)');
+        log.error(
+            'Files have different lengths: original($length0), result ($length2)');
       }
       Instance instance1 = DcmDecoder.decode(new DSSource(bytes2, inFN.path));
       log.debug1('Instance: 1 ${instance1.info}');
@@ -116,9 +118,11 @@ void main(List<String> args) {
 
       // Compare [Dataset]s
       //log.logLevel = Level.info;
-      log.debug("Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
+      log.debug(
+          "Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
       log.down;
-      var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
+      var comparitor =
+          new DatasetComparitor(instance0.dataset, instance1.dataset);
       comparitor.run;
       log.down;
       if (comparitor.hasDifference) {
@@ -133,7 +137,7 @@ void main(List<String> args) {
       }
       log.up2;
 
-     // log.logLevel = Level.debug;
+      // log.logLevel = Level.debug;
       // Compare input and output
       log.debug('Comparing Files by Bytes:');
       log.down;
@@ -141,11 +145,11 @@ void main(List<String> args) {
       log.debug1('Result: ${outFN.path}');
       FileCompareResult result = compareFiles(inFN.path, outFN.path);
       if (result == null) {
-          log.debug('Files are identical');
-        } else {
+        log.debug('Files are identical');
+      } else {
         log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
         log.debug('Files have differences at : $result');
-        error = error ??=  new FileTestError(inFN, outFN);
+        error = error ??= new FileTestError(inFN, outFN);
         error.result = result;
       }
       log.up;

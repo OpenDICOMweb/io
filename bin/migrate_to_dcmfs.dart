@@ -60,7 +60,3 @@ void main(List<String> args) {
   //print('Active Studies: ${activeStudies.stats}');
   //print('Summary:\n ${activeStudies.summary}');
 }
-
-
-
-
