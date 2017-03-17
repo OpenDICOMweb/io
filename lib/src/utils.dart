@@ -96,7 +96,7 @@ List<File> getFilesFromDirectory(String source, [String ext = ".dcm"]) {
   var dir = new Directory(source);
   List<FileSystemEntity> entities =
       dir.listSync(recursive: true, followLinks: false);
-  print('FS Entities: ${entities.length}');
+//  print('FS Entities: ${entities.length}');
   List<File> files = [];
   for (FileSystemEntity e in entities) {
     if (e is File) files.add(e);

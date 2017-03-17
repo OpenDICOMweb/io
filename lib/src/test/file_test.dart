@@ -6,6 +6,7 @@
 
 import 'dart:typed_data';
 
+import 'package:common/logger.dart';
 import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
 import 'package:io/src/filename.dart';
@@ -63,7 +64,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     log.down;
     resultBytes = DcmEncoder.encode(sourceInstance);
     resultFN.writeAsBytesSync(resultBytes);
-    if (haveEqualLengths(sourceBytes, resultBytes))
+    if (haveEqualLengths(sourceBytes, resultBytes, log))
       log.debug1('Wrote ${resultBytes.length} bytes');
     ActiveStudies.removeStudyIfPresent(sourceInstance.study.uid);
     log.up;
@@ -131,7 +132,8 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   return error;
 }
 
-bool haveEqualLengths(Uint8List sourceBytes, Uint8List resultBytes) {
+bool haveEqualLengths(
+    Uint8List sourceBytes, Uint8List resultBytes, Logger log) {
   if (sourceBytes.length == resultBytes.length) {
     log.debug('Both files have length(${sourceBytes.lengthInBytes})');
     return true;

@@ -35,7 +35,7 @@ String toAbsolute(String path) {
 /// This is a file from a non-DICOM File System.
 //TODO: change this so it is based on [File] rather than [path].
 class Filename {
-  static final log = new Logger('Filename');
+  static final log = new Logger('Filename', watermark: Severity.info);
   final String _path;
   FileSubtype _subtype;
   File _file;
@@ -124,7 +124,7 @@ class Filename {
 
   //TODO: should this return the bytes or a parsed Entity
   Entity readSync() {
-    // print('subtype: $subtype');
+    log.debug('subtype: $subtype');
     if (isPart10) {
       Uint8List bytes = file.readAsBytesSync();
       return DcmDecoder.decode(new DSSource(bytes, path));
@@ -202,9 +202,9 @@ Subtype: ${FileSubtype.parse(_path)};
   //TODO move to utilities
   static List<Filename> listFromDirectory(String source,
       [String ext = ".dcm"]) {
-    print('source: $source');
+    log.debug('source: $source');
     List<File> files = getFilesFromDirectory(source, ext);
-    print('Total FSEntities: ${files.length}');
+    log.debug('Total FSEntities: ${files.length}');
     List<Filename> fNames = new List(files.length);
     for (int i = 0; i < files.length; i++)
       fNames[i] = new Filename(files[i].path);

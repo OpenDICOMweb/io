@@ -6,6 +6,7 @@
 
 import 'dart:typed_data';
 
+import 'package:common/logger.dart';
 import 'package:io/io.dart';
 
 /// A simple program that compares to files byte by byte.
@@ -24,24 +25,27 @@ import 'package:io/io.dart';
 String inPath0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath1 = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
+final Logger log =
+new Logger('compare_file_bytes.dart', watermark:Severity.debug);
+
 /// Compare two files byte by byte and report the first significant difference.
 void main(List<String> args) {
   Filename fn0 = new Filename(inPath0);
   Uint8List bytes0 = fn0.file.readAsBytesSync();
   int length0 = bytes0.length;
-  print('fn0 read $length0 bytes');
+  log.debug('fn0 read $length0 bytes');
 
   Filename fn1 = new Filename(inPath1);
   Uint8List bytes1 = fn1.file.readAsBytesSync();
   int length1 = bytes1.length;
-  print('fn1 read $length1 bytes');
+  log.debug('fn1 read $length1 bytes');
 
   int limit = (length0 > length1) ? length1 : length0;
 
   for (int i = 0; i < limit; i++) {
     if (bytes0[i] == bytes1[i]) continue;
     if (bytes0[i] == 0 && bytes1[i] == 32) {
-      print('found Null(0) in f1 and space (" ") in f2');
+      log.debug('found Null(0) in f1 and space (" ") in f2');
       continue;
     }
     printDifference(bytes0, bytes1, i, 10, 20);
@@ -53,7 +57,7 @@ void printDifference(
     Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
   for (int j = -10; j < 20; j++, i++) {
     if (bytes0[i] == bytes1[i]) break;
-    print('$i: ${bytes0[i]} != ${bytes1[i]}');
+    log.debug('$i: ${bytes0[i]} != ${bytes1[i]}');
 
     List<String> d0List = [];
     List<String> h0List = [];

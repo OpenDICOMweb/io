@@ -21,7 +21,7 @@ class FSFormatter {
   String call(FileSystemEntity fse, [String output = ""]) {
     var s = fmt(fse);
     count++;
-    print(s);
+  //  print(s);
     output += s;
     if (fse is Directory) {
       level++;
