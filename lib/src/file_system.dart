@@ -19,7 +19,6 @@ import 'file_type.dart';
 import 'index.dart';
 import 'utils.dart';
 
-
 //TODO: finish all IO calls async
 
 /// A DICOM File System containing SOP Instances.  The structure is not
@@ -91,24 +90,26 @@ class FileSystem extends FileSystemBase {
   @override
   List<Uint8List> readStudySync(FileSubtype fType, String study) =>
       (fType.isBinary)
-      ? readBinaryDirectorySync(toPath(fType, study))
-      : readStringDirectorySync(toPath(fType, study));
+          ? readBinaryDirectorySync(toPath(fType, study))
+          : readStringDirectorySync(toPath(fType, study));
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
-  List<dynamic> readSeriesSync(FileSubtype fType, String study, String series) =>
+  List<dynamic> readSeriesSync(
+          FileSubtype fType, String study, String series) =>
       (fType.isBinary)
-      ? readBinaryDirectorySync(toPath(fType, study, series))
-      : readStringDirectorySync(toPath(fType, study, series));
+          ? readBinaryDirectorySync(toPath(fType, study, series))
+          : readStringDirectorySync(toPath(fType, study, series));
 
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  dynamic readInstanceSync(FileSubtype fType, String study, String series, String instance) =>
+  dynamic readInstanceSync(
+          FileSubtype fType, String study, String series, String instance) =>
       (fType.isBinary)
-      ? readBinaryDirectorySync(toPath(fType, study, series, instance))
-      : readStringDirectorySync(toPath(fType, study, series, instance));
+          ? readBinaryDirectorySync(toPath(fType, study, series, instance))
+          : readStringDirectorySync(toPath(fType, study, series, instance));
 
   // *** Write Async  ***
 
@@ -128,17 +129,11 @@ class FileSystem extends FileSystemBase {
   // *** Write Sync  ***
 
   @override
-  void writeInstanceSync(FileSubtype fType, String study, String series, String instance, data) {
-
-  }
+  void writeInstanceSync(
+      FileSubtype fType, String study, String series, String instance, data) {}
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
 
   DcmFile parse(String path) => toDcmFile(path);
-
-
 }
-
-
-

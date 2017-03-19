@@ -44,7 +44,8 @@ class FSIndex {
 
   /// Return a path to a file in the [FileSystem].
   //TODO: verify this is correct.  If it is move to index.dart
-  String toPath(FileSubtype fType, Uid study, [Uid series, Uid instance, String extension]) {
+  String toPath(FileSubtype fType, Uid study,
+      [Uid series, Uid instance, String extension]) {
     String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
     String part3 = (series == null) ? "" : '/$series';
     return '$path/$study$part3$part4';
@@ -53,4 +54,3 @@ class FSIndex {
   @override
   String toString() => 'FS Index ($runtimeType) rooted at ${fs.root}';
 }
-

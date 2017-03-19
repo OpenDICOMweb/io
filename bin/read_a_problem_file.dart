@@ -11,7 +11,6 @@ import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
 //import 'package:core/dicom.dart';
 
-
 const String inputDir = "C:/odw/test_data/problems/";
 
 String p1 = inputDir + "16deca3c-8305-4d83-85e8-97a50dfba46e.dcm";
@@ -22,7 +21,7 @@ String p4 = inputDir + "d1faaaaa-edf8-450e-8f62-35ebe592ca1b.dcm";
 List<String> filesList = [p2];
 
 void main() {
-  Logger log = new Logger("read_a_problem_file", logLevel: Level.debug);
+  Logger log = new Logger("read_a_problem_file", watermark: Severity.debug);
 
   for (String path in filesList) {
     print('Reading file: $path');

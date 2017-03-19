@@ -17,11 +17,11 @@ import 'package:path/path.dart' as p;
 ///                   / name /ext
 
 Filename convert(File f) {
-String name = f.path;
-String dir = p.dirname(name);
-String ext = p.extension(name);
-FileSubtype subtype = FileSubtype.subtypes[ext];
-print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
+  String name = f.path;
+  String dir = p.dirname(name);
+  String ext = p.extension(name);
+  FileSubtype subtype = FileSubtype.subtypes[ext];
+  print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
   return new Filename(name);
 }
 
@@ -34,9 +34,10 @@ String ext(String s) {
 
 List<Filename> getDcmFilesFromDirectory(String source) {
   var dir = new Directory(source);
-  List<FileSystemEntity> files = dir.listSync(recursive: true, followLinks: false);
+  List<FileSystemEntity> files =
+      dir.listSync(recursive: true, followLinks: false);
   List<Filename> filenames = [];
-  for(File f in files) {
+  for (File f in files) {
     filenames.add(new Filename(f.path));
   }
   return filenames;
@@ -50,14 +51,20 @@ String xmlEntity = 'bas/bar/file.dcmxml';
 String xmlMetadata = 'bas/bar/file.mddcmxml';
 String bulkdata = 'bas/bar/file.bddcm';
 var pathList = [
-  dcmEntity, dcmMetadata, jsonEntity, jsonMetadata, xmlEntity, xmlMetadata, bulkdata
+  dcmEntity,
+  dcmMetadata,
+  jsonEntity,
+  jsonMetadata,
+  xmlEntity,
+  xmlMetadata,
+  bulkdata
 ];
 
 String inRoot = "C:/odw/test_data/sfd/CR";
 
 List flatten(List list) {
   var flat = [];
-  for(var l in list)
+  for (var l in list)
     if (l is List) {
       flat.addAll(l);
     } else {
@@ -70,7 +77,7 @@ List getFiles(String path) {
   Directory dir = new Directory(path);
   List<FileSystemEntity> entities = dir.listSync(recursive: true);
   List<File> files = [];
-  for(var e in entities) {
+  for (var e in entities) {
     if (e is Directory) continue;
     files.add(e);
   }
@@ -83,7 +90,6 @@ String toAbsolute(String path) {
 }
 
 void main() {
-
   //var root = 'C:/odw/sdk/io/';
   for (String s in pathList) {
     /*
@@ -126,12 +132,7 @@ Path: $s
     encoding: ${f.encoding}
     objectType: ${f.objectType}
 ''');
-
   }
-
-
-
-
 }
 /*
 List<DcmFile> getDcmFilesFromDirectory(String source) {

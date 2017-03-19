@@ -2,7 +2,7 @@
 
 // Use of this source code is governed by the open source license
 // that can be found in the LICENSE file.
-// Original author: Jim Philbin <jfphilbin@gmail.edu> - 
+// Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
 import 'dart:typed_data';
@@ -15,7 +15,6 @@ String inPath = 'C:/odw/test_data/IM-0001-0001.dcm';
 String outPath = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 void main() {
-
   // Read a File
   Filename fnIn = new Filename(inPath);
   Uint8List bytes = fnIn.file.readAsBytesSync();
@@ -25,5 +24,4 @@ void main() {
   // Write a File
   Filename fnOut = new Filename.withType(outPath, FileSubtype.part10);
   fnOut.writeSync(instance);
-
 }

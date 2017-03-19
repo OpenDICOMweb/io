@@ -21,13 +21,12 @@ class FSFormatter {
   String call(FileSystemEntity fse, [String output = ""]) {
     var s = fmt(fse);
     count++;
-    print(s);
+  //  print(s);
     output += s;
     if (fse is Directory) {
       level++;
       var list = fse.listSync(followLinks: false);
-      for (var e in list)
-        output += call(e, output);
+      for (var e in list) output += call(e, output);
       level--;
     }
     return output;

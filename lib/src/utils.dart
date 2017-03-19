@@ -33,7 +33,8 @@ typedef File Filter(File f);
 /// Returns [true] if the [path] has [ext] as it's file extension.
 bool hasExtension(String path, String ext) => extension(path) == ext;
 
-String testExtension(String path, String ext) => (hasExtension(path, ext)) ? ext : null;
+String testExtension(String path, String ext) =>
+    (hasExtension(path, ext)) ? ext : null;
 /*
 /// Returns [true] if [f] has the [sopInstance] file extension.
 File isDcmFile(File f) =>
@@ -57,7 +58,8 @@ File isFile(f) => (f is File) ? f : null;
 /// Returns a [List] of [File] from the [Directory] specified by [path].
 List getFilesSync(directory, [filter = isFile]) {
   if (directory is String) directory = new Directory(directory);
-  if (directory is! Directory) throw new ArgumentError('must be String or Directory');
+  if (directory is! Directory)
+    throw new ArgumentError('must be String or Directory');
   return walkSync(directory, filter);
 }
 
@@ -85,14 +87,16 @@ List _walkSync(Directory d, Function func, List list) {
   return list;
 }
 
-Stream getFiles(String root, [Filter filter]) => walk(new Directory(root), filter);
+Stream getFiles(String root, [Filter filter]) =>
+    walk(new Directory(root), filter);
 
 //TODO move to utilities
 /// Returns a [List] of [File]s with extension [ext] from the specified [Directory].
 List<File> getFilesFromDirectory(String source, [String ext = ".dcm"]) {
   var dir = new Directory(source);
-  List<FileSystemEntity> entities = dir.listSync(recursive: true, followLinks: false);
-  print('FS Entities: ${entities.length}');
+  List<FileSystemEntity> entities =
+      dir.listSync(recursive: true, followLinks: false);
+//  print('FS Entities: ${entities.length}');
   List<File> files = [];
   for (FileSystemEntity e in entities) {
     if (e is File) files.add(e);
@@ -135,8 +139,10 @@ List<Uint8List> readBinaryDirectorySync(String path) {
   return _readBinaryDirectorySync(d, []);
 }
 
-List<Uint8List> _readBinaryDirectorySync(Directory d, List<Uint8List> bytesList) {
-  List<FileSystemEntity> entities = d.listSync(recursive: true, followLinks: false);
+List<Uint8List> _readBinaryDirectorySync(
+    Directory d, List<Uint8List> bytesList) {
+  List<FileSystemEntity> entities =
+      d.listSync(recursive: true, followLinks: false);
   try {
     for (FileSystemEntity e in entities) {
       if (e is Directory) {
@@ -209,7 +215,8 @@ List<String> readStringDirectorySync(String path) =>
     _readStringDirectorySync(new Directory(path), []);
 
 List<String> _readStringDirectorySync(Directory d, List<String> bytesList) {
-  List<FileSystemEntity> entities = d.listSync(recursive: true, followLinks: false);
+  List<FileSystemEntity> entities =
+      d.listSync(recursive: true, followLinks: false);
   try {
     for (FileSystemEntity e in entities) {
       if (e is Directory) {

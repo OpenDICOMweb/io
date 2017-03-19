@@ -18,7 +18,7 @@ String inputDir3 = 'C:/dicom/6688';
 String outputDir = 'C:/odw/sdk/io/example/output';
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory', logLevel: Level.config);
+  final log = new Logger('read_write_read_directory', watermark: Severity.config);
   int filesTotal = 0;
   int filesRead = 0;
 
@@ -50,7 +50,8 @@ void main(List<String> args) {
     log.up;
 
     // Write a File
-    Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+    Filename outFN =
+        new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
     log.info('Writing file $i: $outFN');
     log.down;
     Uint8List bytes1 = DcmEncoder.encode(instance0);
@@ -69,7 +70,8 @@ void main(List<String> args) {
     if (length0 == length2) {
       log.info('Files have equal length.');
     } else {
-      log.error('Files have different lengths: original($length0), result ($length2).');
+      log.error(
+          'Files have different lengths: original($length0), result ($length2).');
     }
     Instance instance1 = DcmDecoder.decode(new DSSource(bytes2, inFN.path));
     log.debug('Instance: 1 ${instance1.info}');
@@ -78,9 +80,11 @@ void main(List<String> args) {
 
     // Compare [Dataset]s
     //log.logLevel = Level.info;
-    log.info("Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
+    log.info(
+        "Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
     log.down;
-    var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
+    var comparitor =
+        new DatasetComparitor(instance0.dataset, instance1.dataset);
     comparitor.run;
     if (comparitor.hasDifference) {
       log.info('Result: ${comparitor.bad}');
@@ -109,4 +113,3 @@ void main(List<String> args) {
   Duration elapsed = endTime.dt.difference(startTime.dt);
   log.config('ElapsedTime: $elapsed');
 }
-

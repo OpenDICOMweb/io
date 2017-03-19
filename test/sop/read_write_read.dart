@@ -33,7 +33,6 @@ void main() {
       print('Reading file: $file');
       Instance instance = file.readSync();
       log.info(instance.info);
-
     } else {
       print('Skipping ... $file');
     }

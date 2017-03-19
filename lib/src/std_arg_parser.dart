@@ -13,7 +13,8 @@ ArgResults parse(List<String> args) {
 
 ArgParser getArgParser() {
   var parser = new ArgParser()
-    ..addOption('source', abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')
+    ..addOption('source',
+        abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')
     ..addOption('target',
         abbr: 't',
         defaultsTo: './output',

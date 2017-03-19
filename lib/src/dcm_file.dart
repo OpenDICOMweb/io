@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Open DICOMweb Project. All rights reserved.
 // Use of this source code is governed by the open source license
 // that can be found in the LICENSE file.
-// Author: Jim Philbin <jfphilbin@gmail.edu> - 
+// Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
 import 'dart:async';
@@ -12,7 +12,6 @@ import 'package:core/entity.dart';
 
 import 'file_system.dart';
 import 'file_type.dart';
-
 
 class DcmFile {
   final FileSystem fs;
@@ -55,23 +54,25 @@ class DcmFile {
     await f.writeAsBytes(bytes);
     return true;
   }
+
   void writeSync(Uint8List bytes) {
-  //  print("writeSync: path:$path");
+    //  print("writeSync: path:$path");
     File f = new File(path);
     if (f.existsSync()) {
       throw "File $f already exists";
     } else {
-  //    print('Creating: $f');
+      //    print('Creating: $f');
       f.createSync(recursive: true);
     }
 
     try {
-      f.writeAsBytesSync(bytes, );
-    } catch (e) {throw 'caught $e'; }
+      f.writeAsBytesSync(
+        bytes,
+      );
+    } catch (e) {
+      throw 'caught $e';
+    }
   }
 
-  void writeStringSync(String s) {
-
-  }
-
+  void writeStringSync(String s) {}
 }
