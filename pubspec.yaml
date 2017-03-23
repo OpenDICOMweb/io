@@ -1,6 +1,6 @@
 name: io
 description: A starting point for Dart libraries or applications.
-version: 0.5.1
+version: 0.5.4
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
 homepage: https://github.com/OpenDICOMweb/io
