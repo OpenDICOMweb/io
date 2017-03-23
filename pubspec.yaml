@@ -6,7 +6,7 @@ author: Jim Philbin <mailto:jfphilbin@gmail.com>
 homepage: https://github.com/OpenDICOMweb/io
 
 environment:
-  sdk: ^1.21.0
+  sdk: ^1.22.0
 
 dependencies:
   args: any
@@ -17,21 +17,21 @@ dependencies:
   #    ref: develop
   #    version: ^0.5.2
       path: C:/odw/sdk/common
-      version: ^0.5.2
+      version: ^0.5.4
   core:
   #  git:
   #    url: https://github.com/OpenDICOMweb/core.git
   #    ref: develop
   #    version: ^0.5.1
      path: C:/odw/sdk/core
-     version: ^0.5.1
+     version: ^0.5.4
   convertX:
   #  git:
   #    url: https://github.com/OpenDICOMweb/convert.git
   #    ref: develop
   #    version: ^0.5.0
     path: C:/odw/sdk/convert
-    version: ^0.5.1
+    version: ^0.5.4
 
 dev_dependencies:
   benchmark_harness: ^1.0.4
