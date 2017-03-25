@@ -22,7 +22,7 @@ String p4 = inputDir + "d1faaaaa-edf8-450e-8f62-35ebe592ca1b.dcm";
 List<String> filesList = [p2];
 
 void main() {
-  Logger log = new Logger("read_a_problem_file", logLevel: Level.debug);
+  Logger log = new Logger("read_a_problem_file", watermark: Severity.debug);
 
   for (String path in filesList) {
     print('Reading file: $path');

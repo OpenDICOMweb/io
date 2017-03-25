@@ -6,7 +6,6 @@
 
 import 'dart:typed_data';
 
-import 'package:core/core.dart';
 import 'package:io/io.dart';
 
 /// A simple program that compares to files byte by byte.
@@ -22,7 +21,7 @@ import 'package:io/io.dart';
 /// This program could be improved in several ways:
 ///   * Try to parse both files simultaneously.
 
-final log = new Logger('FileCompare', logLevel: Level.info);
+final log = new Logger('FileCompare', watermark: Severity.info);
 
 class FileCompareResult {
   Filename infile;
@@ -31,14 +30,15 @@ class FileCompareResult {
   bool hasProblems;
   List<FileByteDiff> diffs;
 
-  FileCompareResult(this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
+  FileCompareResult(
+      this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
 
-  String get lengthMsg => (sameLength) ? "Equal lengths" : '** Different Lengths';
+  String get lengthMsg =>
+      (sameLength) ? "Equal lengths" : '** Different Lengths';
 
   String get fmtDiffs {
     var out = 'Differences';
-    for (FileByteDiff d in diffs)
-      out += '$d';
+    for (FileByteDiff d in diffs) out += '$d';
     return out;
   }
 
@@ -66,12 +66,13 @@ class FileByteDiff {
 }
 
 /// Compare two files byte by byte and report the first significant difference.
-FileCompareResult compareFiles(String path0, String path1, [Logger log, logLevel = Level.config]) {
+FileCompareResult compareFiles(String path0, String path1,
+    [Logger log, watermark = Severity.config]) {
   final List<FileByteDiff> diffs = [];
   final maxProblems = 3;
   bool hasProblems = false;
   bool contiguous = false;
-  log.logLevel = logLevel;
+  log.watermark = watermark;
 
   log.down;
   Filename fn0 = new Filename(path0);
@@ -104,14 +105,16 @@ FileCompareResult compareFiles(String path0, String path1, [Logger log, logLevel
     }
     //Test for uppercase & lowercase
     if (byte0 == toLowercaseChar(byte1)) {
-      diffs.add(new FileByteDiff(i, "Lower To Upper case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
+      diffs.add(new FileByteDiff(
+          i, "Lower To Upper case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
       log.debug('Found Uppercase "$s0" ($byte0) in f0 and "$s1"($byte1) in f1');
       contiguous = true;
       continue;
     }
     //Test for uppercase & lowercase
     if (byte0 == toUppercaseChar(byte1)) {
-      diffs.add(new FileByteDiff(i, "Upper To Lower case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
+      diffs.add(new FileByteDiff(
+          i, "Upper To Lower case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
       log.debug('Found Lowercase "$s0" ($byte0) in f0 and "$s1"($byte1) in f1');
       contiguous = true;
       continue;
@@ -127,7 +130,8 @@ FileCompareResult compareFiles(String path0, String path1, [Logger log, logLevel
   log.up;
 
   if (diffs.length != 0) {
-    var result = new FileCompareResult(fn0, fn1, isLengthEqual, hasProblems, diffs);
+    var result =
+        new FileCompareResult(fn0, fn1, isLengthEqual, hasProblems, diffs);
     if (hasProblems) {
       log.debug('**** File are different and have problems');
     } else {
@@ -153,7 +157,8 @@ String _charToString(int c) {
 String _toDecimal(int i) => i.toRadixString(10).padLeft(4, ' ');
 String _toHex(int i) => i.toRadixString(16).padLeft(2, "0").padLeft(4, ' ');
 
-String _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
+String _foundProblem(
+    Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
   var out = 'Found a Problem at index $i\n';
   out += '  $i: ${bytes0[i]} != ${bytes1[i]}\n';
 

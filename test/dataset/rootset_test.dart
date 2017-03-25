@@ -17,7 +17,7 @@ String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
 String inRoot2 = "C:/odw/test_data/sfd/CT";
 String inRoot3 = "C:/odw/test_data/sfd/MG";
 String inRoot4 = "C:/odw/test_data/sfd/RTOG STUDY/RTOG STUDY/RTFiles-1";
-String inRoot5 = "C:/odw/test_tools/dcm_files/test_data/TransferUIDs";
+String inRoot5 = "C:/odw/test_data/mweb/TransferUIDs";
 
 String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';

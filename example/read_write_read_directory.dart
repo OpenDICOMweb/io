@@ -37,7 +37,7 @@ File Text Error:
 }
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory',  logLevel: Level.config);
+  final log = new Logger('read_write_read_directory',  watermark: Severity.config);
   Stopwatch watch = new Stopwatch();
   int filesTotal = 0;
   int filesRead = 0;
@@ -115,7 +115,7 @@ void main(List<String> args) {
       log.up;
 
       // Compare [Dataset]s
-      //log.logLevel = Level.info;
+      //log.watermark = Level.info;
       log.debug("Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
       log.down;
       var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
@@ -133,7 +133,7 @@ void main(List<String> args) {
       }
       log.up2;
 
-     // log.logLevel = Level.debug;
+     // log.watermark = Level.debug;
       // Compare input and output
       log.debug('Comparing Files by Bytes:');
       log.down;

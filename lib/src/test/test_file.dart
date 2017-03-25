@@ -12,6 +12,7 @@ import 'package:io/src/filename.dart';
 import 'package:io/src/test/compare_files.dart';
 import 'package:io/src/test/file_test_error.dart';
 
+Logger log = new Logger("DicomFileTest");
 /// Test of
 FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   Filename sourceFN;
@@ -24,7 +25,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
 
   // Open input file
   sourceFN = Filename.toFilename(inFile);
-  if (log == null) log = new Logger("DicomFileTest");
+
   if (sourceFN.isNotDicom) return null;
 
   //Read source file.
@@ -80,7 +81,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   } catch (e) {}
 
   // Compare [Dataset]s
-  //log.logLevel = Level.info;
+  //log.watermark = Level.info;
   try {
     log.debug("Comparing Datasets: 0: ${sourceInstance.dataset}, 1: ${result.dataset}");
     log.down;
@@ -98,7 +99,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     log.up;
   } catch (e) {}
 
-  // log.logLevel = Level.debug;
+  // log.watermark = Level.debug;
   // Compare input and output
   try {
     log.debug('Comparing Files by Bytes:');

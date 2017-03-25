@@ -21,7 +21,7 @@ String path5 = 'C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20
 String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 
 void main(List<String> args) {
-  final log = new Logger("read_file", logLevel: Level.debug);
+  final log = new Logger("read_file", watermark: Severity.debug);
   Filename fn = new Filename(path5);
   Uint8List bytes = fn.file.readAsBytesSync();
   Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));

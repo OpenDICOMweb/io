@@ -52,7 +52,7 @@ String out3 = "C:/odw/sdk/io/example/output/2.16.840.1.114255.1870665029.9496355
 
 String outX = "C:/odw/sdk/io/example/output/foo.dcm";
 
-final log = new Logger("read_write_file", logLevel: Level.debug);
+final log = new Logger("read_write_file", watermark: Severity.debug);
 
 void main(List<String> args) {
   Filename fn = new Filename(in10);
