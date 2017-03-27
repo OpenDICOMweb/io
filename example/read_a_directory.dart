@@ -6,6 +6,7 @@
 
 import 'dart:io';
 
+import 'package:common/logger.dart';
 import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
 
