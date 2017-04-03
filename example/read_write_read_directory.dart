@@ -15,8 +15,10 @@ import 'package:io/src/test/compare_files.dart';
 
 String inputDir = 'C:/odw/sdk/io/example/input';
 String inputDir2 = 'C:/odw/test_data/sfd/CT';
+String inputDir3 = 'C:/odw/test_data/TransferUIDs';
 
 String outputDir = 'C:/odw/sdk/io/example/output';
+String outputDir2 = 'C:/odw/test_data_out';
 
 class FileTestError {
   Filename inFile;
@@ -45,7 +47,7 @@ void main(List<String> args) {
   int filesRead = 0;
 
   // Get the files in the directory
-  List<Filename> files = Filename.listFromDirectory(inputDir2);
+  List<Filename> files = Filename.listFromDirectory(inputDir3);
   filesTotal = files.length;
   log.config('Total File count: $filesTotal');
   watch.start();
@@ -89,7 +91,7 @@ void main(List<String> args) {
       log.up2;
 
       // Write a File
-      Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+      Filename outFN = new Filename.withType('$outputDir2/${inFN.base}', FileSubtype.part10);
       log.debug('Writing file $i: $outFN');
       log.down;
 
