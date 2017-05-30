@@ -22,9 +22,38 @@ String path4 = 'C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20
 String path5 = 'C:/odw/sdk/io/example/input/1.2.840.113696.596650.500.5347264.20120723195848/2.16.840.1.114255.1870665029.949635505.39523.169/2.16.840.1.114255.1870665029.949635505.10220.175.dcm';
 String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 
-void main(List<String> args) {
-  final log = new Logger("read_file", watermark: Severity.debug);
-  Filename fn = new Filename(path0);
+var paths = [path0, path1, path2, path3, path4, path5];
+
+final log = new Logger("io/bin/read_file.dart", watermark: Severity.debug);
+
+void main() {
+
+  readFile(path1);
+
+  //readFiles(paths);
+}
+
+void readFile(String path) {
+  Filename fn = new Filename(path);
+  readFilename(fn);
+}
+
+void readFiles(List<String> paths) {
+  Filename fn;
+  for (String path in paths) {
+    try {
+      fn = new Filename(path);
+      readFilename(fn);
+    } catch(e) {
+      log.debug('File: $fn');
+      log.debug('e: $e');
+      return;
+    }
+  }
+
+}
+
+void readFilename(Filename fn) {
   Uint8List bytes = fn.file.readAsBytesSync();
   Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
   log.debug('Instance: $instance');

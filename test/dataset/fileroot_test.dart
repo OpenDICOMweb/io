@@ -23,7 +23,8 @@ void main() {
       DSSource dsSource = new DSSource(fn.readAsBytesSync(), fn.path);
       DcmReader reader = new DcmReader(dsSource);
 
-      RootDataset  rds = reader.readRootDataset( (dsSource.lengthInBytes / 64).round());
+      RootDataset  rds =
+      reader.readRootDataset();
 
       print(rds.format(new Formatter(maxDepth: 146)));
 

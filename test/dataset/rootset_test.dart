@@ -6,6 +6,7 @@
 
 import 'dart:io';
 
+import 'package:common/logger.dart';
 import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
 import 'package:core/dataset.dart';
@@ -24,6 +25,8 @@ String outRoot1 = 'test/output/root1';
 String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
+final log = new Logger('io/test/rootset_test.dart', watermark: Severity.debug);
+
 void main() {
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inRoot5);
@@ -34,7 +37,7 @@ void main() {
 
         if (file.isDicom) {
 
-          print('Reading file: $file');
+          log.debug('Reading file: $file');
 
           DSSource dsSource = new DSSource(file.readAsBytesSync(), file.path);
 
@@ -44,9 +47,9 @@ void main() {
 
           group("Data set", () {
             test("Create a data set object from map", (){
-              rds = reader.readRootDataset((dsSource.lengthInBytes / 64).round());
+              rds = reader.readRootDataset();
 
-              print('File name ${file.base} with Transfer Syntax UID: ${rds[0x00020010].values[0]}');
+              log.debug('File name ${file.base} with Transfer Syntax UID: ${rds[0x00020010].values[0]}');
 
               expect(() => rds[0x00020010], isNotNull);
               expect(() => rds[0x00020010].values, isNotNull);
@@ -62,19 +65,19 @@ void main() {
               expect(() => rds[0x00280008].values, isNotNull);
 
               if (rds[0x7FE00010] != null && rds[0x7FE00010].values != null) {
-                print('         Pixel Data: ${rds[0x7FE00010].values[0]}');
+                log.debug('         Pixel Data: ${rds[0x7FE00010].values[0]}');
               }
 
               if (rds[0x00280008] != null && rds[0x00280008].values != null) {
-                print('          Number of Frames: ${rds[0x00280008]?.values[0]}');
+                log.debug('          Number of Frames: ${rds[0x00280008]?.values[0]}');
               }
 
               if (rds[0x00143012] != null&&rds[0x00143012].values != null) {
-                print('          Number of frames integrated: ${rds[0x00143012]?.values[0]}');
+                log.debug('          Number of frames integrated: ${rds[0x00143012]?.values[0]}');
               }
 
               if (rds[0x00143073] != null&&rds[0x00143073].values != null) {
-                print('Number of Frames Used for Integration: ${rds[0x00143073]?.values[0]}');
+                log.debug('Number of Frames Used for Integration: ${rds[0x00143073]?.values[0]}');
               }
 
             });
@@ -82,7 +85,7 @@ void main() {
           });
 
         } else {
-          print('Skipping ... $file');
+          log.debug('Skipping ... $file');
         }
       }
 

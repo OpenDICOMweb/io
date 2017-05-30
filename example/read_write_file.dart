@@ -66,8 +66,8 @@ void main(List<String> args) {
   log.info('Decoded: $instance0');
   if (instance0 == null) return null;
   log.debug(instance0.format(new Formatter(maxDepth: -1)));
-  log.info('${instance0[Tag.kFileMetaInformationGroupLength].info}');
-  log.info('${instance0[Tag.kFileMetaInformationVersion].info}');
+  log.info('${instance0[PTag.kFileMetaInformationGroupLength].info}');
+  log.info('${instance0[PTag.kFileMetaInformationVersion].info}');
   // Write a File
   Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
   fnOut.writeSync(instance0);

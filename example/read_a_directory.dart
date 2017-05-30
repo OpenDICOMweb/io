@@ -14,11 +14,13 @@ String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
 String inRoot2 = "C:/odw/test_data/sfd/CT";
 String inRoot3 = "C:/odw/test_data/sfd/MG";
+String inRoot4 = "C:/odw/test_data/sfd";
 
 String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';
 String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
+String outRoot4 = 'test/output/root4';
 
 
 void main() {
@@ -28,17 +30,24 @@ void main() {
 
   List<FileSystemEntity> fList = dir.listSync();
   log.info('File count: ${fList.length}');
-  for (File f in fList)
-    log.info('File: $f');
+
+  List<File> files = <File>[];
+  for (FileSystemEntity fse in fList) {
+    if (fse is File) {
+      log.info('File: $fse');
+      files.add(fse);
+    }
+  }
+  log.info('Reading ${files.length} files:');
 
   Instance instance;
-  for (File file in fList) {
-    print('\nReading file: $file');
+  for (File file in files) {
+    log.info('\nReading file: $file');
     instance = readInstance(file);
    // print('output:\n${instance.patient.format(new Prefixer())}');
   }
-  print(instance.study.summary);
-  print('Active Patients: $activeStudies');
+  log.info(instance.study.summary);
+  log.info('Active Patients: $activeStudies');
 
 }
 
