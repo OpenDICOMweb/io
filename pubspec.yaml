@@ -6,7 +6,7 @@ author: Jim Philbin <mailto:jfphilbin@gmail.com>
 homepage: https://github.com/OpenDICOMweb/io
 
 environment:
-  sdk: ^1.22.0
+  sdk: ^1.24.1
 
 dependencies:
   args: any
