@@ -6,6 +6,7 @@
 
 import 'dart:typed_data';
 
+import 'package:common/format.dart';
 import 'package:common/logger.dart';
 import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
@@ -13,6 +14,7 @@ import 'package:io/src/filename.dart';
 import 'package:io/src/test/compare_files.dart';
 import 'package:io/src/test/file_test_error.dart';
 
+Logger log = new Logger("DicomFileTest");
 /// Test of
 FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   Filename sourceFN;
@@ -25,7 +27,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
 
   // Open input file
   sourceFN = Filename.toFilename(inFile);
-  if (log == null) log = new Logger("DicomFileTest");
+
   if (sourceFN.isNotDicom) return null;
 
   //Read source file.
@@ -40,8 +42,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     //           log.debug.up('...')
     log.down;
     log.debug1('Read ${sourceBytes.length} bytes');
-    sourceInstance =
-        DcmDecoder.decode(new DSSource(sourceBytes, sourceFN.path));
+    sourceInstance = DcmDecoder.decode(new DSSource(sourceBytes, sourceFN.path));
 
     //TODO: instance should have StatusReport
     if (sourceInstance != null) {
@@ -56,16 +57,15 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   // Write result file
   try {
     // Open output file.
-    resultFN = (outFile == null)
-        ? new Filename.withExt(inFile)
-        : Filename.toFilename(outFile);
+    resultFN =
+        (outFile == null) ? new Filename.withExt(inFile) : Filename.toFilename(outFile);
 
     log.debug('Writing file $resultFN');
     log.down;
     resultBytes = DcmEncoder.encode(sourceInstance);
     resultFN.writeAsBytesSync(resultBytes);
-    if (haveEqualLengths(sourceBytes, resultBytes, log))
-      log.debug1('Wrote ${resultBytes.length} bytes');
+    if (haveEqualLengths(sourceBytes, resultBytes))
+    log.debug1('Wrote ${resultBytes.length} bytes');
     ActiveStudies.removeStudyIfPresent(sourceInstance.study.uid);
     log.up;
   } catch (e) {}
@@ -83,17 +83,14 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   } catch (e) {}
 
   // Compare [Dataset]s
-  //log.logLevel = Level.info;
+  //log.watermark = Level.info;
   try {
-    log.debug(
-        "Comparing Datasets: 0: ${sourceInstance.dataset}, 1: ${result.dataset}");
+    log.debug("Comparing Datasets: 0: ${sourceInstance.dataset}, 1: ${result.dataset}");
     log.down;
-    var comparitor =
-        new DatasetComparitor(sourceInstance.dataset, result.dataset);
+    var comparitor = new DatasetComparitor(sourceInstance.dataset, result.dataset);
     comparitor.run;
     if (comparitor.hasDifference) {
-      log.config(
-          'Comparing Datasets: ${sourceInstance.dataset}, ${result.dataset}');
+      log.config('Comparing Datasets: ${sourceInstance.dataset}, ${result.dataset}');
       log.config('Result: ${comparitor.info}');
       log.debug(comparitor.toString());
       error = new FileTestError(sourceFN, resultFN);
@@ -104,7 +101,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     log.up;
   } catch (e) {}
 
-  // log.logLevel = Level.debug;
+  // log.watermark = Level.debug;
   // Compare input and output
   try {
     log.debug('Comparing Files by Bytes:');
@@ -132,8 +129,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   return error;
 }
 
-bool haveEqualLengths(
-    Uint8List sourceBytes, Uint8List resultBytes, Logger log) {
+bool haveEqualLengths(Uint8List sourceBytes, Uint8List resultBytes) {
   if (sourceBytes.length == resultBytes.length) {
     log.debug('Both files have length(${sourceBytes.lengthInBytes})');
     return true;

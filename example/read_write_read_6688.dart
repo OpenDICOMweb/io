@@ -4,8 +4,12 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
+
 import 'dart:typed_data';
 
+import 'package:common/format.dart';
+import 'package:common/logger.dart';
+import 'package:common/timestamp.dart';
 import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
 import 'package:io/io.dart';
@@ -50,8 +54,7 @@ void main(List<String> args) {
     log.up;
 
     // Write a File
-    Filename outFN =
-        new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+    Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
     log.info('Writing file $i: $outFN');
     log.down;
     Uint8List bytes1 = DcmEncoder.encode(instance0);
@@ -70,8 +73,7 @@ void main(List<String> args) {
     if (length0 == length2) {
       log.info('Files have equal length.');
     } else {
-      log.error(
-          'Files have different lengths: original($length0), result ($length2).');
+      log.error('Files have different lengths: original($length0), result ($length2).');
     }
     Instance instance1 = DcmDecoder.decode(new DSSource(bytes2, inFN.path));
     log.debug('Instance: 1 ${instance1.info}');
@@ -79,12 +81,10 @@ void main(List<String> args) {
     log.up;
 
     // Compare [Dataset]s
-    //log.logLevel = Level.info;
-    log.info(
-        "Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
+    //log.watermark = Level.info;
+    log.info("Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
     log.down;
-    var comparitor =
-        new DatasetComparitor(instance0.dataset, instance1.dataset);
+    var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
     comparitor.run;
     if (comparitor.hasDifference) {
       log.info('Result: ${comparitor.bad}');
@@ -94,7 +94,7 @@ void main(List<String> args) {
     }
     log.up;
 
-    // log.logLevel = Level.debug;
+    // log.watermark = Level.debug;
     // Compare input and output
     log.info('Comparing Files by Bytes:');
     log.down;
@@ -113,3 +113,4 @@ void main(List<String> args) {
   Duration elapsed = endTime.dt.difference(startTime.dt);
   log.config('ElapsedTime: $elapsed');
 }
+

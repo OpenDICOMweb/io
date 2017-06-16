@@ -6,7 +6,8 @@
 
 import 'dart:typed_data';
 
-import 'package:core/core.dart';
+import 'package:common/ascii.dart';
+import 'package:common/logger.dart';
 import 'package:io/io.dart';
 
 /// A simple program that compares to files byte by byte.
@@ -22,7 +23,7 @@ import 'package:io/io.dart';
 /// This program could be improved in several ways:
 ///   * Try to parse both files simultaneously.
 
-final log = new Logger('FileCompare',  watermark: Severity.config);
+final log = new Logger('FileCompare', watermark: Severity.info);
 
 class FileCompareResult {
   Filename infile;
@@ -68,7 +69,7 @@ class FileByteDiff {
 
 /// Compare two files byte by byte and report the first significant difference.
 FileCompareResult compareFiles(String path0, String path1,
-    [Logger log, watermark= Severity.config]) {
+    [Logger log, watermark = Severity.config]) {
   final List<FileByteDiff> diffs = [];
   final maxProblems = 3;
   bool hasProblems = false;

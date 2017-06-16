@@ -1,5 +1,5 @@
 name: io
-description: Open DICOMweb SDK Input/Output Packages.
+description: A starting point for Dart libraries or applications.
 version: 0.5.4
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
@@ -15,18 +15,21 @@ dependencies:
   #  git:
   #    url: https://github.com/OpenDICOMweb/common.git
   #    ref: develop
-    path: C:/odw/sdk/common
-    version: ^0.5.4
+  #    version: ^0.5.2
+      path: C:/odw/sdk/common
+      version: ^0.5.4
   core:
   #  git:
   #    url: https://github.com/OpenDICOMweb/core.git
   #    ref: develop
-    path: C:/odw/sdk/core
-    version: ^0.5.4
+  #    version: ^0.5.1
+     path: C:/odw/sdk/core
+     version: ^0.5.4
   convertX:
   #  git:
   #    url: https://github.com/OpenDICOMweb/convert.git
   #    ref: develop
+  #    version: ^0.5.0
     path: C:/odw/sdk/convert
     version: ^0.5.4
 
@@ -34,9 +37,6 @@ dev_dependencies:
   benchmark_harness: ^1.0.4
   grinder: ^0.8.0
   test:  ^0.12.0
-  test_tools:
-    path: C:/odw/sdk/test_tools
-    version: ^0.5.4
 
 
 
