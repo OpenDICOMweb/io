@@ -6,11 +6,9 @@
 
 //import 'dart:convert';
 
-import 'dart:typed_data';
-
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 
 //TODO: cleanup for V0.9.0
@@ -31,25 +29,23 @@ void main(List<String> args) {
     int count = 0;
     log.info('*** Starting($count): $fn');
     if (fn.isPart10) {
-      Uint8List bytes = fn.file.readAsBytesSync();
-      log.info('  Part10: ${bytes.lengthInBytes}');
-      Instance  instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
-      if (instance == null) {
+      RootTagDataset  rds = TagReader.readFile(fn.file);
+      if (rds == null) {
         log.debug('  *** Skipping Invalid Transfer Syntax: $fn ');
       } else {
-        log.debug(instance.info);
+        log.debug(rds.info);
         count++;
       }
     } else if (fn.isJson) {
       //TODO: can't read JSON yet
-      Uint8List s = fn.file.readAsBytesSync();
+/*      Uint8List s = fn.file.readAsBytesSync();
       Entity e = JsonDecoder.decode(s);
-      log.debug(e.info);
+      log.debug(e.info);*/
     } else if (fn.isXml) {
       //TODO: can't read XML yet
-      Uint8List s = fn.file.readAsBytesSync();
+/*      Uint8List s = fn.file.readAsBytesSync();
       Entity e = JsonDecoder.decode(s);
-      log.debug(e.info);
+      log.debug(e.info);*/
     } else {
       log.debug('  *** Skipping none ".dcm" file: $fn');
     }

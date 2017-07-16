@@ -4,13 +4,10 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:common/format.dart';
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 
 
 const String inputDir = "C:/odw/test_data/problems/";
@@ -29,17 +26,9 @@ void main() {
     print('Reading file: $path');
     log.config('Reading file: $path');
 
-    Instance instance = readInstance(path);
-    print('***patient:\n${instance.patient.format(new Formatter(maxDepth:5))}');
+    RootTagDataset rds = TagReader.readPath(path);
+    print('***patient:\n${rds.format(new Formatter(maxDepth:5))}');
   }
 
   print('Active Patients: ${activeStudies.stats}');
-}
-
-Instance readInstance(String path) {
-  var file = new File(path);
-  Uint8List bytes = file.readAsBytesSync();
-
-  DcmDecoder decoder = new DcmDecoder(new DSSource(bytes, path));
-  return decoder.readInstance();
 }

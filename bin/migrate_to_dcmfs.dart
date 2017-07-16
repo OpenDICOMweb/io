@@ -9,8 +9,8 @@
 import 'dart:typed_data';
 
 import 'package:common/format.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 
 //TODO: cleanup for V0.9.0
@@ -43,18 +43,18 @@ void main(List<String> args) {
       Uint8List bytes = fn.file.readAsBytesSync();
       //print('Filename: $fn');
 
-      Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
-      print('Entity: ${instance.format(new Formatter())}');
+      RootByteDataset rds = ByteReader.readFile(fn.file);
+      print('Entity: ${rds.format(new Formatter())}');
 
-      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, instance.name);
+      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, rds.entity);
       print(dcmFile.path);
       dcmFile.writeSync(bytes);
 
       // print(activeStudies.summary);
     } else if (fn.isJson) {
-      Uint8List s = fn.file.readAsBytesSync();
-      Entity e = JsonDecoder.decode(s);
-      print('Entity: ${e.format(new Formatter())}');
+//      Uint8List s = fn.file.readAsBytesSync();
+//      Entity e = JsonDecoder.decode(s);
+//      print('Entity: ${e.format(new Formatter())}');
     } else {
       print('Skipping none ".dcm" file: $fn');
     }

@@ -8,21 +8,22 @@ import 'dart:typed_data';
 
 import 'package:common/format.dart';
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/src/filename.dart';
 import 'package:io/src/test/compare_files.dart';
 import 'package:io/src/test/file_test_error.dart';
 
 Logger log = new Logger("DicomFileTest");
+
 /// Test of
 FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   Filename sourceFN;
   Uint8List sourceBytes;
-  Instance sourceInstance;
+  RootTagDataset rds0;
   Filename resultFN;
   Uint8List resultBytes;
-  Instance result;
+  RootTagDataset rds1;
   FileTestError error;
 
   // Open input file
@@ -42,12 +43,12 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     //           log.debug.up('...')
     log.down;
     log.debug1('Read ${sourceBytes.length} bytes');
-    sourceInstance = DcmDecoder.decode(new DSSource(sourceBytes, sourceFN.path));
+    var sourceRDS = ByteReader.readFile(sourceFN.file);
 
     //TODO: instance should have StatusReport
-    if (sourceInstance != null) {
-      log.debug1('source: $sourceInstance');
-      log.debug2(sourceInstance.format(new Formatter(maxDepth: -1)));
+    if (sourceRDS != null) {
+      log.debug1('source: $sourceRDS');
+      log.debug2(sourceRDS.format(new Formatter(maxDepth: -1)));
       log.up;
     } else {
       return error;
@@ -57,16 +58,17 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
   // Write result file
   try {
     // Open output file.
-    resultFN =
-        (outFile == null) ? new Filename.withExt(inFile) : Filename.toFilename(outFile);
+    resultFN = (outFile == null)
+        ? new Filename.withExt(inFile)
+        : Filename.toFilename(outFile);
 
     log.debug('Writing file $resultFN');
     log.down;
-    resultBytes = DcmEncoder.encode(sourceInstance);
+    resultBytes = TagWriter.writeBytes(rds0);
     resultFN.writeAsBytesSync(resultBytes);
     if (haveEqualLengths(sourceBytes, resultBytes))
-    log.debug1('Wrote ${resultBytes.length} bytes');
-    ActiveStudies.removeStudyIfPresent(sourceInstance.study.uid);
+      log.debug1('Wrote ${resultBytes.length} bytes');
+    activeStudies.remove(rds0.study);
     log.up;
   } catch (e) {}
 
@@ -76,21 +78,22 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     log.down;
     resultBytes = resultFN.readAsBytesSync();
     log.debug1('Read ${resultBytes.length} bytes');
-    result = DcmDecoder.decode(new DSSource(resultBytes, sourceFN.path));
-    log.debug1('Instance: 1 ${result.info}');
-    log.debug2(result.format(new Formatter(maxDepth: -1)));
+    rds1 = TagReader.readPath(sourceFN.path);
+    log.debug1('Instance: 1 ${rds1.info}');
+    log.debug2(rds1.format(new Formatter(maxDepth: -1)));
     log.up;
   } catch (e) {}
 
   // Compare [Dataset]s
   //log.watermark = Level.info;
   try {
-    log.debug("Comparing Datasets: 0: ${sourceInstance.dataset}, 1: ${result.dataset}");
+    log.debug(
+        "Comparing Datasets: 0: ${rds0}, 1: ${rds1}");
     log.down;
-    var comparitor = new DatasetComparitor(sourceInstance.dataset, result.dataset);
+    var comparitor = new DatasetComparitor(rds0, rds1);
     comparitor.run;
     if (comparitor.hasDifference) {
-      log.config('Comparing Datasets: ${sourceInstance.dataset}, ${result.dataset}');
+      log.config('Comparing Datasets: ${rds0}, ${rds1}');
       log.config('Result: ${comparitor.info}');
       log.debug(comparitor.toString());
       error = new FileTestError(sourceFN, resultFN);

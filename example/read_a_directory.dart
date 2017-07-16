@@ -7,8 +7,8 @@
 import 'dart:io';
 
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
@@ -29,19 +29,13 @@ void main() {
   log.info('File count: ${fList.length}');
   for (File f in fList) log.info('File: $f');
 
-  Instance instance;
+  RootTagDataset rds;
   for (File file in fList) {
     print('\nReading file: $file');
-    instance = readInstance(file);
+    rds = TagReader.readFile(file);
     // print('output:\n${instance.patient.format(new Prefixer())}');
   }
-  print(instance.study.summary);
+  print(rds.study.summary);
   print('Active Patients: $activeStudies');
 }
 
-Instance readInstance(File f) {
-  var bytes = f.readAsBytesSync();
-  // print('LengthInBytes: ${bytes.length}');
-  DcmDecoder decoder = new DcmDecoder(new DSSource(bytes, f.path));
-  return decoder.readInstance();
-}

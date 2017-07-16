@@ -4,12 +4,10 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'dart:typed_data';
-
 import 'package:common/format.dart';
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 
 String path0 = 'C:/odw/test_data/IM-0001-0001.dcm';
@@ -30,9 +28,8 @@ String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 void main(List<String> args) {
   final log = new Logger("read_file", watermark: Severity.debug);
   Filename fn = new Filename(path5);
-  Uint8List bytes = fn.file.readAsBytesSync();
-  Instance instance = DcmDecoder.decode(new DSSource(bytes, fn.path));
-  log.debug('Instance: $instance');
-  log.debug('dataset length: ${instance.dataset.length} elements');
-  log.debug(instance.format(new Formatter(maxDepth: 146)));
+  RootTagDataset rds = TagReader.readFile(fn.file);
+  log.debug('Instance: $rds');
+  log.debug('dataset length: ${rds.length} elements');
+  log.debug(rds.format(new Formatter(maxDepth: 146)));
 }

@@ -29,27 +29,27 @@ class FileSystem extends FileSystemBase {
   @override
   final Directory root;
   @override
-  final String path;
+  final String rootPath;
 
   FileSystem(String path)
-      : path = path,
+      : rootPath = path,
         root = FileSystemBase.maybeCreateRootSync(path);
 
   //TODO: should check that it is a valid [name] for directory
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
   @override
-  Directory directory(EntityName name) => new Directory('$path$name');
+  Directory directory(Entity entity) => new Directory('$rootPath${entity.filename}');
 
   /// Returns the [File] corresponding to the specified arguments.
   @override
-  DcmFile dcmFile(FileType fType, EntityName name) =>
-      new DcmFile(this, fType, name);
+  DcmFile dcmFile(Entity entity, FileType fType) =>
+      new DcmFile(this, fType, entity);
 
   DcmFile toDcmFile(String path) => new DcmFile.fromPath(this, path);
 
   //TODO: implement
   @override
-  FSIndex get index => new FSIndex(path);
+  FSIndex get index => new FSIndex(rootPath);
 
   //TODO: if needed, openStudy(Uid study);
 

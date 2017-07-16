@@ -6,9 +6,8 @@
 
 import 'dart:io';
 
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:core/dataset.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import "package:test/test.dart";
 
@@ -30,23 +29,17 @@ void main() {
   stdout.writeln('File count: ${files.length}');
 
       // Read, parse, and print a summary of each file.
-      for (Filename file in files) {
+      for (Filename fn in files) {
 
-        if (file.isDicom) {
-
-          print('Reading file: $file');
-
-          DSSource dsSource = new DSSource(file.readAsBytesSync(), file.path);
-
-          DcmReader reader = new DcmReader(dsSource);
-
-          RootDataset rds;
+        if (fn.isDicom) {
+          print('Reading file: $fn');
+          RootTagDataset rds;
 
           group("Data set", () {
             test("Create a data set object from map", (){
-              rds = reader.readRootDataset((dsSource.lengthInBytes / 64).round());
+              rds = TagReader.readFile(fn.file);
 
-              print('File name ${file.base} with Transfer Syntax UID: ${rds[0x00020010].values[0]}');
+              print('File name ${fn.base} with Transfer Syntax UID: ${rds[0x00020010].values[0]}');
 
               expect(() => rds[0x00020010], isNotNull);
               expect(() => rds[0x00020010].values, isNotNull);
@@ -82,7 +75,7 @@ void main() {
           });
 
         } else {
-          print('Skipping ... $file');
+          print('Skipping ... $fn');
         }
       }
 

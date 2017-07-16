@@ -46,15 +46,15 @@ class FileType {
 
   bool get isDicom => subtype != FileSubtype.unknown;
 
-  bool get isPatient => level.isPatient;
+  bool get isPatient => level == IELevel.subject;
 
-  bool get isStudy => level.isStudy;
+  bool get isStudy => level  == IELevel.study;
 
-  bool get isSeries => level.isSeries;
+  bool get isSeries => level == IELevel.series;
 
-  bool get isInstance => level.isInstance;
+  bool get isInstance => level == IELevel.instance;
 
-  bool get isDataset => level.isDataset;
+  bool get isDataset => level == IELevel.dataset;
 
   // Subtype
   /// The file extension for this [FileSubtype].

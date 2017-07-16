@@ -12,6 +12,8 @@ import 'package:core/core.dart';
 import 'dcm_file.dart';
 import 'file_type.dart';
 import 'index.dart';
+//import 'file_descriptor.dart';
+
 
 //TODO: Implement all async IO calls
 
@@ -29,7 +31,7 @@ abstract class FileSystemBase {
 
   /// The path to the [root] directory.
   //TODO: verify that this is the absolute path.
-  String get path;
+  String get rootPath;
 
   /// The root [Directory] of the file system.
   //TODO: if [root.path] and [path] are always the same make path get root.path.
@@ -45,10 +47,10 @@ abstract class FileSystemBase {
   FSIndex get index;
 
   /// Returns the [Directory] corresponding to the specified [root], [Study] and [Series].
-  Directory directory(EntityName name);
+  Directory directory(Entity entity);
 
-  /// Returns the [File] corresponding to [root] plus the specified arguments.
-  DcmFile dcmFile(FileType fType, EntityName name);
+  /// Returns the [File] corresponding to [entity] plus the specified arguments.
+  DcmFile dcmFile(Entity entity, FileType fType);
 
   // *** Read Async  ***
   //TODO: *** See https://www.dartlang.org/articles/language/await-async
@@ -120,11 +122,11 @@ abstract class FileSystemBase {
       [String series, String instance, String extension]) {
     String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
     String part3 = (series == null) ? "" : '/$series';
-    return '$path/$study$part3$part4';
+    return '$rootPath/$study$part3$part4';
   }
 
   @override
-  String toString() => 'DICOM File System , root: $path';
+  String toString() => 'DICOM File System , root: $rootPath';
 
   /* TODO: debug - allows asynchronous creation of the FS root.
   static Future<Directory> maybeCreateRoot(String rootPath, bool createIfAbsent) sync* {

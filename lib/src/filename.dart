@@ -9,8 +9,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';
@@ -111,7 +111,7 @@ class Filename {
   /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
 
-  /// Returns [true] if the Dataset is [OType.complete], that is, it contains no Bulkdata
+  /// Returns [true] if the [Dataset] is [OType.complete], that is, it contains no Bulkdata
   /// References.
   bool get isComplete => subtype.oType == OType.complete;
 
@@ -121,17 +121,16 @@ class Filename {
   /// Returns [true] if this is a [Bulkdata] object.
   bool get isBulkdata => subtype.oType == OType.bulkdata;
 
-  Future<Entity> get contents => read();
+  Future<RootTagDataset> get contents => read();
 
   //TODO: should this return the bytes or a parsed Entity
-  Entity readSync() {
+  Dataset readSync() {
     log.debug('subtype: $subtype');
     if (isPart10) {
-      Uint8List bytes = file.readAsBytesSync();
-      return DcmDecoder.decode(new DSSource(bytes, path));
+      return ByteReader.readPath( path);
     } else if (isJson) {
-      Uint8List bytes = file.readAsBytesSync();
-      return JsonDecoder.decode(bytes);
+/*      Uint8List bytes = file.readAsBytesSync();
+      return JsonDecoder.decode(bytes);*/
     } else if (isXml) {
       // Uint8List bytes = file.readAsBytesSync();
       throw "XML Umplemented";
@@ -142,13 +141,13 @@ class Filename {
   //TODO: should this return the bytes or a parsed Entity
   Uint8List readAsBytesSync() => file.readAsBytesSync();
 
-  Future<Entity> read() async {
+  Future<TagDataset> read() async {
     if (isBinary) {
-      Uint8List bytes = await file.readAsBytesSync();
-      return await DcmDecoder.decode(new DSSource(bytes, path));
+      //Uint8List bytes = await file.readAsBytes();
+      return await new Future(() =>TagReader.readPath(_path));
     } else if (isJson) {
-      Uint8List bytes = await file.readAsBytesSync();
-      return await JsonDecoder.decode(bytes);
+//      Uint8List bytes = await file.readAsBytesSync();
+//      return await JsonDecoder.decode(bytes);
     } else if (isXml) {
       // Uint8List bytes = file.readAsBytesSync();
       throw "XML Umplemented";
@@ -158,9 +157,9 @@ class Filename {
     throw "Shouldn't get here";
   }
 
-  bool writeSync(Entity entity) {
+  bool writeSync(TagDataset ds) {
     if (isBinary) {
-      Uint8List bytes = DcmEncoder.encode(entity);
+      Uint8List bytes = TagWriter.writePath(ds, _path);
       log.debug('Writing ${bytes.lengthInBytes} bytes.');
       file.writeAsBytesSync(bytes);
       return true;

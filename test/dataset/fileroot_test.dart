@@ -5,9 +5,8 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:common/format.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
-import 'package:core/dataset.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import "package:test/test.dart";
 
@@ -18,15 +17,9 @@ void main() {
 
   group("RLE Data set", () {
     test("Verify RLE parsing", () {
-
       Filename fn = new Filename(path0);
-      DSSource dsSource = new DSSource(fn.readAsBytesSync(), fn.path);
-      DcmReader reader = new DcmReader(dsSource);
-
-      RootDataset  rds = reader.readRootDataset( (dsSource.lengthInBytes / 64).round());
-
+      RootTagDataset  rds  = TagReader.readFile(fn.file);
       print(rds.format(new Formatter(maxDepth: 146)));
-
     });
   });
 

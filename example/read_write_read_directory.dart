@@ -8,8 +8,8 @@ import 'dart:typed_data';
 
 import 'package:common/format.dart';
 import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
 
@@ -63,8 +63,8 @@ void main(List<String> args) {
     } else if (inFN.isDicom) {
       // Read at least the FMI to get the Transfer Syntax
       Uint8List bytes0 = inFN.file.readAsBytesSync();
-      Instance instance0 = DcmDecoder.decode(new DSSource(bytes0, inFN.path));
-      if (instance0 == null) {
+      var rds0 = TagReader.readFile(inFN.file);
+      if (rds0 == null) {
         log.info('Skipping File $i Bad TS: $inFN');
         continue;
       }
@@ -84,8 +84,8 @@ void main(List<String> args) {
       log.down;
       log.debug1('Read ${bytes0.length} bytes');
       log.down;
-      log.debug1('Instance0: $instance0');
-      //log.debug1(instance0.format(new Formatter(maxDepth: -1)));
+      log.debug1('rds0: $rds0');
+      //log.debug1(rds0.format(new Formatter(maxDepth: -1)));
       log.up2;
 
       // Write a File
@@ -93,10 +93,10 @@ void main(List<String> args) {
       log.debug('Writing file $i: $outFN');
       log.down;
 
-      Uint8List bytes1 = DcmEncoder.encode(instance0);
+      Uint8List bytes1 = TagWriter.writeFile(rds0, outFN.file);
       outFN.writeAsBytesSync(bytes1);
       log.debug1('Wrote ${bytes1.length} bytes');
-      ActiveStudies.removeStudyIfPresent(instance0.study.uid);
+      activeStudies.remove(rds0.study);
       log.up;
 
       // Now read the file we just wrote.
@@ -111,16 +111,16 @@ void main(List<String> args) {
       } else {
         log.error('Files have different lengths: original($length0), result ($length2)');
       }
-      Instance instance1 = DcmDecoder.decode(new DSSource(bytes2, inFN.path));
-      log.debug1('Instance: 1 ${instance1.info}');
-      log.debug2(instance1.format(new Formatter(maxDepth: -1)));
+      var rds1= TagReader.readFile(inFN.file);
+      log.debug1('rds: 1 ${rds1.info}');
+      log.debug2(rds1.format(new Formatter(maxDepth: -1)));
       log.up;
 
       // Compare [Dataset]s
       //log.watermark = Level.info;
-      log.debug("Comparing Datasets: 0: ${instance0.dataset}, 1: ${instance1.dataset}");
+      log.debug("Comparing Datasets: 0: ${rds0}, 1: ${rds1}");
       log.down;
-      var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
+      var comparitor = new DatasetComparitor(rds0, rds1);
       comparitor.run;
       log.down;
       if (comparitor.hasDifference) {

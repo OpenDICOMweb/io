@@ -4,13 +4,11 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'dart:typed_data';
 
-import 'package:common/format.dart';
-import 'package:common/logger.dart';
-import 'package:convertX/convert.dart';
+import 'package:common/common.dart';
 import 'package:core/core.dart';
-import 'package:dictionary/tag.dart';
+import 'package:dcm_convert/dcm.dart';
+import 'package:dictionary/dictionary.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
 
@@ -72,27 +70,23 @@ final log = new Logger("read_write_file", watermark: Severity.debug);
 void main(List<String> args) {
   Filename fn = new Filename(in10);
   log.info('Reading: $fn');
-  Uint8List bytes0 = fn.file.readAsBytesSync();
-  log.info('  ${bytes0.length} bytes');
-  Instance instance0 = DcmDecoder.decode(new DSSource(bytes0, fn.path));
-  log.info('Decoded: $instance0');
-  if (instance0 == null) return null;
-  log.debug(instance0.format(new Formatter(maxDepth: -1)));
-  log.info('${instance0[Tag.kFileMetaInformationGroupLength].info}');
-  log.info('${instance0[Tag.kFileMetaInformationVersion].info}');
+  RootTagDataset rds0 = TagReader.readFile(fn.file);
+  log.info('Decoded: $rds0');
+  if (rds0 == null) return null;
+  log.debug(rds0.format(new Formatter(maxDepth: -1)));
+  log.info('${rds0[kFileMetaInformationGroupLength].info}');
+  log.info('${rds0[kFileMetaInformationVersion].info}');
   // Write a File
   Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
-  fnOut.writeSync(instance0);
+  fnOut.writeSync(rds0);
 
   log.info('Re-reading: $fnOut');
-  Uint8List bytes1 = fnOut.readAsBytesSync();
-  log.info('read ${bytes1.length} bytes');
-  Instance instance1 = DcmDecoder.decode(new DSSource(bytes1, fn.path));
-  log.info(instance1);
-  log.debug(instance1.format(new Formatter(maxDepth: -1)));
+  RootTagDataset rds1 = TagReader.readFile(fn.file);
+  log.info(rds1);
+  log.debug(rds1.format(new Formatter(maxDepth: -1)));
 
   // Compare [Dataset]s
-  var comparitor = new DatasetComparitor(instance0.dataset, instance1.dataset);
+  var comparitor = new DatasetComparitor(rds0, rds1);
   comparitor.run;
   if (comparitor.hasDifference) {
     log.fatal('Result: ${comparitor.info}');

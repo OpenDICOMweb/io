@@ -55,7 +55,7 @@ File isFile(f) => (f is File) ? f : null;
 //TODO: fix
 //File dcmFilter(File f) => filter(f, isDicomFile);
 
-/// Returns a [List] of [File] from the [Directory] specified by [path].
+/// Returns a [List] of [File] from the [Directory] specified by [rootPath].
 List getFilesSync(directory, [filter = isFile]) {
   if (directory is String) directory = new Directory(directory);
   if (directory is! Directory)

@@ -5,10 +5,9 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:convertX/convert.dart';
 import 'package:core/core.dart';
+import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -30,18 +29,11 @@ void main() {
   for (Filename file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
-      Instance instance = file.readSync();
-      print(instance.info);
+      RootTagDataset rds = file.readSync();
+      print(rds.info);
     } else {
       print('Skipping ... $file');
     }
   }
 }
 
-Instance readDicomFile(file) {
-  if (file is String) file = new File(file);
-  if (file is Filename) file = file.file;
-  if (file is! File) return null;
-  Uint8List bytes = file.readAsBytesSync();
-  return DcmDecoder.decode(new DSSource(bytes, file.path));
-}
