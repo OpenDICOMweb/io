@@ -4,16 +4,17 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
+import 'package:dictionary/dictionary.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';
 import 'index.dart';
 //import 'file_descriptor.dart';
-
 
 //TODO: Implement all async IO calls
 
@@ -21,11 +22,8 @@ import 'index.dart';
 /// 1. The file system should be completely independent of core except for [Uid]s.
 /// 2. Simple read write interface using study, series, and instance [Uid]s
 
-/// The infterface to all ODW File Systems.
+/// The interface to all ODW File Systems.
 abstract class FileSystemBase {
-  /// The [type] of the file system.
-  //Flush static FSType type;
-
   /// The [version] of the file system.
   static String version = "0.1.0";
 
@@ -37,6 +35,8 @@ abstract class FileSystemBase {
   //TODO: if [root.path] and [path] are always the same make path get root.path.
   //TODO: if there is no value to making [root] a [Directory] eliminate it.
   Directory get root;
+
+  FileSubtype get defaultFileSubtype;
 
   /// Returns an [Index] to the files in this [FileSystem].
   ///
@@ -50,76 +50,79 @@ abstract class FileSystemBase {
   Directory directory(Entity entity);
 
   /// Returns the [File] corresponding to [entity] plus the specified arguments.
-  DcmFile dcmFile(Entity entity, FileType fType);
+  DcmFile file(Entity entity, FileType fType);
 
   // *** Read Async  ***
   //TODO: *** See https://www.dartlang.org/articles/language/await-async
-  /* TODO: implement async later
+
   /// Returns a [Stream] of [Uint8List] containing the [Study], [Series],
-  /// or [Instance] as specified.
-  Stream<Uint8List> read(String study, [String series, String instance]) {}
+  /// or [Instance] as specified by [path], which must be a [String] of the
+  /// form '/{study}{/series}{/instance}'.
+  Future<Entity> read(String path, [FileSubtype subtype]);
 
-  /// Returns a [Stream] of [Uint8List]s containing all the SOP [Instances] in the [Study].
-  Stream<Uint8List> readStudy(String study);
+  /// Returns a [Stream] of [Uint8List]s containing all the
+  /// SOP [Instances] in the [Study].
+  Future<Study> readStudy(Uid study, [FileSubtype subtype]);
 
-  /// Returns a [Stream] of [Uint8List]s containing all the SOP [Instances] in the [Study].
-  Stream<Uint8List> readSeries(String study, String series);
+  /// Returns a [Stream] of [Uint8List]s containing all the
+  /// SOP [Instances] in the [Study].
+  Future<Series> readSeries(Uid study, Uid series, [FileSubtype subtype]);
 
-  /// Returns a [Future] containing a [Uint8List] containing the specified SOP [Instance].
-  Future<Uint8List> readInstance(String study, String series, String instance);
-  */
+  /// Returns a [Future] containing a [Uint8List] containing
+  /// the specified SOP [Instance].
+  Future<Instance> readInstance(Uid study, Uid series, Uid instance,
+      [FileSubtype subtype]);
 
   // *** Read Sync  ***
 
-  /// Returns a [List] of [Uint8List], where each [Uint8List] contains a [Study], [Series],
-  /// or [Instance] as specified by the corresponding [FileSystemEntity].
+  /// Returns a [List] of [Uint8List] by [path], which must be a
+  /// [String] of the form '/{study}{/series}{/instance}'..
   //TODO: decide if this is needed.
-  // List<Uint8List> readSync(FileType fType, String study, [String series, String instance]);
+  Entity readSync(String path, [FileSubtype subtype]);
 
-  /// Returns a [List] of [Uint8List]s, or [String] (depending on the [FileSubtype])
-  /// containing all the SOP Instances of the [Study] in the target [Directory]
-  /// in the specified [FileSubtype].
-  List<Uint8List> readStudySync(FileSubtype fType, String study);
+  /// Returns a [List] of [Uint8List]s, or [String] (depending on
+  /// the [FileSubtype]) containing all the SOP Instances of the
+  /// [Study] in the target [Directory] in the specified [FileSubtype].
+  Study readStudySync(Uid study, [FileSubtype subtype]);
 
   /// Returns a [List] of [Uint8List]s, or [String] (depending on the [FileSubtype])
   /// containing all the SOP Instances of the [Series] in the target [Directory]
   /// in the specified [FileSubtype].
-  List readSeriesSync(FileSubtype fType, String study, String series);
+  Series readSeriesSync(Uid study, Uid series, [FileSubtype subtype]);
 
   /// Returns a [Uint8List] or [String] (depending on the [FileSubtype]) containing the
   /// target SOP Instance in the specified [FileSubtype].
-  dynamic readInstanceSync(
-      FileSubtype fType, String study, String series, String instance);
+  Instance readInstanceSync(Uid study, Uid series, Uid instance,
+      [FileSubtype subtype]);
 
   // *** Write Async  ***
-  /* TODO: implement async calls
-  Sink<Uint8List> write(String study, [String series, String instance]);
 
-  Sink<Uint8List> writeStudy(String study, Uint8List bytes);
+  Future<bool> write(Entity entity, [FileSubtype fType]);
 
-  Sink<Uint8List> writeSeries(String study, String series, Uint8List bytes);
+  Future<bool> writeStudy(Study study, [FileSubtype subtype]);
 
-  Future<Uint8List> writeInstance(String study, String series, String instance, Uint8List bytes);
-*/
+  Future<bool> writeSeries(Series series, [FileSubtype subtype]);
+
+  Future<bool> writeInstance(Instance instance, [FileSubtype subtype]);
+
   // *** Write Sync  ***
 
   //TODO: needed?
-  //void writeSync(FileType fType, String study, [String series, String instance]);
+  bool writeSync(Entity entity, [FileSubtype subtype]);
 
   //TODO: needed?
-  //void writeStudySync(String study);
+  bool writeStudySync(Study study, [FileSubtype subtype]);
 
   //TODO: needed?
-  //void writeSeriesSync(String study, String series);
+  bool writeSeriesSync(Series series, [FileSubtype subtype]);
 
   /// Writes the [Uint8List] or [String] contained in the bytes argument, to the
   /// file specified by by the [FileSubtype], [Study], [Series], and [Instance] [String]s.
-  void writeInstanceSync(
-      FileSubtype fType, String study, String series, String instance, bytes);
+  bool writeInstanceSync(Instance instance, [FileSubtype subtype]);
 
   /// Return a path to a file in the [FileSystem]
-  String toPath(FileSubtype fType, String study,
-      [String series, String instance, String extension]) {
+  String toPath(FileSubtype fType, Uid study,
+      [Uid series, Uid instance, String extension]) {
     String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
     String part3 = (series == null) ? "" : '/$series';
     return '$rootPath/$study$part3$part4';
@@ -128,15 +131,13 @@ abstract class FileSystemBase {
   @override
   String toString() => 'DICOM File System , root: $rootPath';
 
-  /* TODO: debug - allows asynchronous creation of the FS root.
-  static Future<Directory> maybeCreateRoot(String rootPath, bool createIfAbsent) sync* {
+  // TODO: debug - allows asynchronous creation of the FS root.
+  static Future<Directory> maybeCreateRoot(String rootPath) async {
     var root = new Directory(rootPath);
     bool exists = await root.exists();
-    if (! exists && createIfAbsent)
-        await root.createSync(recursive: true);
+    if (!exists) await root.createSync(recursive: true);
     return root;
   }
-  */
 
   /// Create the [root] Directory of the [FileSystem] recursively.
   static Directory maybeCreateRootSync(String path) {

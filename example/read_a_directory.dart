@@ -35,7 +35,7 @@ void main() {
     rds = TagReader.readFile(file);
     // print('output:\n${instance.patient.format(new Prefixer())}');
   }
-  print(rds.study.summary);
+  print(rds.summary);
   print('Active Patients: $activeStudies');
 }
 

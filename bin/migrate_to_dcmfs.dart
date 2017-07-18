@@ -43,10 +43,12 @@ void main(List<String> args) {
       Uint8List bytes = fn.file.readAsBytesSync();
       //print('Filename: $fn');
 
-      RootByteDataset rds = ByteReader.readFile(fn.file);
+      RootTagDataset rds = TagReader.readFile(fn.file);
       print('Entity: ${rds.format(new Formatter())}');
 
-      DcmFile dcmFile = fs.dcmFile(FileType.part10Instance, rds.entity);
+      var entity = activeStudies.entityFromDataset(rds);
+
+      DcmFile dcmFile = fs.file(entity, FileType.part10Instance);
       print(dcmFile.path);
       dcmFile.writeSync(bytes);
 

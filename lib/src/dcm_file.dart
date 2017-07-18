@@ -20,7 +20,7 @@ class DcmFile {
 
   DcmFile(this.fs, this.fType, this.entity);
 
-  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toDcmFile(path);
+  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toFile(path);
 
   Directory get directory => fs.directory(entity);
 

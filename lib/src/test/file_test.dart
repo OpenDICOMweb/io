@@ -68,7 +68,7 @@ FileTestError dicomFileTest(inFile, outFile, [Logger log]) {
     resultFN.writeAsBytesSync(resultBytes);
     if (haveEqualLengths(sourceBytes, resultBytes))
       log.debug1('Wrote ${resultBytes.length} bytes');
-    activeStudies.remove(rds0.study);
+    activeStudies.remove(rds0.studyUid);
     log.up;
   } catch (e) {}
 

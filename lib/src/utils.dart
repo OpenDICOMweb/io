@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:path/path.dart';
 
 //TODO: document this file
@@ -131,15 +132,17 @@ Stream _walk(Directory d, Filter filter) async* {
 
 //**** Binary Utility Functions
 //TODO: implement later
-//Stream<Uint8List> readDirectory(String path) {}
+Future<FileSystemEntity> readDirectory(String path) {
+  throw "Unimplemented";
+}
 
 //TODO: debug, doc, and Test
-List<Uint8List> readBinaryDirectorySync(String path) {
+Entity readBinaryDirectorySync(String path) {
   Directory d = new Directory(path);
   return _readBinaryDirectorySync(d, []);
 }
 
-List<Uint8List> _readBinaryDirectorySync(
+Entity _readBinaryDirectorySync(
     Directory d, List<Uint8List> bytesList) {
   List<FileSystemEntity> entities =
       d.listSync(recursive: true, followLinks: false);
@@ -154,12 +157,11 @@ List<Uint8List> _readBinaryDirectorySync(
       }
     }
   } catch (e) {}
-  return bytesList;
+  throw "Unimplemented";
 }
 
-Future<Uint8List> readBinaryFile(String path) async {
-  File f = new File(path);
-  return await f.readAsBytes();
+Future<Entity> readBinaryFile(String path) async {
+  throw "Unimplemented";
 }
 
 Uint8List readBinaryFileSync(String path) {

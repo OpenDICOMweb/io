@@ -96,7 +96,7 @@ void main(List<String> args) {
       Uint8List bytes1 = TagWriter.writeFile(rds0, outFN.file);
       outFN.writeAsBytesSync(bytes1);
       log.debug1('Wrote ${bytes1.length} bytes');
-      activeStudies.remove(rds0.study);
+      activeStudies.remove(rds0.studyUid);
       log.up;
 
       // Now read the file we just wrote.

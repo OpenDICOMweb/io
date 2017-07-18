@@ -17,7 +17,6 @@ import 'package:io/src/file_system_base.dart';
 import 'dcm_file.dart';
 import 'file_type.dart';
 import 'index.dart';
-import 'utils.dart';
 
 //TODO: finish all IO calls async
 
@@ -38,102 +37,152 @@ class FileSystem extends FileSystemBase {
   //TODO: should check that it is a valid [name] for directory
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
   @override
-  Directory directory(Entity entity) => new Directory('$rootPath${entity.filename}');
+  Directory directory(Entity entity) =>
+      new Directory('$rootPath${entity.path}');
 
-  /// Returns the [File] corresponding to the specified arguments.
+  /// Returns the [DcmFile] corresponding to the arguments.
   @override
-  DcmFile dcmFile(Entity entity, FileType fType) =>
+  DcmFile file(Entity entity, FileType fType) =>
       new DcmFile(this, fType, entity);
 
-  DcmFile toDcmFile(String path) => new DcmFile.fromPath(this, path);
+  /// Returns the [DcmFile] corresponding to [path].
+  DcmFile toFile(String path) => new DcmFile.fromPath(this, path);
 
   //TODO: implement
   @override
   FSIndex get index => new FSIndex(rootPath);
 
+  @override
+  FileSubtype get defaultFileSubtype => FileSubtype.part10 ;
+
   //TODO: if needed, openStudy(Uid study);
 
   // *** Read Async  ***
-  /* TODO: implement later
+
+  /// Reads a DICOM [Study], [Series], or [Instance] asynchronously
+  /// from [this]. Returns a [Uint8List] containing the requested object.
+  @override
+  Future<Entity> read(String path,
+      [FileSubtype subtype = FileSubtype.part10 ]) async {
+    throw "Unimplemented";
+  }
+
+  /// Reads a DICOM [Study] asynchronously from [this].
+  /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
+  @override
+  Future<Study> readStudy(Uid study,
+      [FileSubtype subtype = FileSubtype.part10   ]) async {
+    throw "Unimplemented";
+  }
+
+  /// Reads a DICOM [Series] asynchronously from [this]. Throws an
+  /// [InvalidSeriesError] if [study], or [series] are invalid.
+  @override
+  Future<Series> readSeries(Uid study, Uid series,
+      [FileSubtype subtype = FileSubtype.part10   ]) async {
+    throw "Unimplemented";
+  }
+
+  /// Reads a DICOM [Instance] (SOPInstance) asynchronously from [this].
+  /// Throws an [InvalidInstanceError] if [study], [series], or [instance]
+  /// are invalid.
+  @override
+  Future<Instance> readInstance(Uid study, Uid series, Uid instance,
+      [FileSubtype subtype = FileSubtype.part10   ]) async {
+    throw "Unimplemented";
+  }
+
+  // *** Read Synchronous  ***
+
   /// Read a [Study], [Series], or [Instance].
   /// Returns a [Uint8List] containing the requested object.
+  // TODO: if needed.
   @override
-  Stream<Uint8List> read(Uid study, [Uid series, Uid instance]) async* {}
+  Entity readSync(String path, [FileSubtype subtype = FileSubtype.part10 ]) {
+    throw "Unimplemented";
+  }
 
   /// Reads a DICOM [Study].
   /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
   @override
-  Stream<Uint8List> readStudy(Uid study) async* {}
+  Study readStudySync(Uid study,
+      [FileSubtype subtype = FileSubtype .part10 ]) {
+    var path = toPath(subtype, study);
+    throw "Unimplemented";
+  }
+
 
   /// Reads a DICOM [Series].
   /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
   @override
-  Stream<Uint8List> readSeries(Uid study, Uid series) async* {
+  Series readSeriesSync(Uid study, Uid series,
+      [FileSubtype subtype = FileSubtype .part10 ]) {
+    var path = toPath(subtype, study);
     throw "Unimplemented";
   }
 
   /// Reads a DICOM [SopInstance].
   /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
   @override
-  Future<Uint8List> readInstance(Uid study, Uid series, Uid instance) async {}
-*/
-  // *** Read Synchronous  ***
-
-  /// Read a [Study], [Series], or [Instance].
-  /// Returns a [Uint8List] containing the requested object.
-  // TODO: if needed.
-  //@override
-  //List<dynamic> readSync(FileType fType, Uid study, [Uid series, Uid instance]) {}
-
-  /// Reads a DICOM [Study].
-  /// The [Study] [Uid] must correspond to a [Study] or an [Exception] is thrown.
-  @override
-  List<Uint8List> readStudySync(FileSubtype fType, String study) =>
-      (fType.isBinary)
-          ? readBinaryDirectorySync(toPath(fType, study))
-          : readStringDirectorySync(toPath(fType, study));
-
-  /// Reads a DICOM [Series].
-  /// The [Series] [Uid] must correspond to a [Series] or an [Exception] is thrown.
-  @override
-  List<dynamic> readSeriesSync(
-          FileSubtype fType, String study, String series) =>
-      (fType.isBinary)
-          ? readBinaryDirectorySync(toPath(fType, study, series))
-          : readStringDirectorySync(toPath(fType, study, series));
-
-  /// Reads a DICOM [SopInstance].
-  /// The [SopInstance] [Uid] must correspond to a [SopInstance] or an [Exception] is thrown.
-  @override
-  dynamic readInstanceSync(
-          FileSubtype fType, String study, String series, String instance) =>
-      (fType.isBinary)
-          ? readBinaryDirectorySync(toPath(fType, study, series, instance))
-          : readStringDirectorySync(toPath(fType, study, series, instance));
+  Instance readInstanceSync(Uid study, Uid series, Uid instance,
+  [FileSubtype subtype = FileSubtype .part10 ]){
+    var path = toPath(subtype, study);
+    throw "Unimplemented";
+  }
 
   // *** Write Async  ***
 
-  /* TODO: later
+  // TODO: later
   @override
-  Sink<Uint8List> write(Uid study, [Uid series, Uid instance]) async* {}
+  Future<bool> write(Entity entity,
+      [FileSubtype subtype = FileSubtype.part10 ]) async {
+    throw "Unimplemented";
+  }
 
   @override
-  Future writeStudy(Uid study){}
+  Future<bool>  writeStudy(Study study,
+      [FileSubtype subtype = FileSubtype .part10 ]) async {
+    throw "Unimplemented";
+  }
 
   @override
-  Future writeSeries(Uid study, Uid series){}
+  Future<bool>  writeSeries(Series series,
+      [FileSubtype subtype = FileSubtype .part10 ]) async {
+    throw "Unimplemented";
+  }
 
   @override
-  Future<Uint8List> writeInstance(Uid study, Uid series, Uid instance){}
-*/
+  Future<bool> writeInstance(Instance instance,
+      [FileSubtype subtype = FileSubtype .part10 ]){
+    throw "Unimplemented";
+  }
+
   // *** Write Sync  ***
 
   @override
-  void writeInstanceSync(
-      FileSubtype fType, String study, String series, String instance, data) {}
+  bool writeSync(Entity entity, [FileSubtype subtype = FileSubtype.part10 ]) {
+    throw "Unimplemented";
+  }
+
+  @override
+  bool writeStudySync(Study study, [FileSubtype subtype = FileSubtype .part10 ]) {
+    throw "Unimplemented";
+  }
+
+  @override
+  bool writeSeriesSync(Series series,
+      [FileSubtype subtype = FileSubtype.part10    ]) {
+    throw "Unimplemented";
+  }
+
+  @override
+  bool writeInstanceSync(Instance instance,
+      [FileSubtype subtype = FileSubtype.part10    ]) {
+    throw "Unimplemented";
+  }
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>
       dir.list(recursive: true, followLinks: false);
 
-  DcmFile parse(String path) => toDcmFile(path);
+  DcmFile parse(String path) => toFile(path);
 }
