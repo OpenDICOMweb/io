@@ -40,6 +40,7 @@ void main(List<String> args) {
 
     log.down;
     RootTagDataset rds0 = TagReader.readFile(inFN.file);
+    var bytes
     if (rds0 == null) {
       log.info('Skipping File $i Bad TS: $inFN');
       continue;
