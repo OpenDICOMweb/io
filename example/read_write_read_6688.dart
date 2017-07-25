@@ -40,7 +40,6 @@ void main(List<String> args) {
 
     log.down;
     RootTagDataset rds0 = TagReader.readFile(inFN.file);
-    var bytes
     if (rds0 == null) {
       log.info('Skipping File $i Bad TS: $inFN');
       continue;
@@ -55,21 +54,21 @@ void main(List<String> args) {
     Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
     log.info('Writing file $i: $outFN');
     log.down;
-    outFN.writeAsBytesSync(bytes1);
-    log.info('Wrote ${bytes1.length} bytes');
-    activeStudies.remove(rds0.study);
+//    outFN.writeAsBytesSync(bytes1);
+//   log.info('Wrote ${bytes1.length} bytes');
+//    activeStudies.remove(rds0.study);
     log.up;
 
     // Now read the file we just wrote.
     log.info('Reading Result file $i: $outFN');
     log.down;
-    int length0 = rds0.lengthInBytes;
+/*    int length0 = rds0.LengthInBytes;
     int length2 = rds1.lengthInBytes;
     if (length0 == length2) {
       log.info('Files have equal length.');
     } else {
       log.error('Files have different lengths: original($length0), result ($length2).');
-    }
+    }*/
     RootTagDataset rds1 = TagReader.readFile(inFN.file);
     log.debug('Instance: 1 ${rds1.info}');
     log.debug1(rds1.format(new Formatter(maxDepth: -1)));
@@ -77,9 +76,9 @@ void main(List<String> args) {
 
     // Compare [Dataset]s
     //log.watermark = Level.info;
-    log.info("Comparing Datasets: 0: ${rds0.dataset}, 1: ${rds1.dataset}");
+    log.info("Comparing Datasets: 0: ${rds0}, 1: ${rds1}");
     log.down;
-    var comparitor = new DatasetComparitor(rds0.dataset, rds1.dataset);
+    var comparitor = new DatasetComparitor(rds0, rds1);
     comparitor.run;
     if (comparitor.hasDifference) {
       log.info('Result: ${comparitor.bad}');

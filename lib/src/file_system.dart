@@ -107,7 +107,7 @@ class FileSystem extends FileSystemBase {
   @override
   Study readStudySync(Uid study,
       [FileSubtype subtype = FileSubtype .part10 ]) {
-    var path = toPath(subtype, study);
+//    var path = toPath(subtype, study);
     throw "Unimplemented";
   }
 
@@ -117,7 +117,7 @@ class FileSystem extends FileSystemBase {
   @override
   Series readSeriesSync(Uid study, Uid series,
       [FileSubtype subtype = FileSubtype .part10 ]) {
-    var path = toPath(subtype, study);
+//    var path = toPath(subtype, study);
     throw "Unimplemented";
   }
 
@@ -126,7 +126,7 @@ class FileSystem extends FileSystemBase {
   @override
   Instance readInstanceSync(Uid study, Uid series, Uid instance,
   [FileSubtype subtype = FileSubtype .part10 ]){
-    var path = toPath(subtype, study);
+//    var path = toPath(subtype, study);
     throw "Unimplemented";
   }
 
