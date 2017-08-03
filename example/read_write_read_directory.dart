@@ -39,7 +39,7 @@ File Text Error:
 }
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory',  watermark: Severity.config);
+  final log = new Logger('read_write_read_directory',  Level.config);
   Stopwatch watch = new Stopwatch();
   int filesTotal = 0;
   int filesRead = 0;
@@ -78,15 +78,10 @@ void main(List<String> args) {
       filesRead++;
 
       log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
-      log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
-      log.down;
-      log.debug('Reading $i: $inFN');
-      log.down;
-      log.debug1('Read ${bytes0.length} bytes');
-      log.down;
-      log.debug1('rds0: $rds0');
-      //log.debug1(rds0.format(new Formatter(maxDepth: -1)));
-      log.up2;
+      log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}', 1);
+      log.debug('Reading $i: $inFN', 1);
+      log.debug1('Read ${bytes0.length} bytes', 1);
+      log.debug1('rds0: $rds0', -2);
 
       // Write a File
       Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
@@ -118,8 +113,7 @@ void main(List<String> args) {
 
       // Compare [Dataset]s
       //log.watermark = Level.info;
-      log.debug("Comparing Datasets: 0: ${rds0}, 1: ${rds1}");
-      log.down;
+      log.debug("Comparing Datasets: 0: ${rds0}, 1: ${rds1}", 1);
       var comparitor = new DatasetComparitor(rds0, rds1);
       comparitor.run;
       log.down;

@@ -26,7 +26,7 @@ String inPath0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath1 = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 final Logger log =
-new Logger('compare_file_bytes.dart', watermark:Severity.debug);
+new Logger('compare_file_bytes.dart', Level.debug);
 
 /// Compare two files byte by byte and report the first significant difference.
 void main(List<String> args) {

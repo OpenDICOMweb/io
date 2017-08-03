@@ -20,7 +20,7 @@ String inputDir3 = 'C:/dicom/6688';
 String outputDir = 'C:/odw/sdk/io/example/output';
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory', watermark: Severity.config);
+  final log = new Logger('read_write_read_directory', Level.config);
   int filesTotal = 0;
   int filesRead = 0;
 
@@ -53,31 +53,18 @@ void main(List<String> args) {
     // Write a File
     Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
     log.info('Writing file $i: $outFN');
-    log.down;
-//    outFN.writeAsBytesSync(bytes1);
-//   log.info('Wrote ${bytes1.length} bytes');
-//    activeStudies.remove(rds0.study);
-    log.up;
 
     // Now read the file we just wrote.
-    log.info('Reading Result file $i: $outFN');
-    log.down;
-/*    int length0 = rds0.LengthInBytes;
-    int length2 = rds1.lengthInBytes;
-    if (length0 == length2) {
-      log.info('Files have equal length.');
-    } else {
-      log.error('Files have different lengths: original($length0), result ($length2).');
-    }*/
+    log.info('Reading Result file $i: $outFN', 1);
+
     RootTagDataset rds1 = TagReader.readFile(inFN.file);
     log.debug('Instance: 1 ${rds1.info}');
-    log.debug1(rds1.format(new Formatter(maxDepth: -1)));
-    log.up;
+    log.debug1(rds1.format(new Formatter(maxDepth: -1)), -1);
 
     // Compare [Dataset]s
     //log.watermark = Level.info;
-    log.info("Comparing Datasets: 0: ${rds0}, 1: ${rds1}");
-    log.down;
+    log.info("Comparing Datasets: 0: ${rds0}, 1: ${rds1}", 1);
+
     var comparitor = new DatasetComparitor(rds0, rds1);
     comparitor.run;
     if (comparitor.hasDifference) {
@@ -92,15 +79,14 @@ void main(List<String> args) {
     // Compare input and output
     log.info('Comparing Files by Bytes:');
     log.down;
-    log.debug('Original: ${inFN.path}');
+    log.debug('Original: ${inFN.path}', 1);
     log.debug('Result: ${outFN.path}');
     FileCompareResult result = compareFiles(inFN.path, outFN.path, log);
     if (result == null) {
-      log.info('Files are identical');
+      log.info('Files are identical', -2);
     } else {
-      log.info('Files have differences at: $result');
+      log.info('Files have differences at: $result', -2);
     }
-    log.up2;
   }
   Timestamp endTime = new Timestamp("End Time:");
   log.config('Completed tests at $endTime ...');

@@ -24,7 +24,7 @@ String outRoot3 = 'test/output/root3';
 
 void main() {
   final Logger log =
-      new Logger('readFile_test.dart', watermark: Severity.debug);
+      new Logger('readFile_test.dart', Level.debug);
 // Get the files in the directory
   Filename files = new Filename(file5);
   Filename file1 = new Filename.fromFile(new File(

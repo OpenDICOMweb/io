@@ -26,7 +26,7 @@ String path5 =
 String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 
 void main(List<String> args) {
-  final log = new Logger("read_file", watermark: Severity.debug);
+  final log = new Logger("read_file", Level.debug);
   Filename fn = new Filename(path5);
   RootTagDataset rds = TagReader.readFile(fn.file);
   log.debug('Instance: $rds');
