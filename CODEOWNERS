@@ -1,0 +1,5 @@
+# This file contains the code owners for the Open DICOMweb Software Development Kit.
+# Each line is a file pattern followed by one or more owners.
+
+# These owners will be the default owners for everything in the repo.
+*  @jfphilbin jim@philbin.us
