@@ -36,7 +36,7 @@ String toAbsolute(String path) {
 /// This is a file from a non-DICOM File System.
 //TODO: change this so it is based on [File] rather than [path].
 class Filename {
-  static final log = new Logger('Filename', watermark: Severity.info);
+  static final log = new Logger('Filename', Level.info);
   final String _path;
   FileSubtype _subtype;
   File _file;

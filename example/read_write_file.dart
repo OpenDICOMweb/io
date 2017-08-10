@@ -4,7 +4,6 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-
 import 'package:common/common.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
@@ -65,7 +64,7 @@ String out3 =
 
 String outX = "C:/odw/sdk/io/example/output/foo.dcm";
 
-final log = new Logger("read_write_file", watermark: Severity.debug);
+final log = new Logger("read_write_file", Level.debug);
 
 void main(List<String> args) {
   Filename fn = new Filename(in10);
