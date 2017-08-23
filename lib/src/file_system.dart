@@ -11,8 +11,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/entity.dart';
-import 'package:dictionary/uid.dart';
 import 'package:io/src/file_system_base.dart';
+import 'package:uid/uid.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';

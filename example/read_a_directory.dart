@@ -6,9 +6,9 @@
 
 import 'dart:io';
 
-import 'package:common/logger.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
+import 'package:logger/logger.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
@@ -26,8 +26,8 @@ void main() {
   Directory dir = new Directory(inRoot1);
 
   List<FileSystemEntity> fList = dir.listSync();
-  log.info('File count: ${fList.length}');
-  for (File f in fList) log.info('File: $f');
+  log.info0('File count: ${fList.length}');
+  for (File f in fList) log.info0('File: $f');
 
   RootTagDataset rds;
   for (File file in fList) {

@@ -6,10 +6,10 @@
 
 //import 'dart:convert';
 
-import 'package:common/logger.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
+import 'package:logger/logger.dart';
 
 //TODO: cleanup for V0.9.0
 
@@ -27,7 +27,7 @@ void main(List<String> args) {
 
   for (Filename fn in files) {
     int count = 0;
-    log.info('*** Starting($count): $fn');
+    log.info0('*** Starting($count): $fn');
     if (fn.isPart10) {
       RootTagDataset  rds = TagReader.readFile(fn.file);
       if (rds == null) {
@@ -49,7 +49,7 @@ void main(List<String> args) {
     } else {
       log.debug('  *** Skipping none ".dcm" file: $fn');
     }
-    log.info('*** Finished $fn\n');
+    log.info0('*** Finished $fn\n');
   }
 }
 

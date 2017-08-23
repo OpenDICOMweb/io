@@ -4,10 +4,11 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:common/format.dart';
+
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
+import 'package:logger/logger.dart';
 import "package:test/test.dart";
 
 String path0 = 'C:/odw/sdk/test_tools/test_data/TransferUIDs/1.2.840'

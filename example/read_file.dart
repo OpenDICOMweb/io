@@ -4,11 +4,10 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'package:common/format.dart';
-import 'package:common/logger.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
+import 'package:logger/logger.dart';
 
 String path0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String path1 =

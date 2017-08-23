@@ -6,12 +6,11 @@
 
 import 'dart:typed_data';
 
-import 'package:common/format.dart';
-import 'package:common/logger.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
+import 'package:logger/logger.dart';
 
 String inputDir = 'C:/odw/sdk/io/example/input';
 String inputDir2 = 'C:/odw/test_data/sfd/CT';
@@ -58,14 +57,14 @@ void main(List<String> args) {
     FileTestError error;
 
     if (!inFN.isDicom) {
-      log.info('Skipping File $i Non-Dicom File:$inFN');
+      log.info0('Skipping File $i Non-Dicom File:$inFN');
       continue;
     } else if (inFN.isDicom) {
       // Read at least the FMI to get the Transfer Syntax
       Uint8List bytes0 = inFN.file.readAsBytesSync();
       var rds0 = TagReader.readFile(inFN.file);
       if (rds0 == null) {
-        log.info('Skipping File $i Bad TS: $inFN');
+        log.info0('Skipping File $i Bad TS: $inFN');
         continue;
       }
 
@@ -77,8 +76,8 @@ void main(List<String> args) {
       }
       filesRead++;
 
-      log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
-      log.info('*** ($filesRead) File $i of $filesTotal: ${inFN.path}', 1);
+      log.info0('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
+      log.info0('*** ($filesRead) File $i of $filesTotal: ${inFN.path}', 1);
       log.debug('Reading $i: $inFN', 1);
       log.debug1('Read ${bytes0.length} bytes', 1);
       log.debug1('rds0: $rds0', -2);
@@ -127,7 +126,8 @@ void main(List<String> args) {
       } else {
         log.debug("Dataset are identical");
       }
-      log.up2;
+      log.up;
+      log.up;
 
      // log.watermark = Level.debug;
       // Compare input and output

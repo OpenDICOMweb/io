@@ -6,9 +6,8 @@
 
 import 'dart:typed_data';
 
-import 'package:common/ascii.dart';
-import 'package:common/logger.dart';
 import 'package:io/io.dart';
+import 'package:system/system.dart';
 
 /// A simple program that compares to files byte by byte.
 ///

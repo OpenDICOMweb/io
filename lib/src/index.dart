@@ -7,9 +7,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dictionary/uid.dart';
 import 'package:io/src/file_system_base.dart';
 import 'package:io/src/file_type.dart';
+import 'package:uid/uid.dart';
 
 /// An interface for an [Index] of a [FileSystem].
 class FSIndex {

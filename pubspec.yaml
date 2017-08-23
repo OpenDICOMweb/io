@@ -11,32 +11,28 @@ environment:
 dependencies:
   args: any
   path: any
-  common:
-  #  git:
-  #    url: https://github.com/OpenDICOMweb/common.git
-  #    ref: develop
-  #    version: ^0.5.2
-      path: C:/odw/sdk/common
-      version: ^0.5.6
-  core:
-  #  git:
-  #    url: https://github.com/OpenDICOMweb/core.git
-  #    ref: develop
-  #    version: ^0.5.1
-     path: C:/odw/sdk/core
-     version: ^0.5.6
   dcm_convert:
-  #  git:
-  #    url: https://github.com/OpenDICOMweb/convert.git
-  #    ref: develop
-  #    version: ^0.5.0
     path: C:/odw/sdk/convert
-    version: ^0.5.6
+    version: ^0.6.0
+  logger:
+    path: C:/odw/sdk/logger
+    version: ^0.6.0
+  uid:
+    path: C:/odw/sdk/uid
+    version: ^0.6.1
 
 dev_dependencies:
   benchmark_harness: ^1.0.4
+  coverage: "^0.7.3"
+  dart_dev: "^1.0.0"
+  dart_style: ">=0.1.8 <0.3.0"
+  dartdoc: "^0.4.0"
   grinder: ^0.8.0
   test:  ^0.12.0
+  test_tools:
+    path: C:/odw/sdk/test_tools
+    version: ^0.6.0
+  yaml: ^2.1.12
 
 
 

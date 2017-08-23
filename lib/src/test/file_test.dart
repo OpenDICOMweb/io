@@ -6,13 +6,12 @@
 
 import 'dart:typed_data';
 
-import 'package:common/format.dart';
-import 'package:common/logger.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/src/filename.dart';
 import 'package:io/src/test/compare_files.dart';
 import 'package:io/src/test/file_test_error.dart';
+import 'package:logger/logger.dart';
 
 Logger log = new Logger("DicomFileTest");
 

@@ -4,12 +4,12 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'package:common/common.dart';
+
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
-import 'package:dictionary/dictionary.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
+import 'package:system/system.dart';
 
 //String inPath = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath =
@@ -68,20 +68,20 @@ final log = new Logger("read_write_file", Level.debug);
 
 void main(List<String> args) {
   Filename fn = new Filename(in10);
-  log.info('Reading: $fn');
+  log.info0('Reading: $fn');
   RootTagDataset rds0 = TagReader.readFile(fn.file);
-  log.info('Decoded: $rds0');
+  log.info0('Decoded: $rds0');
   if (rds0 == null) return null;
   log.debug(rds0.format(new Formatter(maxDepth: -1)));
-  log.info('${rds0[kFileMetaInformationGroupLength].info}');
-  log.info('${rds0[kFileMetaInformationVersion].info}');
+  log.info0('${rds0[kFileMetaInformationGroupLength].info}');
+  log.info0('${rds0[kFileMetaInformationVersion].info}');
   // Write a File
   Filename fnOut = new Filename.withType(outX, FileSubtype.part10);
   fnOut.writeSync(rds0);
 
-  log.info('Re-reading: $fnOut');
+  log.info0('Re-reading: $fnOut');
   RootTagDataset rds1 = TagReader.readFile(fn.file);
-  log.info(rds1);
+  log.info0(rds1);
   log.debug(rds1.format(new Formatter(maxDepth: -1)));
 
   // Compare [Dataset]s
@@ -91,15 +91,15 @@ void main(List<String> args) {
     log.fatal('Result: ${comparitor.info}');
   }
   // Compare input and output
-  log.info('Comparing Bytes:');
+  log.info0('Comparing Bytes:');
   log.down;
-  log.info('Original: ${fn.path}');
-  log.info('Result: ${fnOut.path}');
+  log.info0('Original: ${fn.path}');
+  log.info0('Result: ${fnOut.path}');
   FileCompareResult out = compareFiles(fn.path, fnOut.path, log);
   if (out == null) {
-    log.info('Files are identical.');
+    log.info0('Files are identical.');
   } else {
-    log.info('Files are different!');
+    log.info0('Files are different!');
     log.fatal('$out');
   }
   log.up;

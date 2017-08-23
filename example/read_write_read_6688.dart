@@ -5,13 +5,12 @@
 // See the   AUTHORS file for other contributors.
 
 
-import 'package:common/format.dart';
-import 'package:common/logger.dart';
-import 'package:common/timestamp.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
+import 'package:logger/logger.dart';
+import 'package:timing/timestamp.dart';
 
 String inputDir = 'C:/odw/sdk/io/example/input';
 String inputDir2 = 'C:/odw/test_data/sfd/CT';
@@ -41,7 +40,7 @@ void main(List<String> args) {
     log.down;
     RootTagDataset rds0 = TagReader.readFile(inFN.file);
     if (rds0 == null) {
-      log.info('Skipping File $i Bad TS: $inFN');
+      log.info0('Skipping File $i Bad TS: $inFN');
       continue;
     }
     filesRead++;
@@ -52,10 +51,10 @@ void main(List<String> args) {
 
     // Write a File
     Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
-    log.info('Writing file $i: $outFN');
+    log.info0('Writing file $i: $outFN');
 
     // Now read the file we just wrote.
-    log.info('Reading Result file $i: $outFN', 1);
+    log.info0('Reading Result file $i: $outFN', 1);
 
     RootTagDataset rds1 = TagReader.readFile(inFN.file);
     log.debug('Instance: 1 ${rds1.info}');
@@ -63,29 +62,29 @@ void main(List<String> args) {
 
     // Compare [Dataset]s
     //log.watermark = Level.info;
-    log.info("Comparing Datasets: 0: ${rds0}, 1: ${rds1}", 1);
+    log.info0("Comparing Datasets: 0: ${rds0}, 1: ${rds1}", 1);
 
     var comparitor = new DatasetComparitor(rds0, rds1);
     comparitor.run;
     if (comparitor.hasDifference) {
-      log.info('Result: ${comparitor.bad}');
+      log.info0('Result: ${comparitor.bad}');
       throw "stop";
     } else {
-      log.info("Dataset are identical");
+      log.info0("Dataset are identical");
     }
     log.up;
 
     // log.watermark = Level.debug;
     // Compare input and output
-    log.info('Comparing Files by Bytes:');
+    log.info0('Comparing Files by Bytes:');
     log.down;
     log.debug('Original: ${inFN.path}', 1);
     log.debug('Result: ${outFN.path}');
     FileCompareResult result = compareFiles(inFN.path, outFN.path, log);
     if (result == null) {
-      log.info('Files are identical', -2);
+      log.info0('Files are identical', -2);
     } else {
-      log.info('Files have differences at: $result', -2);
+      log.info0('Files have differences at: $result', -2);
     }
   }
   Timestamp endTime = new Timestamp("End Time:");

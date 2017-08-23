@@ -6,7 +6,7 @@
 
 import 'dart:typed_data';
 
-import 'package:common/common.dart';
+import 'package:system/system.dart';
 
 void printIt(Uint8List bytes, int offset, int count) {
   int length = bytes.length;
@@ -16,7 +16,7 @@ void printIt(Uint8List bytes, int offset, int count) {
   for (int i = 0; i < count; i += 4) {
     int first = bd.getUint16(offset + i);
     int second = bd.getUint16(offset + i + 2);
-    print('${Int.hex(first)},${Int.hex(second)}');
+    print('$hex32(first)},${hex32(second)}');
   }
 }
 

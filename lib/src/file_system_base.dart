@@ -9,7 +9,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:dictionary/dictionary.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';

@@ -6,10 +6,10 @@
 
 import 'dart:io';
 
-import 'package:common/logger.dart';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
+import 'package:logger/logger.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
@@ -25,14 +25,14 @@ final log = new Logger('read_write_file');
 void main() {
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inRoot0);
-  log.info('File count: ${files.length}');
+  log.info0('File count: ${files.length}');
 
   // Read, parse, and print a summary of each file.
   for (Filename file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
       TagDataset rds = file.readSync();
-      log.info(rds.info);
+      log.info0(rds.info);
     } else {
       print('Skipping ... $file');
     }

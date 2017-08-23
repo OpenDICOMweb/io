@@ -6,8 +6,8 @@
 
 import 'dart:io';
 
-import 'package:common/logger.dart';
 import 'package:io/io.dart';
+import 'package:logger/logger.dart';
 import "package:test/test.dart";
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
