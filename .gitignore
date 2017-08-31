@@ -19,7 +19,7 @@ pubspec.lock
 doc/api/
 
 # JetBrains IDEs
-.idea/
+/.idea/
 *.iml
 *.ipr
 *.iws

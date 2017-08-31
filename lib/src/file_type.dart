@@ -8,6 +8,7 @@
 import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';
+import 'ie_level.dart';
 
 // Flush later.
 //int _firstDot(String s) => p.basename(s).indexOf('.');

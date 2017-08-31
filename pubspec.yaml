@@ -1,6 +1,6 @@
 name: io
 description: A starting point for Dart libraries or applications.
-version: 0.5.5
+version: 0.6.0
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
 homepage: https://github.com/OpenDICOMweb/io
@@ -16,6 +16,9 @@ dependencies:
     version: ^0.6.0
   logger:
     path: C:/odw/sdk/logger
+    version: ^0.6.0
+  timer:
+    path: C:/odw/sdk/timer
     version: ^0.6.0
   uid:
     path: C:/odw/sdk/uid
