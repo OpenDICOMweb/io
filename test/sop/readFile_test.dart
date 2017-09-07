@@ -8,6 +8,7 @@ import 'dart:io';
 
 import 'package:io/io.dart';
 import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 import "package:test/test.dart";
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -23,8 +24,7 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
-  final Logger log =
-      new Logger('readFile_test.dart', Level.debug);
+  Server.initialize(name: 'sop/readFile_test', level: Level.info0);
 // Get the files in the directory
   Filename files = new Filename(file5);
   Filename file1 = new Filename.fromFile(new File(
