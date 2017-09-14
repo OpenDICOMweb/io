@@ -25,16 +25,17 @@ String outRoot3 = 'test/output/root3';
 
 void main() {
   Server.initialize(name: 'sop/readFile_test', level: Level.info0);
-// Get the files in the directory
+
+  // Get the files in the directory
   Filename files = new Filename(file5);
   Filename file1 = new Filename.fromFile(new File(
       "E:/dicom/1.2.840.113619.2.5.1762583153.215519.978957063.89.dcm"));
 
   group("Data set", () {
     test("Create a data set object from map", () {
-// Read, parse, and print a summary of each file.
 
-      //TODO: make print out neet:
+      // Read, parse, and print a summary of each file.
+      //TODO: make print out neat:
       log.debug(files.path);
       log.debug(files.typeExt);
       log.debug(files.objectType);
