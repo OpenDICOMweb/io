@@ -1,5 +1,5 @@
 name: io
-description: A starting point for Dart libraries or applications.
+description: ODW input/output (files, network, etc.) package
 version: 0.6.0
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
@@ -13,16 +13,13 @@ dependencies:
   path: any
   dcm_convert:
     path: C:/odw/sdk/convert
-    version: ^0.6.0
-  logger:
-    path: C:/odw/sdk/logger
-    version: ^0.6.0
+    version: ^0.6.3
   timer:
     path: C:/odw/sdk/timer
     version: ^0.6.0
   uid:
     path: C:/odw/sdk/uid
-    version: ^0.6.1
+    version: ^0.6.3
 
 dev_dependencies:
   benchmark_harness: ^1.0.4

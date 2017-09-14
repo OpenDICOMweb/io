@@ -6,7 +6,7 @@
 
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 
 const String inputDir = "C:/odw/test_data/problems/";
@@ -19,7 +19,7 @@ String p4 = inputDir + "d1faaaaa-edf8-450e-8f62-35ebe592ca1b.dcm";
 List<String> filesList = [p2];
 
 void main() {
-  Logger log = new Logger("read_a_problem_file", Level.debug);
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
   for (String path in filesList) {
     print('Reading file: $path');

@@ -10,8 +10,8 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
-import 'package:logger/logger.dart';
 import 'package:path/path.dart' as p;
+import 'package:system/system.dart';
 
 import 'dcm_media_type.dart';
 import 'file_type.dart';
@@ -36,7 +36,6 @@ String toAbsolute(String path) {
 /// This is a file from a non-DICOM File System.
 //TODO: change this so it is based on [File] rather than [path].
 class Filename {
-  static final log = new Logger('Filename', Level.info);
   final String _path;
   FileSubtype _subtype;
   File _file;

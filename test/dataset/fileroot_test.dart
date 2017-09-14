@@ -8,13 +8,14 @@
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 import "package:test/test.dart";
 
 String path0 = 'C:/odw/sdk/test_tools/test_data/TransferUIDs/1.2.840'
     '.10008.1.2.5.dcm';
 
 void main() {
+  Server.initialize(name: 'fileroot_test.dart', level: Level.info0);
 
   group("RLE Data set", () {
     test("Verify RLE parsing", () {

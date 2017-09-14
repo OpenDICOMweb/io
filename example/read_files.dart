@@ -9,7 +9,7 @@
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 //TODO: cleanup for V0.9.0
 
@@ -19,7 +19,7 @@ import 'package:logger/logger.dart';
 /// DICOM file extension and print's out some information about the
 /// [Dataset] contained in the file.
 void main(List<String> args) {
-  final Logger log = new Logger('read_files.dart');
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
   //var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CT";

@@ -22,8 +22,6 @@ import 'package:system/system.dart';
 /// This program could be improved in several ways:
 ///   * Try to parse both files simultaneously.
 
-final log = new Logger('FileCompare', Level.info);
-
 class FileCompareResult {
   Filename infile;
   Filename outfile;
@@ -67,13 +65,11 @@ class FileByteDiff {
 }
 
 /// Compare two files byte by byte and report the first significant difference.
-FileCompareResult compareFiles(String path0, String path1,
-    [Logger log, level = Level.config]) {
+FileCompareResult compareFiles(String path0, String path1) {
   final List<FileByteDiff> diffs = [];
   final maxProblems = 3;
   bool hasProblems = false;
   bool contiguous = false;
-  log.level = level;
 
   log.down;
   Filename fn0 = new Filename(path0);

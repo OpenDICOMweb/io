@@ -9,7 +9,7 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
@@ -21,8 +21,10 @@ String outRoot1 = 'test/output/root1';
 String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
-final log = new Logger('read_write_file');
+
 void main() {
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
+
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inRoot0);
   log.info0('File count: ${files.length}');

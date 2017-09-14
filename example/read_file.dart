@@ -7,7 +7,7 @@
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 String path0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String path1 =
@@ -25,7 +25,8 @@ String path5 =
 String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 
 void main(List<String> args) {
-  final log = new Logger("read_file", Level.debug);
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
+
   Filename fn = new Filename(path5);
   RootTagDataset rds = TagReader.readFile(fn.file);
   log.debug('Instance: $rds');

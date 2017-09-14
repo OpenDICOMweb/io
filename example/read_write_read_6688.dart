@@ -9,7 +9,7 @@ import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 import 'package:timer/timestamp.dart';
 
 String inputDir = 'C:/odw/sdk/io/example/input';
@@ -19,7 +19,7 @@ String inputDir3 = 'C:/dicom/6688';
 String outputDir = 'C:/odw/sdk/io/example/output';
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory', Level.config);
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
   int filesTotal = 0;
   int filesRead = 0;
 
@@ -80,7 +80,7 @@ void main(List<String> args) {
     log.down;
     log.debug('Original: ${inFN.path}', 1);
     log.debug('Result: ${outFN.path}');
-    FileCompareResult result = compareFiles(inFN.path, outFN.path, log);
+    FileCompareResult result = compareFiles(inFN.path, outFN.path);
     if (result == null) {
       log.info0('Files are identical', -2);
     } else {

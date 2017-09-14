@@ -9,7 +9,7 @@ import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
-import 'package:system/system.dart';
+import 'package:system/server.dart';
 
 //String inPath = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath =
@@ -64,9 +64,10 @@ String out3 =
 
 String outX = "C:/odw/sdk/io/example/output/foo.dcm";
 
-final log = new Logger("read_write_file", Level.debug);
 
-void main(List<String> args) {
+void main() {
+  Server.initialize(name: 'read_write_file.dart', level: Level.debug);
+
   Filename fn = new Filename(in10);
   log.info0('Reading: $fn');
   RootTagDataset rds0 = TagReader.readFile(fn.file);
@@ -95,7 +96,7 @@ void main(List<String> args) {
   log.down;
   log.info0('Original: ${fn.path}');
   log.info0('Result: ${fnOut.path}');
-  FileCompareResult out = compareFiles(fn.path, fnOut.path, log);
+  FileCompareResult out = compareFiles(fn.path, fnOut.path);
   if (out == null) {
     log.info0('Files are identical.');
   } else {

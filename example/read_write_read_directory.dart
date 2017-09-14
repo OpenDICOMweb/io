@@ -10,7 +10,7 @@ import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 String inputDir = 'C:/odw/sdk/io/example/input';
 String inputDir2 = 'C:/odw/test_data/sfd/CT';
@@ -38,7 +38,7 @@ File Text Error:
 }
 
 void main(List<String> args) {
-  final log = new Logger('read_write_read_directory',  Level.config);
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
   Stopwatch watch = new Stopwatch();
   int filesTotal = 0;
   int filesRead = 0;

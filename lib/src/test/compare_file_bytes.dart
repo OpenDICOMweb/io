@@ -7,7 +7,7 @@
 import 'dart:typed_data';
 
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 /// A simple program that compares to files byte by byte.
 ///
@@ -25,11 +25,10 @@ import 'package:logger/logger.dart';
 String inPath0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath1 = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
-final Logger log =
-new Logger('compare_file_bytes.dart', Level.debug);
-
 /// Compare two files byte by byte and report the first significant difference.
 void main(List<String> args) {
+  Server.initialize(name: 'compare_file_bytes.dart', level: Level.info0);
+
   Filename fn0 = new Filename(inPath0);
   Uint8List bytes0 = fn0.file.readAsBytesSync();
   int length0 = bytes0.length;

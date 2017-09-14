@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
-import 'package:logger/logger.dart';
+import 'package:system/server.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
 String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
@@ -21,7 +21,7 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
-  Logger log = new Logger("read_a_directory");
+  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
   Directory dir = new Directory(inRoot1);
 

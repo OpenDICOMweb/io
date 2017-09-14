@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
+import 'package:system/server.dart';
 import "package:test/test.dart";
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -24,6 +25,8 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
+  Server.initialize(name: 'read_test.dart', level: Level.info0);
+
   // Get the files in the directory
   List<Filename> files = Filename.listFromDirectory(inRoot5);
   stdout.writeln('File count: ${files.length}');

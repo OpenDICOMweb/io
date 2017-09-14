@@ -11,8 +11,7 @@ import 'dart:typed_data';
 import 'package:core/core.dart';
 import 'package:dcm_convert/dcm.dart';
 import 'package:io/io.dart';
-import 'package:logger/logger.dart';
-import 'package:system/system.dart';
+import 'package:system/server.dart';
 
 //TODO: cleanup for V0.9.0
 
@@ -27,7 +26,9 @@ String outRoot = "C:/odw/sdk/io/bin/output";
 /// in its tree, reads them and then stores them in the appropriate
 /// place in the DICOM [FileSystem].
 //TODO: make this work with arguments. Uncomment the source and target arguments
-void main(List<String> args) {
+void main() {
+  Server.initialize(name: 'read_write_file.dart', level: Level.info0);
+
   //var results = parse(args);
   //var source = results['source'];
   var source = r"C:/odw/test_data/sfd/CR_and_RF";
