@@ -15,8 +15,6 @@ import 'package:system/server.dart';
 
 /// Test of
 FileTestError dicomFileTest(inFile, outFile) {
-  Server.initialize(name: 'file_test.dart', level: Level.info0);
-
   Filename sourceFN;
   Uint8List sourceBytes;
   RootTagDataset rds0;
