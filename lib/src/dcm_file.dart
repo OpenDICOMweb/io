@@ -31,35 +31,35 @@ class DcmFile {
 
   Uint8List get bytes {
     if (fType.subtype.isBinary) {
-      File f = new File(path);
+      final f = new File(path);
       return f.readAsBytesSync();
     } else {
-      throw "Not a binary file type $this";
+      throw 'Not a binary file type $this';
     }
   }
 
   String get json {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   String get xml {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   String toString() => 'DcmFile($path)';
 
   Future<bool> write(Uint8List bytes) async {
-    File f = new File(path);
+    final f = new File(path);
     await f.writeAsBytes(bytes);
     return true;
   }
 
   void writeSync(Uint8List bytes) {
-    //  print("writeSync: path:$path");
-    File f = new File(path);
+    //  print('writeSync: path:$path');
+    final f = new File(path);
     if (f.existsSync()) {
-      throw "File $f already exists";
+      throw 'File $f already exists';
     } else {
       //    print('Creating: $f');
       f.createSync(recursive: true);

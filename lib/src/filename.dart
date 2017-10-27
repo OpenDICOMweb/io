@@ -22,7 +22,7 @@ import 'utils.dart';
 int _firstDot(String s) => p.basename(s).indexOf('.');
 
 String toAbsolute(String path) {
-  var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
+  final s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
   return s.replaceAll('\\', '/');
 }
 
@@ -49,7 +49,7 @@ class Filename {
         _path = toAbsolute(file.path);
 
   factory Filename.withExt(Filename fn, [String ext = 'out']) {
-    var path = p.basenameWithoutExtension(fn.path) + '.$ext';
+    final path = p.basenameWithoutExtension(fn.path) + '.$ext';
     return new Filename(path);
   }
 
@@ -132,7 +132,7 @@ class Filename {
       return JsonDecoder.decode(bytes);*/
     } else if (isXml) {
       // Uint8List bytes = file.readAsBytesSync();
-      throw "XML Umplemented";
+      throw 'XML Umplemented';
     }
     throw "Shouldn't get here";
   }
@@ -149,25 +149,25 @@ class Filename {
 //      return await JsonDecoder.decode(bytes);
     } else if (isXml) {
       // Uint8List bytes = file.readAsBytesSync();
-      throw "XML Umplemented";
+      throw 'XML Umplemented';
     } else if (subtype.isUnknown) {
-      throw "Unknown FileType: $path";
+      throw 'Unknown FileType: $path';
     }
     throw "Shouldn't get here";
   }
 
   bool writeSync(TagDataset ds) {
     if (isBinary) {
-      Uint8List bytes = TagWriter.writePath(ds, _path);
+      final bytes = TagWriter.writePath(ds, _path);
       log.debug('Writing ${bytes.lengthInBytes} bytes.');
       file.writeAsBytesSync(bytes);
       return true;
     } else if (isJson) {
       //Uint8List bytes = JsonEncoder.encode(entity);
       //file.writeAsBytesSync(bytes);
-      throw "JSON Umplemented";
+      throw 'JSON Umplemented';
     } else if (isXml) {
-      throw "XML Umplemented";
+      throw 'XML Umplemented';
     }
     throw "Shouldn't get here";
   }
@@ -180,7 +180,7 @@ class Filename {
 
   bool write(Entity entity) {
     //TODO: finish
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   String get info => '''
@@ -200,12 +200,12 @@ Subtype: ${FileSubtype.parse(_path)};
 
   //TODO move to utilities
   static List<Filename> listFromDirectory(String source,
-      [String ext = ".dcm"]) {
+      [String ext = '.dcm']) {
     log.debug('source: $source');
-    List<File> files = getFilesFromDirectory(source, ext);
+    final files = getFilesFromDirectory(source, ext);
     log.debug('Total FSEntities: ${files.length}');
-    List<Filename> fNames = new List(files.length);
-    for (int i = 0; i < files.length; i++)
+    final fNames = new List(files.length);
+    for (var i = 0; i < files.length; i++)
       fNames[i] = new Filename(files[i].path);
     return fNames;
   }

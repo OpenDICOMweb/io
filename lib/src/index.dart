@@ -46,8 +46,8 @@ class FSIndex {
   //TODO: verify this is correct.  If it is move to index.dart
   String toPath(FileSubtype fType, Uid study,
       [Uid series, Uid instance, String extension]) {
-    String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
-    String part3 = (series == null) ? "" : '/$series';
+    final part4 = (instance == null) ? '' : '/$instance${fType.extension}';
+    final part3 = (series == null) ? '' : '/$series';
     return '$path/$study$part3$part4';
   }
 

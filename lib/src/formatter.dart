@@ -14,18 +14,18 @@ class FSFormatter {
 
   FSFormatter({this.indent: 2});
 
-  String get sp => "".padRight(indent * level, " ");
+  String get sp => ''.padRight(indent * level, ' ');
 
   String fmt(Object o) => '$sp$count: $o';
 
-  String call(FileSystemEntity fse, [String output = ""]) {
-    var s = fmt(fse);
+  String call(FileSystemEntity fse, [String output = '']) {
+    final s = fmt(fse);
     count++;
   //  print(s);
     output += s;
     if (fse is Directory) {
       level++;
-      var list = fse.listSync(followLinks: false);
+      final list = fse.listSync(followLinks: false);
       for (var e in list) output += call(e, output);
       level--;
     }
