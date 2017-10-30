@@ -21,11 +21,11 @@ void main(List<String> args) {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
   //var results = parse(args);
   //var source = results['source'];
-  var source = r"C:/odw/test_data/sfd/CT";
-  List<Filename> files = Filename.listFromDirectory(source);
+  final source = r'C:/odw/test_data/sfd/CT';
+  final files = Filename.listFromDirectory(source);
 
-  for (Filename fn in files) {
-    int count = 0;
+  for (var fn in files) {
+    var count = 0;
     log.info0('*** Starting($count): $fn');
     if (fn.isPart10) {
       RootDataset  rds = TagReader.readFile(fn.file);

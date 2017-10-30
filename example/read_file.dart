@@ -26,9 +26,9 @@ String outPath = 'C:/odw/sdk/io/example/output/out.dcm';
 void main(List<String> args) {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
-  Filename fn = new Filename(path5);
-  RootDataset rds = TagReader.readFile(fn.file);
-  log.debug('Instance: $rds');
-  log.debug('dataset length: ${rds.length} elements');
-  log.debug(rds.format(new Formatter(maxDepth: 146)));
+  final fn = new Filename(path5);
+  final rds = TagReader.readFile(fn.file);
+  log..debug('Instance: $rds')
+    ..debug('dataset length: ${rds.length} elements')
+    ..debug(rds.format(new Formatter(maxDepth: 146)));
 }

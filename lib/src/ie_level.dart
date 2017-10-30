@@ -11,10 +11,10 @@ class IELevel {
 
   const IELevel(this.level, this.name);
 
-  static const subject = const IELevel(0, 'Subject');
-  static const study = const IELevel(0, 'Study');
-  static const series = const IELevel(0, 'Series');
-  static const instance = const IELevel(0, 'Instance');
-  static const dataset = const IELevel(0, 'Dataset');
+  static const IELevel subject = const IELevel(0, 'Subject');
+  static const IELevel study = const IELevel(0, 'Study');
+  static const IELevel series = const IELevel(0, 'Series');
+  static const IELevel instance = const IELevel(0, 'Instance');
+  static const IELevel dataset = const IELevel(0, 'Dataset');
 }
 
