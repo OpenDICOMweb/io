@@ -29,11 +29,10 @@ class FileCompareResult {
   bool hasProblems;
   List<FileByteDiff> diffs;
 
-  FileCompareResult(
-      this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
+  FileCompareResult(this.infile, this.outfile, this.diffs,
+      {this.sameLength, this.hasProblems});
 
-  String get lengthMsg =>
-      (sameLength) ? 'Equal lengths' : '** Different Lengths';
+  String get lengthMsg => (sameLength) ? 'Equal lengths' : '** Different Lengths';
 
   String get fmtDiffs {
     var out = 'Differences';
@@ -66,7 +65,7 @@ class FileByteDiff {
 
 /// Compare two files byte by byte and report the first significant difference.
 FileCompareResult compareFiles(String path0, String path1) {
-  final diffs = [];
+  final diffs = <FileByteDiff>[];
   final maxProblems = 3;
   final hasProblems = false;
   var contiguous = false;
@@ -127,18 +126,20 @@ FileCompareResult compareFiles(String path0, String path1) {
   log.up;
 
   if (diffs.isNotEmpty) {
-    final result =
-        new FileCompareResult(fn0, fn1, isLengthEqual, hasProblems, diffs);
+    final result = new FileCompareResult(fn0, fn1, diffs,
+        sameLength: isLengthEqual, hasProblems: hasProblems);
     if (hasProblems) {
       log.debug('**** File are different and have problems');
     } else {
       log.debug('** Warning Files are different but result is correct');
     }
-    log..up
+    log
+      ..up
       ..debug(result);
     return result;
   }
-  log..debug('Files are identical')
+  log
+    ..debug('Files are identical')
     ..up;
   return null;
 }
@@ -154,19 +155,18 @@ String _charToString(int c) {
 String _toDecimal(int i) => i.toRadixString(10).padLeft(4, ' ');
 String _toHex(int i) => i.toRadixString(16).padLeft(2, '0').padLeft(4, ' ');
 
-String _foundProblem(
-    Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
+String _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
   var out = 'Found a Problem at index $i\n';
   out += '  $i: ${bytes0[i]} != ${bytes1[i]}\n';
 
-  final count = [];
-  final index = [];
-  final dec0 = [];
-  final hex0 = [];
-  final char0 = [];
-  final dec1 = [];
-  final hex1 = [];
-  final char1 = [];
+  final count = <String>[];
+  final index = <String>[];
+  final dec0 = <String>[];
+  final hex0 = <String>[];
+  final char0 = <String>[];
+  final dec1 = <String>[];
+  final hex1 = <String>[];
+  final char1 = <String>[];
 
   var begin = i - before;
   var end = i;

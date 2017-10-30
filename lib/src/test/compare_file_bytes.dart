@@ -26,7 +26,7 @@ String inPath0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath1 = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 /// Compare two files byte by byte and report the first significant difference.
-void main(final args) {
+void main(List<String> args) {
   Server.initialize(name: 'compare_file_bytes.dart', level: Level.info0);
 
   final fn0 = new Filename(inPath0);
@@ -58,12 +58,12 @@ void printDifference(
     if (bytes0[i] == bytes1[i]) break;
     log.debug('$i: ${bytes0[i]} != ${bytes1[i]}');
 
-    final d0List = [];
-    final h0List = [];
-    final c0List = [];
-    final d1List = [];
-    final h1List = [];
-    final c1List = [];
+    final d0List = <String>[];
+    final h0List = <String>[];
+    final c0List = <String>[];
+    final d1List = <String>[];
+    final h1List = <String>[];
+    final c1List = <String>[];
 
     for (var k = 0; k < before; k++) {
       // File 0

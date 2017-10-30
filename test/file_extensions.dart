@@ -17,26 +17,26 @@ import 'package:path/path.dart' as p;
 ///                   / name /ext
 
 Filename convert(File f) {
-  String name = f.path;
-  String dir = p.dirname(name);
-  String ext = p.extension(name);
-  FileSubtype subtype = FileSubtype.subtypes[ext];
+  final name = f.path;
+  final dir = p.dirname(name);
+  final ext = p.extension(name);
+  final subtype = FileSubtype.subtypes[ext];
   print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
   return new Filename(name);
 }
 
 String ext(String s) {
-  var base = p.basename(s);
-  var i = base.indexOf('.');
-  var ext = base.substring(i);
+  final base = p.basename(s);
+  final i = base.indexOf('.');
+  final ext = base.substring(i);
   return ext;
 }
 
 List<Filename> getDcmFilesFromDirectory(String source) {
-  var dir = new Directory(source);
-  List<FileSystemEntity> files =
+  final dir = new Directory(source);
+  final files =
       dir.listSync(recursive: true, followLinks: false);
-  List<Filename> filenames = [];
+  final filenames = <Filename>[];
   for (File f in files) {
     filenames.add(new Filename(f.path));
   }
@@ -50,7 +50,7 @@ String jsonMetadata = 'bas/json/file.mddcmjson';
 String xmlEntity = 'bas/bar/file.dcmxml';
 String xmlMetadata = 'bas/bar/file.mddcmxml';
 String bulkdata = 'bas/bar/file.bddcm';
-final pathList = [
+final List<String> pathList = <String>[
   dcmEntity,
   dcmMetadata,
   jsonEntity,
@@ -62,6 +62,7 @@ final pathList = [
 
 String inRoot = 'C:/odw/test_data/sfd/CR';
 
+/* Flush if not used
 List flatten(List list) {
   final flat = [];
   for (var l in list)
@@ -72,6 +73,7 @@ List flatten(List list) {
     }
   return flat;
 }
+*/
 
 List getFiles(String path) {
   final dir = new Directory(path);

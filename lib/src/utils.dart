@@ -22,7 +22,8 @@ Future<Directory> createRoot(String path) async {
   return root;
 }
 
-/// Returns a [List] of [Uint8List]s containing all the SOP [Instances] of the [Study]
+/// Returns a [List] of [Uint8List]s containing all the SOP Instances
+/// of the [Study].
 /// specified by the [Directory].
 String getFilename(File f) => basenameWithoutExtension(f.path);
 String getFileExt(File f) => extension(f.path);
@@ -31,49 +32,51 @@ String getFileExt(File f) => extension(f.path);
 /// If the filter should return a [File] or null.
 typedef File Filter(File f);
 
-/// Returns [true] if the [path] has [ext] as it's file extension.
+/// Returns true if the [path] has [ext] as it's file extension.
 bool hasExtension(String path, String ext) => extension(path) == ext;
 
 String testExtension(String path, String ext) => (hasExtension(path, ext)) ? ext : null;
-/*
-/// Returns [true] if [f] has the [sopInstance] file extension.
-File isDcmFile(File f) =>
-    (hasExtension(f.path, '.dcm')) ? f : null;
 
-/// Returns [true] if [f] has the [metadata] file extension.
+/// Returns true if [f] has the SopInstance file extension ('.dcm').
+File isDicomFile(File f) =>
+    (hasExtension(f.path, '.dcm')) ? f : null;
+/*
+/// Returns true if [f] has the [metadata] file extension.
 bool isMetadataFile(File f) => hasExtension(f.path, FileSubtype.ext);
 
-/// Returns [true] if [f] has the [bulkdate] file extension.
+/// Returns true if [f] has the [bulkdate] file extension.
 bool isBulkdataFile(File f) => hasExtension(f.path, FileSubtype.ext);
 */
-/// Returns the [File] if the predicate [p] is [true]; otherwise, null.
+/// Returns the [File] if the predicate [p] is true; otherwise, null.
 File filter(File f, Filter p) => (p(f) != null) ? f : null;
 
 File isFile(Object f) => (f is File) ? f : null;
 
-/// Returns the [File] if the predicate is [true]; otherwise, null.
+/// Returns the [File] if the predicate is true; otherwise, null.
 //TODO: fix
-//File dcmFilter(File f) => filter(f, isDicomFile);
+File dcmFilter(File f) => filter(f, isDicomFile);
 
-/// Returns a [List] of [File] from the [Directory] specified by [rootPath].
-List getFilesSync(Object directory, [filter = isFile]) {
-  if (directory is String) directory = new Directory(directory);
-  if (directory is! Directory) throw new ArgumentError('must be String or Directory');
-  return walkSync(directory, filter);
+/// Returns a [List] of [File] from the [Directory] specified by rootPath.
+List getFilesSync(Object rootPath, [Filter filter = isFile]) {
+  Directory dir;
+  if (rootPath is String) dir = new Directory(rootPath);
+  if (rootPath is! Directory) throw new ArgumentError('must be String or Directory');
+  dir = rootPath;
+  return walkSync(dir, filter);
 }
 
 //TODO: debug and create unit test
-/// Returns a [List] of values that result from walking the [Directory] tree, and applying [func]
-/// to each [File] in the tree.
-List walkSync(Directory d, Function func) => _walkSync(d, func, []);
+/// Returns a [List] of values that result from walking the [Directory] tree,
+/// and applying [func] to each [File] in the tree.
+List walkSync(Directory d, Function func) => _walkSync(d, func, <Object>[]);
 
-List _walkSync(Directory d, Function func, List list) {
+List _walkSync(Directory d, Function func, List<Object> list) {
   final entries = d.listSync(followLinks: false);
   try {
     for (var e in entries) {
       if (e is File) {
         // print('Found file ${e.path}');
-        var v = func(e);
+        Object v = func(e);
         if (v == null) continue;
         list.add(v);
       } else if (e is Directory) {
@@ -247,7 +250,7 @@ String readStringFileSync(String path) {
 
 //TODO: debug and test
 void writeStringDirectorySync(String path, Map<String, String> entries) {
-  entries.forEach((String path, String s) {
+  entries.forEach((path, s) {
     final f = new File(path);
     try {
       f.writeAsStringSync(s);

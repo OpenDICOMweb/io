@@ -6,13 +6,12 @@
 
 import 'dart:io';
 
-import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 
-String inRoot0 = "C:/odw/test_data/sfd/CR";
-String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
-String inRoot2 = "C:/odw/test_data/sfd/CT";
-String inRoot3 = "C:/odw/test_data/sfd/MG";
+String inRoot0 = 'C:/odw/test_data/sfd/CR';
+String inRoot1 = 'C:/odw/test_data/sfd/CR_and_RF';
+String inRoot2 = 'C:/odw/test_data/sfd/CT';
+String inRoot3 = 'C:/odw/test_data/sfd/MG';
 
 String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';
@@ -21,14 +20,14 @@ String outRoot3 = 'test/output/root3';
 
 void main() {
   // Get the files in the directory
-  List<Filename> files = Filename.listFromDirectory(inRoot0);
+  final files = Filename.listFromDirectory(inRoot0);
   stdout.writeln('File count: ${files.length}');
 
   // Read, parse, and print a summary of each file.
-  for (Filename file in files) {
+  for (var file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
-      RootDataset rds = file.readSync();
+      final rds = file.readSync();
       print(rds.info);
     } else {
       print('Skipping ... $file');
