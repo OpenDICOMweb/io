@@ -7,12 +7,12 @@
 import 'package:args/args.dart';
 
 ArgResults parse(List<String> args) {
-  var parser = getArgParser();
+  final parser = getArgParser();
   return parser.parse(args);
 }
 
 ArgParser getArgParser() {
-  var parser = new ArgParser()
+  final parser = new ArgParser()
     ..addOption('source',
         abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')
     ..addOption('target',

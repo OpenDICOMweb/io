@@ -26,22 +26,22 @@ String inPath0 = 'C:/odw/test_data/IM-0001-0001.dcm';
 String inPath1 = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 /// Compare two files byte by byte and report the first significant difference.
-void main(List<String> args) {
+void main(final args) {
   Server.initialize(name: 'compare_file_bytes.dart', level: Level.info0);
 
-  Filename fn0 = new Filename(inPath0);
-  Uint8List bytes0 = fn0.file.readAsBytesSync();
-  int length0 = bytes0.length;
+  final fn0 = new Filename(inPath0);
+  final bytes0 = fn0.file.readAsBytesSync();
+  final length0 = bytes0.length;
   log.debug('fn0 read $length0 bytes');
 
-  Filename fn1 = new Filename(inPath1);
-  Uint8List bytes1 = fn1.file.readAsBytesSync();
-  int length1 = bytes1.length;
+  final fn1 = new Filename(inPath1);
+  final bytes1 = fn1.file.readAsBytesSync();
+  final length1 = bytes1.length;
   log.debug('fn1 read $length1 bytes');
 
-  int limit = (length0 > length1) ? length1 : length0;
+  final limit = (length0 > length1) ? length1 : length0;
 
-  for (int i = 0; i < limit; i++) {
+  for (var i = 0; i < limit; i++) {
     if (bytes0[i] == bytes1[i]) continue;
     if (bytes0[i] == 0 && bytes1[i] == 32) {
       log.debug('found Null(0) in f1 and space (" ") in f2');
@@ -54,48 +54,48 @@ void main(List<String> args) {
 
 void printDifference(
     Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
-  for (int j = -10; j < 20; j++, i++) {
+  for (var j = -10; j < 20; j++, i++) {
     if (bytes0[i] == bytes1[i]) break;
     log.debug('$i: ${bytes0[i]} != ${bytes1[i]}');
 
-    List<String> d0List = [];
-    List<String> h0List = [];
-    List<String> c0List = [];
-    List<String> d1List = [];
-    List<String> h1List = [];
-    List<String> c1List = [];
+    final d0List = [];
+    final h0List = [];
+    final c0List = [];
+    final d1List = [];
+    final h1List = [];
+    final c1List = [];
 
-    for (int k = 0; k < before; k++) {
+    for (var k = 0; k < before; k++) {
       // File 0
-      int v0 = bytes0[(i - before) + k];
+      final v0 = bytes0[(i - before) + k];
       d0List.add(v0.toRadixString(10).padLeft(3, ' '));
       h0List.add(v0.toRadixString(16).padLeft(3, ' '));
       c0List.add(new String.fromCharCode(v0).padLeft(3, ' '));
       // File 1
-      int v1 = bytes1[(i - before) + k];
+      final v1 = bytes1[(i - before) + k];
       d1List.add(v1.toRadixString(10).padLeft(3, ' '));
       h1List.add(v1.toRadixString(16).padLeft(3, ' '));
       c1List.add(new String.fromCharCode(v1).padLeft(3, ' '));
     }
     // File 0
-    int v0 = bytes0[i];
+    final v0 = bytes0[i];
     d0List.add('|${v0.toRadixString(10).padLeft(3, ' ')}|');
     h0List.add('|${v0.toRadixString(16).padLeft(3, ' ')}|');
     c0List.add('|${new String.fromCharCode(v0).padLeft(3, ' ')}|');
     // File 1
-    int v1 = bytes1[i];
+    final v1 = bytes1[i];
     d1List.add('|${v1.toRadixString(10).padLeft(3, ' ')}|');
     h1List.add('|${v1.toRadixString(16).padLeft(3, ' ')}|');
     c1List.add('|${new String.fromCharCode(v1).padLeft(3, ' ')}|');
 
-    for (int k = 0; k < after; k++) {
+    for (var k = 0; k < after; k++) {
       // File 0
-      int v0 = bytes0[(i - after) + k];
+      final v0 = bytes0[(i - after) + k];
       d0List.add(v0.toRadixString(10).padLeft(3, ' '));
       h0List.add(v0.toRadixString(16).padLeft(3, ' '));
       c0List.add(new String.fromCharCode(v0).padLeft(3, ' '));
       // File 1
-      int v1 = bytes1[(i - after) + k];
+      final v1 = bytes1[(i - after) + k];
       d1List.add(v1.toRadixString(10).padLeft(3, ' '));
       h1List.add(v1.toRadixString(16).padLeft(3, ' '));
       c1List.add(new String.fromCharCode(v1).padLeft(3, ' '));

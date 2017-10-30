@@ -33,11 +33,11 @@ class FileCompareResult {
       this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
 
   String get lengthMsg =>
-      (sameLength) ? "Equal lengths" : '** Different Lengths';
+      (sameLength) ? 'Equal lengths' : '** Different Lengths';
 
   String get fmtDiffs {
     var out = 'Differences';
-    for (FileByteDiff d in diffs) out += '$d';
+    for (var d in diffs) out += '$d';
     return out;
   }
 
@@ -66,36 +66,36 @@ class FileByteDiff {
 
 /// Compare two files byte by byte and report the first significant difference.
 FileCompareResult compareFiles(String path0, String path1) {
-  final List<FileByteDiff> diffs = [];
+  final diffs = [];
   final maxProblems = 3;
-  bool hasProblems = false;
-  bool contiguous = false;
+  final hasProblems = false;
+  var contiguous = false;
 
   log.down;
-  Filename fn0 = new Filename(path0);
-  Uint8List bytes0 = fn0.file.readAsBytesSync();
-  int length0 = bytes0.length;
+  final fn0 = new Filename(path0);
+  final bytes0 = fn0.file.readAsBytesSync();
+  final length0 = bytes0.length;
   log.debug('fn0 read $length0 bytes');
 
-  Filename fn1 = new Filename(path1);
-  Uint8List bytes1 = fn1.file.readAsBytesSync();
-  int length1 = bytes1.length;
+  final fn1 = new Filename(path1);
+  final bytes1 = fn1.file.readAsBytesSync();
+  final length1 = bytes1.length;
   log.debug('fn1 read $length1 bytes');
-  bool isLengthEqual = (length0 == length1);
+  final isLengthEqual = (length0 == length1);
 
   log.down;
-  int limit = (length0 > length1) ? length1 : length0;
-  for (int i = 0; i < limit; i++) {
-    int byte0 = bytes0[i];
-    int byte1 = bytes1[i];
+  final limit = (length0 > length1) ? length1 : length0;
+  for (var i = 0; i < limit; i++) {
+    final byte0 = bytes0[i];
+    final byte1 = bytes1[i];
     if (byte0 == byte1) {
       contiguous = false;
       continue;
     }
-    String s0 = new String.fromCharCode(byte0);
-    String s1 = new String.fromCharCode(byte1);
+    final s0 = new String.fromCharCode(byte0);
+    final s1 = new String.fromCharCode(byte1);
     if ((byte0 == 0 && byte1 == 32) || (byte0 == 32 && byte1 == 0)) {
-      diffs.add(new FileByteDiff(i, "Null/Space", byte0, byte1, ""));
+      diffs.add(new FileByteDiff(i, 'Null/Space', byte0, byte1, ''));
       log.debug('Found $s0($byte0) in f0 and $s1($byte1) in f1');
       contiguous = true;
       continue;
@@ -103,7 +103,7 @@ FileCompareResult compareFiles(String path0, String path1) {
     //Test for uppercase & lowercase
     if (byte0 == toLowercaseChar(byte1)) {
       diffs.add(new FileByteDiff(
-          i, "Lower To Upper case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
+          i, 'Lower To Upper case', byte0, byte1, '$s0($byte0), $s1($byte1)'));
       log.debug('Found Uppercase "$s0" ($byte0) in f0 and "$s1"($byte1) in f1');
       contiguous = true;
       continue;
@@ -111,35 +111,35 @@ FileCompareResult compareFiles(String path0, String path1) {
     //Test for uppercase & lowercase
     if (byte0 == toUppercaseChar(byte1)) {
       diffs.add(new FileByteDiff(
-          i, "Upper To Lower case", byte0, byte1, '$s0($byte0), $s1($byte1)'));
+          i, 'Upper To Lower case', byte0, byte1, '$s0($byte0), $s1($byte1)'));
       log.debug('Found Lowercase "$s0" ($byte0) in f0 and "$s1"($byte1) in f1');
       contiguous = true;
       continue;
     }
     if (!contiguous && diffs.length < maxProblems) {
-      var problem = _foundProblem(bytes0, bytes1, i, 20, 20);
-      diffs.add(new FileByteDiff(i, "Problem", byte0, byte1, problem));
+      final problem = _foundProblem(bytes0, bytes1, i, 20, 20);
+      diffs.add(new FileByteDiff(i, 'Problem', byte0, byte1, problem));
       hasProblems == true;
     }
     contiguous = true;
-    //log.fatal("Stop");
+    //log.fatal('Stop');
   }
   log.up;
 
-  if (diffs.length != 0) {
-    var result =
+  if (diffs.isNotEmpty) {
+    final result =
         new FileCompareResult(fn0, fn1, isLengthEqual, hasProblems, diffs);
     if (hasProblems) {
       log.debug('**** File are different and have problems');
     } else {
       log.debug('** Warning Files are different but result is correct');
     }
-    log.up;
-    log.debug(result);
+    log..up
+      ..debug(result);
     return result;
   }
-  log.debug('Files are identical');
-  log.up;
+  log..debug('Files are identical')
+    ..up;
   return null;
 }
 
@@ -152,56 +152,56 @@ String _charToString(int c) {
 }
 
 String _toDecimal(int i) => i.toRadixString(10).padLeft(4, ' ');
-String _toHex(int i) => i.toRadixString(16).padLeft(2, "0").padLeft(4, ' ');
+String _toHex(int i) => i.toRadixString(16).padLeft(2, '0').padLeft(4, ' ');
 
 String _foundProblem(
     Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
   var out = 'Found a Problem at index $i\n';
   out += '  $i: ${bytes0[i]} != ${bytes1[i]}\n';
 
-  List<String> count = [];
-  List<String> index = [];
-  List<String> dec0 = [];
-  List<String> hex0 = [];
-  List<String> char0 = [];
-  List<String> dec1 = [];
-  List<String> hex1 = [];
-  List<String> char1 = [];
+  final count = [];
+  final index = [];
+  final dec0 = [];
+  final hex0 = [];
+  final char0 = [];
+  final dec1 = [];
+  final hex1 = [];
+  final char1 = [];
 
   var begin = i - before;
   var end = i;
-  for (int j = 0, k = begin; k < end; j++, k++) {
+  for (var j = 0, k = begin; k < end; j++, k++) {
     // File 0
-    int v0 = bytes0[k];
+    final v0 = bytes0[k];
     count.add(_toDecimal(j));
     index.add(_toDecimal(k));
     dec0.add(_toDecimal(v0));
     hex0.add(_toHex(v0));
     char0.add(_charToString(v0));
     // File 1
-    int v1 = bytes1[k];
+    final v1 = bytes1[k];
     dec1.add(_toDecimal(v1));
     hex1.add(_toHex(v1));
     char1.add(_charToString(v1));
   }
   // File 0
-  int v0 = bytes0[i];
+  final v0 = bytes0[i];
   count.add('| ${_toDecimal(before)}|');
   index.add('| ${_toDecimal(i)}|');
   dec0.add('| ${_toDecimal(v0)}|');
   hex0.add('| ${_toHex(v0)}|');
   char0.add('| ${_charToString(v0)}|');
   // File 1
-  int v1 = bytes1[i];
+  final v1 = bytes1[i];
   dec1.add('| ${_toDecimal(v1)}|');
   hex1.add('| ${_toHex(v1)}|');
   char1.add('| ${_charToString(v1)}|');
 
   begin = i + 1;
   end = begin + after;
-  for (int j = before + 1, k = begin; k < end; j++, k++) {
+  for (var j = before + 1, k = begin; k < end; j++, k++) {
     // File 0
-    int v0 = bytes0[k];
+    final v0 = bytes0[k];
     count.add(_toDecimal(j));
     index.add(_toDecimal(k));
     dec0.add(_toDecimal(v0));
@@ -211,7 +211,7 @@ String _foundProblem(
     // c0List.add(new String.fromCharCode(v0).padLeft(3, ' '));
 
     // File 1
-    int v1 = bytes1[k];
+    final v1 = bytes1[k];
     dec1.add(_toDecimal(v1));
     hex1.add(_toHex(v1));
     char1.add(_charToString(v1));

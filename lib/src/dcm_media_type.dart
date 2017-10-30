@@ -62,9 +62,9 @@ class DcmMediaType {
   const DcmMediaType(this.name, this.encoding, this.units);
 
   /// The media type [type] of DICOM Media Types
-  String get type => "application";
+  String get type => 'application';
 
-  bool get isDicom => name != "Unknown";
+  bool get isDicom => name != 'Unknown';
 
   /// Returns [true] if the representation is encoded in [Units.binary].
   bool get isBinary => units == Units.binary;
@@ -94,19 +94,19 @@ DcmMediaType:
 
   /// Returns the IANA media type [String].
   @override
-  String toString() => "$type/$name";
+  String toString() => '$type/$name';
 
   //TODO: finish documenting these
   static const part10 =
-      const DcmMediaType("dicom", Encoding.part10, Units.binary);
+      const DcmMediaType('dicom', Encoding.part10, Units.binary);
   static const json =
-      const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
+      const DcmMediaType('dicom+json', Encoding.json, Units.utf8);
   static const fastJson =
-      const DcmMediaType("dicom+json", Encoding.json, Units.utf8);
-  static const pureJson = const DcmMediaType("json", Encoding.json, Units.utf8);
-  static const xml = const DcmMediaType("dicom+xml", Encoding.xml, Units.utf8);
+      const DcmMediaType('dicom+json', Encoding.json, Units.utf8);
+  static const pureJson = const DcmMediaType('json', Encoding.json, Units.utf8);
+  static const xml = const DcmMediaType('dicom+xml', Encoding.xml, Units.utf8);
   static const octets =
-      const DcmMediaType("octet-stream", Encoding.xml, Units.binary);
+      const DcmMediaType('octet-stream', Encoding.xml, Units.binary);
   static const unknown =
-      const DcmMediaType("Unknown", Encoding.unknown, Units.unknown);
+      const DcmMediaType('Unknown', Encoding.unknown, Units.unknown);
 }

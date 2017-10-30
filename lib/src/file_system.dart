@@ -24,7 +24,7 @@ import 'index.dart';
 /// defined, it must be defined at a higher level.
 class FileSystem extends FileSystemBase {
   //static const FSType type = FSType.sop;
-  static const String version = "0.1.0";
+  static const String version = '0.1.0';
   @override
   final Directory root;
   @override
@@ -64,7 +64,7 @@ class FileSystem extends FileSystemBase {
   @override
   Future<Entity> read(String path,
       [FileSubtype subtype = FileSubtype.part10 ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   /// Reads a DICOM [Study] asynchronously from [this].
@@ -72,7 +72,7 @@ class FileSystem extends FileSystemBase {
   @override
   Future<Study> readStudy(Uid study,
       [FileSubtype subtype = FileSubtype.part10   ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   /// Reads a DICOM [Series] asynchronously from [this]. Throws an
@@ -80,7 +80,7 @@ class FileSystem extends FileSystemBase {
   @override
   Future<Series> readSeries(Uid study, Uid series,
       [FileSubtype subtype = FileSubtype.part10   ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   /// Reads a DICOM [Instance] (SOPInstance) asynchronously from [this].
@@ -89,7 +89,7 @@ class FileSystem extends FileSystemBase {
   @override
   Future<Instance> readInstance(Uid study, Uid series, Uid instance,
       [FileSubtype subtype = FileSubtype.part10   ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   // *** Read Synchronous  ***
@@ -99,7 +99,7 @@ class FileSystem extends FileSystemBase {
   // TODO: if needed.
   @override
   Entity readSync(String path, [FileSubtype subtype = FileSubtype.part10 ]) {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   /// Reads a DICOM [Study].
@@ -108,7 +108,7 @@ class FileSystem extends FileSystemBase {
   Study readStudySync(Uid study,
       [FileSubtype subtype = FileSubtype .part10 ]) {
 //    var path = toPath(subtype, study);
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
 
@@ -118,7 +118,7 @@ class FileSystem extends FileSystemBase {
   Series readSeriesSync(Uid study, Uid series,
       [FileSubtype subtype = FileSubtype .part10 ]) {
 //    var path = toPath(subtype, study);
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   /// Reads a DICOM [SopInstance].
@@ -127,7 +127,7 @@ class FileSystem extends FileSystemBase {
   Instance readInstanceSync(Uid study, Uid series, Uid instance,
   [FileSubtype subtype = FileSubtype .part10 ]){
 //    var path = toPath(subtype, study);
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   // *** Write Async  ***
@@ -136,49 +136,49 @@ class FileSystem extends FileSystemBase {
   @override
   Future<bool> write(Entity entity,
       [FileSubtype subtype = FileSubtype.part10 ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   Future<bool>  writeStudy(Study study,
       [FileSubtype subtype = FileSubtype .part10 ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   Future<bool>  writeSeries(Series series,
       [FileSubtype subtype = FileSubtype .part10 ]) async {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   Future<bool> writeInstance(Instance instance,
       [FileSubtype subtype = FileSubtype .part10 ]){
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   // *** Write Sync  ***
 
   @override
   bool writeSync(Entity entity, [FileSubtype subtype = FileSubtype.part10 ]) {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   bool writeStudySync(Study study, [FileSubtype subtype = FileSubtype .part10 ]) {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   bool writeSeriesSync(Series series,
       [FileSubtype subtype = FileSubtype.part10    ]) {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   @override
   bool writeInstanceSync(Instance instance,
       [FileSubtype subtype = FileSubtype.part10    ]) {
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   Stream<FileSystemEntity> listEntities(Directory dir) =>

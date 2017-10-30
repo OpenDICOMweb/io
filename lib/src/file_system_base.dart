@@ -24,7 +24,7 @@ import 'index.dart';
 /// The interface to all ODW File Systems.
 abstract class FileSystemBase {
   /// The [version] of the file system.
-  static String version = "0.1.0";
+  static String version = '0.1.0';
 
   /// The path to the [root] directory.
   //TODO: verify that this is the absolute path.
@@ -122,8 +122,8 @@ abstract class FileSystemBase {
   /// Return a path to a file in the [FileSystem]
   String toPath(FileSubtype fType, Uid study,
       [Uid series, Uid instance, String extension]) {
-    String part4 = (instance == null) ? "" : '/$instance${fType.extension}';
-    String part3 = (series == null) ? "" : '/$series';
+    final part4 = (instance == null) ? '' : '/$instance${fType.extension}';
+    final part3 = (series == null) ? '' : '/$series';
     return '$rootPath/$study$part3$part4';
   }
 
@@ -132,15 +132,15 @@ abstract class FileSystemBase {
 
   // TODO: debug - allows asynchronous creation of the FS root.
   static Future<Directory> maybeCreateRoot(String rootPath) async {
-    var root = new Directory(rootPath);
-    bool exists = await root.exists();
+    final root = new Directory(rootPath);
+    final exists = await root.exists();
     if (!exists) await root.createSync(recursive: true);
     return root;
   }
 
   /// Create the [root] Directory of the [FileSystem] recursively.
   static Directory maybeCreateRootSync(String path) {
-    var root = new Directory(path);
+    final root = new Directory(path);
     if (!root.existsSync()) root.createSync(recursive: true);
     return root;
   }
