@@ -10,12 +10,12 @@ import 'dart:io';
 import 'package:io/io.dart';
 
 Future main() async {
-  String root = r"C:\odw\test_data\sfd\CR_and_RF";
-  Directory dir = new Directory(root);
+  final root = r'C:\odw\test_data\sfd\CR_and_RF';
+  final dir = new Directory(root);
   //List<String> tree = await getFilesSync(root, isDcmFile);
   print(root);
-  FSFormatter format = new FSFormatter();
-  var out = format(dir);
+  final format = new FSFormatter();
+  final out = format(dir);
 
   print('Tree:\n$out');
 }

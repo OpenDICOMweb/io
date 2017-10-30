@@ -14,12 +14,12 @@ String outPath = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 void main() {
   // Read a File
-  Filename fnIn = new Filename(inPath);
+  final fnIn = new Filename(inPath);
 
   RootDataset rds = TagReader.readFile(fnIn.file);
   print(rds.format(new Formatter(maxDepth: -1)));
 
   // Write a File
-  Filename fnOut = new Filename.withType(outPath, FileSubtype.part10);
+  final fnOut = new Filename.withType(outPath, FileSubtype.part10);
   fnOut.writeSync(rds);
 }
