@@ -6,20 +6,18 @@
 
 //import 'dart:convert';
 
-import 'dart:typed_data';
-
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
+import 'package:entity/entity.dart';
 import 'package:io/io.dart';
 import 'package:system/server.dart';
 
 //TODO: cleanup for V0.9.0
 
-/// This program copies DICOM PS3.10 files (i.e. files with an extension of ".dcm") from anywhere
+/// This program copies DICOM PS3.10 files (i.e. files with an extension of '.dcm') from anywhere
 /// in a source directory to a ODW SOP File System rooted at the destination directory.
 
-String inRoot = "C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/";
-String outRoot = "C:/odw/sdk/io/bin/output";
+String inRoot = 'C:/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/';
+String outRoot = 'C:/odw/sdk/io/bin/output';
 
 //TODO: cleanup and move to examples
 /// A program that takes a Directory containing '.dcm' files
@@ -31,26 +29,25 @@ void main() {
 
   //var results = parse(args);
   //var source = results['source'];
-  var source = r"C:/odw/test_data/sfd/CR_and_RF";
-  List<Filename> files = Filename.listFromDirectory(source);
+  final source = r'C:/odw/test_data/sfd/CR_and_RF';
+  final files = Filename.listFromDirectory(source);
   print('source: $source');
   //var target = results['target'];
-  var target = "C:/odw/sdk/io/example/output";
-  var fs = new FileSystem(target);
+  final target = 'C:/odw/sdk/io/example/output';
+  final fs = new FileSystem(target);
 
   print('files: $files');
 
-  for (Filename fn in files) {
+  for (var fn in files) {
     if (fn.isPart10) {
-      Uint8List bytes = fn.file.readAsBytesSync();
+      final bytes = fn.file.readAsBytesSync();
       //print('Filename: $fn');
 
-      RootTagDataset rds = TagReader.readFile(fn.file);
+      final rds = TagReader.readFile(fn.file);
       print('Entity: ${rds.format(new Formatter())}');
+      Entity entity = activeStudies.entityFromDataset(rds);
 
-      var entity = activeStudies.entityFromDataset(rds);
-
-      DcmFile dcmFile = fs.file(entity, FileType.part10Instance);
+      final dcmFile = fs.file(entity, FileType.part10Instance);
       print(dcmFile.path);
       dcmFile.writeSync(bytes);
 

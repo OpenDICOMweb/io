@@ -6,8 +6,7 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:system/server.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -29,7 +28,7 @@ void main() {
   log.info0('File count: ${fList.length}');
   for (File f in fList) log.info0('File: $f');
 
-  RootTagDataset rds;
+  RootDataset rds;
   for (File file in fList) {
     print('\nReading file: $file');
     rds = TagReader.readFile(file);

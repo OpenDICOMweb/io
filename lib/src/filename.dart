@@ -8,8 +8,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:path/path.dart' as p;
 import 'package:system/system.dart';
 
@@ -22,7 +21,7 @@ import 'utils.dart';
 int _firstDot(String s) => p.basename(s).indexOf('.');
 
 String toAbsolute(String path) {
-  var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
+  final s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
   return s.replaceAll('\\', '/');
 }
 
@@ -49,7 +48,7 @@ class Filename {
         _path = toAbsolute(file.path);
 
   factory Filename.withExt(Filename fn, [String ext = 'out']) {
-    var path = p.basenameWithoutExtension(fn.path) + '.$ext';
+    final path = '${p.basenameWithoutExtension(fn.path)}.$ext';
     return new Filename(path);
   }
 
@@ -120,7 +119,7 @@ class Filename {
   /// Returns [true] if this is a [Bulkdata] object.
   bool get isBulkdata => subtype.oType == OType.bulkdata;
 
-  Future<RootTagDataset> get contents => read();
+  Future<RootDataset> get contents => read();
 
   //TODO: should this return the bytes or a parsed Entity
   Dataset readSync() {
@@ -132,15 +131,15 @@ class Filename {
       return JsonDecoder.decode(bytes);*/
     } else if (isXml) {
       // Uint8List bytes = file.readAsBytesSync();
-      throw "XML Umplemented";
+      throw 'XML Umplemented';
     }
-    throw "Shouldn't get here";
+    throw 'Shouldn\'t get here';
   }
 
   //TODO: should this return the bytes or a parsed Entity
   Uint8List readAsBytesSync() => file.readAsBytesSync();
 
-  Future<TagDataset> read() async {
+  Future<Dataset> read() async {
     if (isBinary) {
       //Uint8List bytes = await file.readAsBytes();
       return await new Future(() =>TagReader.readPath(_path));
@@ -149,27 +148,27 @@ class Filename {
 //      return await JsonDecoder.decode(bytes);
     } else if (isXml) {
       // Uint8List bytes = file.readAsBytesSync();
-      throw "XML Umplemented";
+      throw 'XML Umplemented';
     } else if (subtype.isUnknown) {
-      throw "Unknown FileType: $path";
+      throw 'Unknown FileType: $path';
     }
-    throw "Shouldn't get here";
+    throw 'Shouldn\'t get here';
   }
 
-  bool writeSync(TagDataset ds) {
+  bool writeSync(Dataset ds) {
     if (isBinary) {
-      Uint8List bytes = TagWriter.writePath(ds, _path);
+      final bytes = TagWriter.writePath(ds, _path);
       log.debug('Writing ${bytes.lengthInBytes} bytes.');
       file.writeAsBytesSync(bytes);
       return true;
     } else if (isJson) {
       //Uint8List bytes = JsonEncoder.encode(entity);
       //file.writeAsBytesSync(bytes);
-      throw "JSON Umplemented";
+      throw 'JSON Umplemented';
     } else if (isXml) {
-      throw "XML Umplemented";
+      throw 'XML Umplemented';
     }
-    throw "Shouldn't get here";
+    throw 'Shouldn\'t get here';
   }
 
   bool writeAsBytesSync(Uint8List bytes) {
@@ -180,7 +179,7 @@ class Filename {
 
   bool write(Entity entity) {
     //TODO: finish
-    throw "Unimplemented";
+    throw 'Unimplemented';
   }
 
   String get info => '''
@@ -191,7 +190,7 @@ Subtype: ${FileSubtype.parse(_path)};
   @override
   String toString() => _path;
 
-  static Filename toFilename(obj) {
+  static Filename toFilename(Object obj) {
     if (obj is Filename) return obj;
     if (obj is String) return new Filename(obj);
     if (obj is File) return new Filename.fromFile(obj);
@@ -200,12 +199,12 @@ Subtype: ${FileSubtype.parse(_path)};
 
   //TODO move to utilities
   static List<Filename> listFromDirectory(String source,
-      [String ext = ".dcm"]) {
+      [String ext = '.dcm']) {
     log.debug('source: $source');
-    List<File> files = getFilesFromDirectory(source, ext);
+    final files = getFilesFromDirectory(source, ext);
     log.debug('Total FSEntities: ${files.length}');
-    List<Filename> fNames = new List(files.length);
-    for (int i = 0; i < files.length; i++)
+    final fNames = new List<Filename>(files.length);
+    for (var i = 0; i < files.length; i++)
       fNames[i] = new Filename(files[i].path);
     return fNames;
   }

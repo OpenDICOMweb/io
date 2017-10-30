@@ -6,8 +6,7 @@
 
 //import 'dart:convert';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:system/server.dart';
 
@@ -29,7 +28,7 @@ void main(List<String> args) {
     int count = 0;
     log.info0('*** Starting($count): $fn');
     if (fn.isPart10) {
-      RootTagDataset  rds = TagReader.readFile(fn.file);
+      RootDataset  rds = TagReader.readFile(fn.file);
       if (rds == null) {
         log.debug('  *** Skipping Invalid Transfer Syntax: $fn ');
       } else {

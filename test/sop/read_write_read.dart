@@ -6,8 +6,7 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:system/server.dart';
 
@@ -33,7 +32,7 @@ void main() {
   for (Filename file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
-      TagDataset rds = file.readSync();
+      Dataset rds = file.readSync();
       log.info0(rds.info);
     } else {
       print('Skipping ... $file');
@@ -42,7 +41,7 @@ void main() {
 }
 
 /// Returns a [TagDataset] read from the [File] associated with [fileId]
-TagDataset readDicomFile(fileId) {
+Dataset readDicomFile(fileId) {
   File file;
   if (file is String) file = new File(fileId);
   if (file is Filename) file = fileId.file;

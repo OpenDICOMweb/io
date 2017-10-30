@@ -6,8 +6,7 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:system/server.dart';
 import "package:test/test.dart";
@@ -37,7 +36,7 @@ void main() {
       for (Filename file in files) {
         if (file.isDicom && file.base != "ct.0.dcm") {
           print('Reading file: $file');
-          RootTagDataset rds = file.readSync();
+          RootDataset rds = file.readSync();
           print(rds.info);
         } else {
           print('Skipping ... $file');

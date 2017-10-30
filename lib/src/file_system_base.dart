@@ -8,12 +8,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:core/core.dart';
+import 'package:entity/entity.dart';
+import 'package:uid/uid.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';
 import 'index.dart';
-//import 'file_descriptor.dart';
 
 //TODO: Implement all async IO calls
 

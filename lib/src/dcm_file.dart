@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:core/core.dart';
+import 'package:entity/entity.dart';
 
 import 'file_system.dart';
 import 'file_type.dart';

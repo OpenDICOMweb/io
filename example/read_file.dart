@@ -4,8 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:system/server.dart';
 
@@ -28,7 +27,7 @@ void main(List<String> args) {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
   Filename fn = new Filename(path5);
-  RootTagDataset rds = TagReader.readFile(fn.file);
+  RootDataset rds = TagReader.readFile(fn.file);
   log.debug('Instance: $rds');
   log.debug('dataset length: ${rds.length} elements');
   log.debug(rds.format(new Formatter(maxDepth: 146)));

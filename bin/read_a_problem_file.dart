@@ -4,8 +4,8 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:system/server.dart';
 
 
@@ -25,7 +25,7 @@ void main() {
     print('Reading file: $path');
     log.config('Reading file: $path');
 
-    RootTagDataset rds = TagReader.readPath(path);
+    RootDataset rds = TagReader.readPath(path);
     print('***patient:\n${rds.format(new Formatter(maxDepth:5))}');
   }
 

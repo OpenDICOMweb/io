@@ -4,9 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
 import 'package:system/server.dart';
@@ -20,76 +18,71 @@ String outputDir = 'C:/odw/sdk/io/example/output';
 
 void main(List<String> args) {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
-  int filesTotal = 0;
-  int filesRead = 0;
+  var filesTotal = 0;
+  var filesRead = 0;
 
   // Get the files in the directory
-  List<Filename> files = Filename.listFromDirectory(inputDir3);
+  final files = Filename.listFromDirectory(inputDir3);
   filesTotal = files.length;
   log.config('Total File count: $filesTotal');
-  Timestamp startTime = new Timestamp("Start Time:");
+  final startTime = new Timestamp('Start Time:');
   log.config('Starting tests at $startTime ...');
 
   // Read, parse, and log a summary of each file.
-  for (int i = 0; i < files.length; i++) {
-    Filename inFN = files[i];
+  for (var i = 0; i < files.length; i++) {
+    final inFN = files[i];
 
-    log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
+    log
+      ..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
+      ..down;
     // Read at least the FMI to get the Transfer Syntax
-
-    log.down;
-    RootTagDataset rds0 = TagReader.readFile(inFN.file);
+    final rds0 = TagReader.readFile(inFN.file);
     if (rds0 == null) {
       log.info0('Skipping File $i Bad TS: $inFN');
       continue;
     }
     filesRead++;
-    log.down;
-    log.debug('rds0: $rds0');
-    //log.debug1(instance0.format(new Formatter(maxDepth: -1)));
-    log.up;
+    log
+      ..down
+      ..debug('rds0: $rds0')
+      ..up;
 
     // Write a File
-    Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
-    log.info0('Writing file $i: $outFN');
+    final outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+    log..info0('Writing file $i: $outFN')..info0('Reading Result file $i: $outFN', 1);
 
     // Now read the file we just wrote.
-    log.info0('Reading Result file $i: $outFN', 1);
+    final rds1 = TagReader.readFile(inFN.file);
+    log
+      ..debug('Instance: 1 ${rds1.info}')
+      ..debug1(rds1.format(new Formatter(maxDepth: -1)), -1)
+      ..info0('Comparing Datasets: 0: $rds0, 1: $rds1', 1);
 
-    RootTagDataset rds1 = TagReader.readFile(inFN.file);
-    log.debug('Instance: 1 ${rds1.info}');
-    log.debug1(rds1.format(new Formatter(maxDepth: -1)), -1);
-
-    // Compare [Dataset]s
-    //log.watermark = Level.info;
-    log.info0("Comparing Datasets: 0: ${rds0}, 1: ${rds1}", 1);
-
-    var comparitor = new DatasetComparitor(rds0, rds1);
-    comparitor.run;
+    final comparitor = new DatasetComparitor(rds0, rds1)..run;
     if (comparitor.hasDifference) {
       log.info0('Result: ${comparitor.bad}');
-      throw "stop";
+      throw 'stop';
     } else {
-      log.info0("Dataset are identical");
+      log.info0('Dataset are identical');
     }
-    log.up;
+    log
+      ..up
+      ..info0('Comparing Files by Bytes:')
+      ..down
+      ..debug('Original: ${inFN.path}', 1)
+      ..debug('Result: ${outFN.path}');
 
     // log.watermark = Level.debug;
     // Compare input and output
-    log.info0('Comparing Files by Bytes:');
-    log.down;
-    log.debug('Original: ${inFN.path}', 1);
-    log.debug('Result: ${outFN.path}');
-    FileCompareResult result = compareFiles(inFN.path, outFN.path);
+    final result = compareFiles(inFN.path, outFN.path);
     if (result == null) {
       log.info0('Files are identical', -2);
     } else {
       log.info0('Files have differences at: $result', -2);
     }
   }
-  Timestamp endTime = new Timestamp("End Time:");
+  final endTime = new Timestamp('End Time:');
   log.config('Completed tests at $endTime ...');
-  Duration elapsed = endTime.dt.difference(startTime.dt);
+  final elapsed = endTime.dt.difference(startTime.dt);
   log.config('ElapsedTime: $elapsed');
 }
-

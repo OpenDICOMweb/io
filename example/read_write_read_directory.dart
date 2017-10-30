@@ -4,10 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
 
-import 'dart:typed_data';
-
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:io/src/test/compare_files.dart';
 import 'package:system/server.dart';
@@ -39,21 +36,21 @@ File Text Error:
 
 void main(List<String> args) {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
-  Stopwatch watch = new Stopwatch();
-  int filesTotal = 0;
-  int filesRead = 0;
+  final watch = new Stopwatch();
+  var filesTotal = 0;
+  var filesRead = 0;
 
   // Get the files in the directory
-  List<Filename> files = Filename.listFromDirectory(inputDir2);
+  final files = Filename.listFromDirectory(inputDir2);
   filesTotal = files.length;
   log.config('Total File count: $filesTotal');
   watch.start();
-  Duration begin = watch.elapsed;
+  var begin = watch.elapsed;
   List<FileTestError> errors;
 
   // Read, parse, and log.debug a summary of each file.
   for (var i = 0; i < files.length; i++) {
-    Filename inFN = files[i];
+    final inFN = files[i];
     FileTestError error;
 
     if (!inFN.isDicom) {
@@ -61,92 +58,93 @@ void main(List<String> args) {
       continue;
     } else if (inFN.isDicom) {
       // Read at least the FMI to get the Transfer Syntax
-      Uint8List bytes0 = inFN.file.readAsBytesSync();
-      var rds0 = TagReader.readFile(inFN.file);
+      final bytes0 = inFN.file.readAsBytesSync();
+      final rds0 = TagReader.readFile(inFN.file);
       if (rds0 == null) {
         log.info0('Skipping File $i Bad TS: $inFN');
         continue;
       }
 
       if ((i % 1000) == 0) {
-       Duration end = watch.elapsed;
-       Duration time = end - begin;
-       print('$time $i files ok');
-       begin = end;
+        final end = watch.elapsed;
+        final time = end - begin;
+        print('$time $i files ok');
+        begin = end;
       }
       filesRead++;
 
-      log.info0('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
-      log.info0('*** ($filesRead) File $i of $filesTotal: ${inFN.path}', 1);
-      log.debug('Reading $i: $inFN', 1);
-      log.debug1('Read ${bytes0.length} bytes', 1);
-      log.debug1('rds0: $rds0', -2);
+      log
+        ..info0('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
+        ..info0('*** ($filesRead) File $i of $filesTotal: ${inFN.path}', 1)
+        ..debug('Reading $i: $inFN', 1)
+        ..debug1('Read ${bytes0.length} bytes', 1)
+        ..debug1('rds0: $rds0', -2);
 
       // Write a File
-      Filename outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
-      log.debug('Writing file $i: $outFN');
-      log.down;
+      final outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+      log
+        ..debug('Writing file $i: $outFN')
+        ..down;
 
-      Uint8List bytes1 = TagWriter.writeFile(rds0, outFN.file);
+      final bytes1 = TagWriter.writeFile(rds0, outFN.file);
       outFN.writeAsBytesSync(bytes1);
       log.debug1('Wrote ${bytes1.length} bytes');
       activeStudies.remove(rds0.studyUid);
-      log.up;
-
+      log
+        ..up
+        ..debug('Reading Result file $i: $outFN')
+        ..down;
       // Now read the file we just wrote.
-      log.debug('Reading Result file $i: $outFN');
-      log.down;
-      Uint8List bytes2 = outFN.readAsBytesSync();
-      int length0 = bytes0.lengthInBytes;
-      int length2 = bytes2.lengthInBytes;
+      final bytes2 = outFN.readAsBytesSync();
+      final length0 = bytes0.length;
+      final length2 = bytes2.lengthInBytes;
       log.debug1('Read $length2 bytes');
       if (length0 == length2) {
         log.debug('Both files have length($length0)');
       } else {
         log.error('Files have different lengths: original($length0), result ($length2)');
       }
-      var rds1= TagReader.readFile(inFN.file);
-      log.debug1('rds: 1 ${rds1.info}');
-      log.debug2(rds1.format(new Formatter(maxDepth: -1)));
-      log.up;
-
+      final rds1 = TagReader.readFile(inFN.file);
+      log
+        ..debug1('rds: 1 ${rds1.info}')
+        ..debug2(rds1.format(new Formatter(maxDepth: -1)))
+        ..up
+        ..debug('Comparing Datasets: 0: $rds0, 1: $rds1', 1);
       // Compare [Dataset]s
       //log.watermark = Level.info;
-      log.debug("Comparing Datasets: 0: ${rds0}, 1: ${rds1}", 1);
-      var comparitor = new DatasetComparitor(rds0, rds1);
-      comparitor.run;
+      final comparitor = new DatasetComparitor(rds0, rds1)
+      ..run;
       log.down;
       if (comparitor.hasDifference) {
-        log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
-        log.config('Result: ${comparitor.info}');
-        log.debug(comparitor.toString());
-        error = new FileTestError(inFN, outFN);
-        error.dsCompare = comparitor.info;
-        throw "stop";
+        log..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
+        ..config('Result: ${comparitor.info}')
+        ..debug(comparitor.toString());
+        error = new FileTestError(inFN, outFN)
+        ..dsCompare = comparitor.info;
+        throw 'stop';
       } else {
-        log.debug("Dataset are identical");
+        log.debug('Dataset are identical');
       }
-      log.up;
-      log.up;
-
-     // log.watermark = Level.debug;
+      log..up
+      ..up
+      ..debug('Comparing Files by Bytes:')
+      ..down
+      ..debug1('Original: ${inFN.path}')
+      ..debug1('Result: ${outFN.path}');
+      // log.watermark = Level.debug;
       // Compare input and output
-      log.debug('Comparing Files by Bytes:');
-      log.down;
-      log.debug1('Original: ${inFN.path}');
-      log.debug1('Result: ${outFN.path}');
-      FileCompareResult result = compareFiles(inFN.path, outFN.path);
+      final result = compareFiles(inFN.path, outFN.path);
       if (result == null) {
-          log.debug('Files are identical');
-        } else {
-        log.config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}');
-        log.debug('Files have differences at : $result');
-        error = error ??=  new FileTestError(inFN, outFN);
-        error.result = result;
+        log.debug('Files are identical');
+      } else {
+        log..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
+        ..debug('Files have differences at : $result');
+        error = error ??= new FileTestError(inFN, outFN)
+        ..result = result;
       }
       log.up;
     } else {
-      throw "Fall-through error";
+      throw 'Fall-through error';
     }
     if (error != null) {
       errors.add(error);

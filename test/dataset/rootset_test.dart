@@ -6,8 +6,7 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 import 'package:system/server.dart';
 import "package:test/test.dart";
@@ -35,7 +34,7 @@ void main() {
 
         if (fn.isDicom) {
           log.debug('Reading file: $fn');
-          RootTagDataset rds;
+          RootDataset rds;
 
           group("Data set", () {
             test("Create a data set object from map", (){

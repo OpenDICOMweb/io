@@ -50,7 +50,7 @@ String jsonMetadata = 'bas/json/file.mddcmjson';
 String xmlEntity = 'bas/bar/file.dcmxml';
 String xmlMetadata = 'bas/bar/file.mddcmxml';
 String bulkdata = 'bas/bar/file.bddcm';
-var pathList = [
+final pathList = [
   dcmEntity,
   dcmMetadata,
   jsonEntity,
@@ -60,10 +60,10 @@ var pathList = [
   bulkdata
 ];
 
-String inRoot = "C:/odw/test_data/sfd/CR";
+String inRoot = 'C:/odw/test_data/sfd/CR';
 
 List flatten(List list) {
-  var flat = [];
+  final flat = [];
   for (var l in list)
     if (l is List) {
       flat.addAll(l);
@@ -74,9 +74,9 @@ List flatten(List list) {
 }
 
 List getFiles(String path) {
-  Directory dir = new Directory(path);
-  List<FileSystemEntity> entities = dir.listSync(recursive: true);
-  List<File> files = [];
+  final dir = new Directory(path);
+  final entities = dir.listSync(recursive: true);
+  final files = <File>[];
   for (var e in entities) {
     if (e is Directory) continue;
     files.add(e);
@@ -85,39 +85,14 @@ List getFiles(String path) {
 }
 
 String toAbsolute(String path) {
-  var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
+  final s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
   return s.replaceAll('\\', '/');
 }
 
 void main() {
   //var root = 'C:/odw/sdk/io/';
-  for (String s in pathList) {
-    /*
-    String path = toAbsolute(s);
-    print('path: $path');
-    var dir = p.dirname(path);
-    print('dirname: $dir');
-
-    if (dir.indexOf(root) == 0) dir = dir.replaceFirst(root, "");
-    print('without root: $dir');
-    var dirs = dir.split('/');
-    print('dirList: $dirs');
-
-    int length = dirs.length;
-    if (length > 2) throw "too many directories: $dir";
-    var series;
-    var study;
-    if (length == 2) {
-      //series = Uid.isValid(dirs[1]);
-      //study = Uid.isValid(dirs[0]);
-      series = dirs[1];
-      study = dirs[0];
-    } else if (length == 1) {
-      var study = dirs[0];
-    }
-    print('study: $study, series: $series');
-*/
-    Filename f = new Filename(s);
+  for (var s in pathList) {
+    final f = new Filename(s);
     print('''
 Path: $s
   components:

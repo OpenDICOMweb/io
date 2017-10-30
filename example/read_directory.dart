@@ -6,8 +6,7 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:dcm_convert/byte_convert.dart';
 import 'package:io/io.dart';
 
 String inRoot0 = "C:/odw/test_data/sfd/CR";
@@ -29,7 +28,7 @@ void main() {
   for (Filename file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
-      RootTagDataset rds = file.readSync();
+      RootDataset rds = file.readSync();
       print(rds.info);
     } else {
       print('Skipping ... $file');
