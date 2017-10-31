@@ -35,9 +35,9 @@ class FileCompareResult {
   String get lengthMsg => (sameLength) ? 'Equal lengths' : '** Different Lengths';
 
   String get fmtDiffs {
-    var out = 'Differences';
-    for (var d in diffs) out += '$d';
-    return out;
+    final sb = new StringBuffer('Differences');
+    for (var d in diffs) sb.write('$d');
+    return sb.toString();
   }
 
   @override
@@ -156,8 +156,8 @@ String _toDecimal(int i) => i.toRadixString(10).padLeft(4, ' ');
 String _toHex(int i) => i.toRadixString(16).padLeft(2, '0').padLeft(4, ' ');
 
 String _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
-  var out = 'Found a Problem at index $i\n';
-  out += '  $i: ${bytes0[i]} != ${bytes1[i]}\n';
+  final sb = new StringBuffer('Found a Problem at index $i\n')
+    ..write('  $i: ${bytes0[i]} != ${bytes1[i]}\n');
 
   final count = <String>[];
   final index = <String>[];
@@ -217,13 +217,14 @@ String _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int 
     char1.add(_charToString(v1));
   }
 
-  out += ' k: $count';
-  out += ' i: $index';
-  out += 'D0: $dec0';
-  out += 'D1: $dec1';
-  out += 'H0: $hex0';
-  out += 'H1: $hex1';
-  out += 'C0: $char0';
-  out += 'C1: $char1';
-  return out;
+  sb
+    ..write(' k: $count')
+    ..write(' i: $index')
+    ..write('D0: $dec0')
+    ..write('D1: $dec1')
+    ..write('H0: $hex0')
+    ..write('H1: $hex1')
+    ..write('C0: $char0')
+    ..write('C1: $char1');
+  return sb.toString();
 }

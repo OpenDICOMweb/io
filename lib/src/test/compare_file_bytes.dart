@@ -53,7 +53,8 @@ void main(List<String> args) {
 }
 
 void printDifference(
-    Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
+    Uint8List bytes0, Uint8List bytes1, int index, int before, int after) {
+  var i = index;
   for (var j = -10; j < 20; j++, i++) {
     if (bytes0[i] == bytes1[i]) break;
     log.debug('$i: ${bytes0[i]} != ${bytes1[i]}');

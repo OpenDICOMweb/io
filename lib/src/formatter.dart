@@ -18,17 +18,17 @@ class FSFormatter {
 
   String fmt(Object o) => '$sp$count: $o';
 
-  String call(FileSystemEntity fse, [String output = '']) {
-    final s = fmt(fse);
+
+  String call(FileSystemEntity fse, [StringBuffer sb]) {
+    sb ??= new StringBuffer();
+    sb.write(fmt(fse));
     count++;
-  //  print(s);
-    output += s;
     if (fse is Directory) {
       level++;
       final list = fse.listSync(followLinks: false);
-      for (var e in list) output += call(e, output);
+      for (var e in list) sb.write(call(e, sb));
       level--;
     }
-    return output;
+    return sb.toString();
   }
 }

@@ -16,10 +16,9 @@ void main() {
   // Read a File
   final fnIn = new Filename(inPath);
 
-  RootDataset rds = TagReader.readFile(fnIn.file);
+  final rds = TagReader.readFile(fnIn.file);
   print(rds.format(new Formatter(maxDepth: -1)));
 
   // Write a File
-  final fnOut = new Filename.withType(outPath, FileSubtype.part10);
-  fnOut.writeSync(rds);
+  new Filename.withType(outPath, FileSubtype.part10)..writeSync(rds);
 }

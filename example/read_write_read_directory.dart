@@ -112,7 +112,7 @@ void main(List<String> args) {
         ..debug('Comparing Datasets: 0: $rds0, 1: $rds1', 1);
       // Compare [Dataset]s
       //log.watermark = Level.info;
-      final comparitor = new DatasetComparitor(rds0, rds1)
+      final comparitor = new DatasetComparitor<int>(rds0, rds1)
       ..run;
       log.down;
       if (comparitor.hasDifference) {

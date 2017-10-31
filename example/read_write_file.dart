@@ -83,7 +83,7 @@ void main() {
   ..debug(rds1.format(new Formatter(maxDepth: -1)));
 
   // Compare [Dataset]s
-  final comparitor = new DatasetComparitor(rds0, rds1)..run;
+  final comparitor = new DatasetComparitor<int>(rds0, rds1)..run;
   if (comparitor.hasDifference) {
     log.fatal('Result: ${comparitor.info}');
   }

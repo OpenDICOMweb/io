@@ -66,22 +66,22 @@ class DcmMediaType {
 
   bool get isDicom => name != 'Unknown';
 
-  /// Returns [true] if the representation is encoded in [Units.binary].
+  /// Returns _true_ if the representation is encoded in [Units.binary].
   bool get isBinary => units == Units.binary;
 
-  /// Returns [true] if the representation is encoded in [Units.ascii].
+  /// Returns _true_ if the representation is encoded in [Units.ascii].
   bool get isAscii => units == Units.ascii;
 
-  /// Returns [true] if the representation is encoded in [Units.utf8].
+  /// Returns _true_ if the representation is encoded in [Units.utf8].
   bool get isUtf8 => units == Units.utf8;
 
-  /// Returns [true] if the representation encoding is [encoding.part10].
+  /// Returns _true_ if the representation encoding is [encoding].part10.
   bool get isPart10 => encoding == Encoding.part10;
 
-  /// Returns [true] if the representation encoding is [encoding.json].
+  /// Returns _true_ if the representation encoding is [encoding].json.
   bool get isJson => encoding == Encoding.json;
 
-  /// Returns [true] if the representation encoding is [encoding.xml].
+  /// Returns _true_ if the representation encoding is [encoding].xml.
   bool get isXml => encoding == Encoding.xml;
 
   /// Returns information about this DICOM Media Type.

@@ -11,38 +11,37 @@ import 'package:io/src/file_system_base.dart';
 import 'package:io/src/file_type.dart';
 import 'package:uid/uid.dart';
 
-/// An interface for an [Index] of a [FileSystem].
+/// An interface for an [FSIndex] of a FileSystem.
 class FSIndex {
   FileSystemBase fs;
   List<String> _list;
   final String path;
   final Directory root;
 
-  FSIndex(String path)
-      : path = path,
-        root = FileSystemBase.maybeCreateRootSync(path),
+  FSIndex(this.path)
+      : root = FileSystemBase.maybeCreateRootSync(path),
         super();
 
-  /// Asynchronously retrieves and returns a stored [Index].
+  /// Asynchronously retrieves and returns a stored [FSIndex].
 //  Future<List<String>> load() {}
 
-  /// Synchronously retrieves and returns a stored [Index].
+  /// Synchronously retrieves and returns a stored [FSIndex].
 //  List<String> loadSync() {}
 
-  /// Asynchronously stores an [Index].
+  /// Asynchronously stores an [FSIndex].
 //  Future<Null> store() {}
 
-  /// Synchronously stores an [Index].
+  /// Synchronously stores an [FSIndex].
   void storeSync() {}
 
-  /// Returns an [Index] encoded as a JSON string.
+  /// Returns an [FSIndex] encoded as a JSON string.
   String toJson() => JSON.encode(_list);
 
-  /// Returns a formatted [String] containing the [Index].
+  /// Returns a formatted [String] containing the [FSIndex].
   //TODO: fix or flush
   //String format([int indent = 2, int level = 0]);
 
-  /// Return a path to a file in the [FileSystem].
+  /// Return a path to a file in the FileSystem].
   //TODO: verify this is correct.  If it is move to index.dart
   String toPath(FileSubtype fType, Uid study,
       [Uid series, Uid instance, String extension]) {

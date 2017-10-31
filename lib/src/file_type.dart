@@ -62,25 +62,25 @@ class FileType {
   String get extension => subtype.extension;
 
   // Media Type  and associated accessors.
-  /// The IANA Media Type of the associated [Filename].
+  /// The IANA Media Type of the associated Filename.
   DcmMediaType get mediaType => subtype.mType;
 
-  /// Returns [true] if the encoding units are bytes.
+  /// Returns _true_ if the encoding units are bytes.
   bool get isBinary => subtype.mType.isBinary;
 
-  /// Returns [true] if the encoding units are 7-bit US-ASCII.
+  /// Returns _true_ if the encoding units are 7-bit US-ASCII.
   bool get isAscii => subtype.mType.isAscii;
 
-  /// Returns [true] if the encoding (code) units are UTF8.
+  /// Returns _true_ if the encoding (code) units are UTF8.
   bool get isUtf8 => subtype.mType.isUtf8;
 
-  /// Returns [true] if the representation encoding is [encoding.part10].
+  /// Returns _true_ if the representation encoding is [encoding].part10.
   bool get isPart10 => subtype.mType.encoding == Encoding.part10;
 
-  /// Returns [true] if the representation encoding is [encoding.json].
+  /// Returns _true_ if the representation encoding is [encoding].json.
   bool get isJson => subtype.mType.encoding == Encoding.json;
 
-  /// Returns [true] if the representation encoding is [encoding.xml].
+  /// Returns _true_ if the representation encoding is [encoding].xml.
   bool get isXml => subtype.mType.encoding == Encoding.xml;
 
   /// The DICOM object [Encoding].
@@ -89,14 +89,14 @@ class FileType {
   /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
 
-  /// Returns [true] if the Dataset is [OType.complete], that is, it contains no Bulkdata
+  /// Returns _true_ if the Dataset is [OType.complete], that is, it contains no Bulkdata
   /// References.
   bool get isComplete => subtype.oType == OType.complete;
 
-  /// Returns [true] if the Dataset is [Metadata], that is, it contains Bulkdata References.
+  /// Returns _true_ if the Dataset is Metadata, that is, it contains Bulkdata References.
   bool get isMetadata => subtype.oType == OType.metadata;
 
-  /// Returns [true] if this is a [Bulkdata] object.
+  /// Returns _true_ if this is a Bulkdata object.
   bool get isBulkdata => subtype.oType == OType.bulkdata;
 
   bool get isUnknown => this == unknown;
@@ -192,7 +192,7 @@ class FileType {
           case FileSubtype.xmlMD:
             return xmlStudyMD;
         }
-        throw "bad study lookup";
+        throw 'bad study lookup';
       case IELevel.series:
         switch (fSubtype) {
           case FileSubtype.part10:
@@ -210,7 +210,7 @@ class FileType {
           case FileSubtype.xmlMD:
             return xmlSeriesMD;
         }
-        throw "bad series lookup";
+        throw 'bad series lookup';
       case IELevel.instance:
         switch (fSubtype) {
           case FileSubtype.part10:
@@ -228,7 +228,7 @@ class FileType {
           case FileSubtype.xmlMD:
             return xmlInstanceMD;
         }
-        throw "bad instance lookup";
+        throw 'bad instance lookup';
 /*
       case IELevel.frames:
         switch (fSubtype) {
@@ -247,10 +247,10 @@ class FileType {
           case FileSubtype.xmlMD:
             return xmlFramesMD;
         }
-        throw "bad frames lookup";
+        throw 'bad frames lookup';
         */
     }
-    throw "bad Entity lookup";
+    throw 'bad Entity lookup';
   }
 
   @override
@@ -259,15 +259,15 @@ class FileType {
 
 /// The DICOM Object Type [OType].
 enum OType {
-  /// The Complete DICOM object [Dataset].
+  /// The Complete DICOM object Dataset.
   ///
-  /// A [Dataset] that contains all Data [Element]s along with their values.
+  /// A Dataset that contains all Data Elements along with their values.
   /// In Particular,it contains no Bulkdata References.
   complete,
 
   /// A Metadata object.
   ///
-  /// A [Dataset] that contains all Data [Element]s, but
+  /// A Dataset that contains all Data Elements, but
   /// some of the values are Bulkdata References.
   metadata,
 
@@ -297,25 +297,25 @@ class FileSubtype {
   String get extension => ext;
 
   // Media Type  and associated accessors.
-  /// The IANA Media Type of the associated [Filename].
+  /// The IANA Media Type of the associated Filename.
   DcmMediaType get mediaType => mType;
 
-  /// Returns [true] if the encoding units are bytes.
+  /// Returns _true_ if the encoding units are bytes.
   bool get isBinary => mType.isBinary;
 
-  /// Returns [true] if the encoding units are 7-bit US-ASCII.
+  /// Returns _true_ if the encoding units are 7-bit US-ASCII.
   bool get isAscii => mType.isAscii;
 
-  /// Returns [true] if the encoding (code) units are UTF8.
+  /// Returns _true_ if the encoding (code) units are UTF8.
   bool get isUtf8 => mType.isUtf8;
 
-  /// Returns [true] if the representation encoding is [encoding.part10].
+  /// Returns _true_ if the representation encoding is [encoding].part10.
   bool get isPart10 => mType.encoding == Encoding.part10;
 
-  /// Returns [true] if the representation encoding is [encoding.json].
+  /// Returns _true_ if the representation encoding is [encoding].json.
   bool get isJson => mType.encoding == Encoding.json;
 
-  /// Returns [true] if the representation encoding is [encoding.xml].
+  /// Returns _true_ if the representation encoding is [encoding].xml.
   bool get isXml => mType.encoding == Encoding.xml;
 
   /// The DICOM object [Encoding].
@@ -324,14 +324,14 @@ class FileSubtype {
   /// The [Encoding] [Units].
   Units get units => mType.units;
 
-  /// Returns [true] if the Dataset is [OType.complete],
+  /// Returns _true_ if the Dataset is [OType.complete],
   /// that is, it contains no Bulkdata References.
   bool get isComplete => oType == OType.complete;
 
-  /// Returns [true] if the Dataset is [Metadata], that is, it contains Bulkdata References.
+  /// Returns _true_ if the Dataset is Metadata, that is, it contains Bulkdata References.
   bool get isMetadata => oType == OType.metadata;
 
-  /// Returns [true] if this is a [Bulkdata] object.
+  /// Returns _true_ if this is a Bulkdata object.
   bool get isBulkdata => oType == OType.bulkdata;
 
   bool get isUnknown => mediaType == DcmMediaType.unknown;

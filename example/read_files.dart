@@ -28,7 +28,7 @@ void main(List<String> args) {
     var count = 0;
     log.info0('*** Starting($count): $fn');
     if (fn.isPart10) {
-      RootDataset  rds = TagReader.readFile(fn.file);
+      final  rds = TagReader.readFile(fn.file);
       if (rds == null) {
         log.debug('  *** Skipping Invalid Transfer Syntax: $fn ');
       } else {

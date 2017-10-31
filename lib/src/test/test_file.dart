@@ -92,7 +92,7 @@ FileTestError dicomFileTest(Filename inFile, Filename outFile) {
     log
       ..debug('Comparing Datasets: 0: $rds0, 1: {rds1')
       ..down;
-    final comparitor = new DatasetComparitor(rds0, rds1)..run;
+    final comparitor = new DatasetComparitor<int>(rds0, rds1)..run;
     if (comparitor.hasDifference) {
       log
         ..config('Comparing Datasets: $rds0, $rds1')

@@ -45,7 +45,7 @@ void main() {
 
       final rds = TagReader.readFile(fn.file);
       print('Entity: ${rds.format(new Formatter())}');
-      final entity = activeStudies.entityFromDataset(rds);
+      final entity = activeStudies.entityFromRootDataset(rds);
 
       final dcmFile = fs.file(entity, FileType.part10Instance);
       print(dcmFile.path);

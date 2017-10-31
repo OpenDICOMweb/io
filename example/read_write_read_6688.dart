@@ -58,7 +58,7 @@ void main(List<String> args) {
       ..debug1(rds1.format(new Formatter(maxDepth: -1)), -1)
       ..info0('Comparing Datasets: 0: $rds0, 1: $rds1', 1);
 
-    final comparitor = new DatasetComparitor(rds0, rds1)..run;
+    final comparitor = new DatasetComparitor<int>(rds0, rds1)..run;
     if (comparitor.hasDifference) {
       log.info0('Result: ${comparitor.bad}');
       throw 'stop';
