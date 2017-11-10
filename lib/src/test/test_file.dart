@@ -42,7 +42,7 @@ FileTestError dicomFileTest(Filename inFile, Filename outFile) {
     log
       ..down
       ..debug1('Read ${sourceBytes.length} bytes');
-    final sourceRDS = ByteReader.readFile(sourceFN.file);
+    final sourceRDS = ByteDatasetReader.readFile(sourceFN.file);
 
     //TODO: instance should have StatusReport
     if (sourceRDS != null) {

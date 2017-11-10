@@ -15,3 +15,5 @@ export 'package:io/src/formatter.dart';
 export 'package:io/src/index.dart';
 export 'package:io/src/std_arg_parser.dart';
 export 'package:io/src/utils.dart';
+export 'package:io/src/utils/file_list_reader.dart';
+export 'package:io/src/utils/file_utils.dart';

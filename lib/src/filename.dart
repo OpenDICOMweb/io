@@ -125,7 +125,7 @@ class Filename {
   Dataset readSync() {
     log.debug('subtype: $subtype');
     if (isPart10) {
-      return ByteReader.readPath( path);
+      return ByteDatasetReader.readPath( path);
     } else if (isJson) {
 /*      Uint8List bytes = file.readAsBytesSync();
       return JsonDecoder.decode(bytes);*/
