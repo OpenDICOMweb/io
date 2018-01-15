@@ -6,14 +6,13 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
-import 'package:system/server.dart';
+import 'package:core/server.dart';
+import 'package:convert/convert.dart';
 
-String inRoot0 = "C:/odw/test_data/sfd/CR";
-String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
-String inRoot2 = "C:/odw/test_data/sfd/CT";
-String inRoot3 = "C:/odw/test_data/sfd/MG";
+String inRoot0 = 'C:/acr/odw/test_data/sfd/CR';
+String inRoot1 = 'C:/acr/odw/test_data/sfd/CR_and_RF';
+String inRoot2 = 'C:/acr/odw/test_data/sfd/CT';
+String inRoot3 = 'C:/acr/odw/test_data/sfd/MG';
 
 String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';
@@ -23,13 +22,13 @@ String outRoot3 = 'test/output/root3';
 void main() {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
-  Directory dir = new Directory(inRoot1);
+  final dir = new Directory(inRoot1);
 
-  List<FileSystemEntity> fList = dir.listSync();
+  final fList = dir.listSync();
   log.info0('File count: ${fList.length}');
   for (File f in fList) log.info0('File: $f');
 
-  RootTagDataset rds;
+  TagRootDataset rds;
   for (File file in fList) {
     print('\nReading file: $file');
     rds = TagReader.readFile(file);

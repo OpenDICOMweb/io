@@ -6,8 +6,9 @@
 
 import 'dart:typed_data';
 
+import 'package:core/server.dart';
 import 'package:io/io.dart';
-import 'package:system/server.dart';
+
 
 /// A simple program that compares to files byte by byte.
 ///
@@ -22,11 +23,11 @@ import 'package:system/server.dart';
 /// This program could be improved in several ways:
 ///   * Try to parse both files simultaneously.
 
-String inPath0 = 'C:/odw/test_data/IM-0001-0001.dcm';
-String inPath1 = 'C:/odw/sdk/io/example/output/IM-0001-0001.dcm';
+String inPath0 = 'C:/acr/odw/test_data/IM-0001-0001.dcm';
+String inPath1 = 'C:/acr/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 /// Compare two files byte by byte and report the first significant difference.
-void main(final args) {
+void main(List<String> args) {
   Server.initialize(name: 'compare_file_bytes.dart', level: Level.info0);
 
   final fn0 = new Filename(inPath0);
@@ -53,7 +54,8 @@ void main(final args) {
 }
 
 void printDifference(
-    Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
+    Uint8List bytes0, Uint8List bytes1, int index, int before, int after) {
+  var i = index;
   for (var j = -10; j < 20; j++, i++) {
     if (bytes0[i] == bytes1[i]) break;
     log.debug('$i: ${bytes0[i]} != ${bytes1[i]}');

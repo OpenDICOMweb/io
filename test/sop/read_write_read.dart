@@ -6,15 +6,15 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
-import 'package:io/io.dart';
-import 'package:system/server.dart';
+import 'package:core/server.dart';
+import 'package:convert/convert.dart';
 
-String inRoot0 = "C:/odw/test_data/sfd/CR";
-String inRoot1 = "C:/odw/test_data/sfd/CR_and_RF";
-String inRoot2 = "C:/odw/test_data/sfd/CT";
-String inRoot3 = "C:/odw/test_data/sfd/MG";
+import 'package:io/src/filename.dart';
+
+String inRoot0 = 'C:/acr/odw/test_data/sfd/CR';
+String inRoot1 = 'C:/acr/odw/test_data/sfd/CR_and_RF';
+String inRoot2 = 'C:/acr/odw/test_data/sfd/CT';
+String inRoot3 = 'C:/acr/odw/test_data/sfd/MG';
 
 String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';
@@ -26,14 +26,14 @@ void main() {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
   // Get the files in the directory
-  List<Filename> files = Filename.listFromDirectory(inRoot0);
+  final files = Filename.listFromDirectory(inRoot0);
   log.info0('File count: ${files.length}');
 
   // Read, parse, and print a summary of each file.
-  for (Filename file in files) {
+  for (var file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
-      TagDataset rds = file.readSync();
+      final rds = file.readSync();
       log.info0(rds.info);
     } else {
       print('Skipping ... $file');
@@ -42,10 +42,10 @@ void main() {
 }
 
 /// Returns a [TagDataset] read from the [File] associated with [fileId]
-TagDataset readDicomFile(fileId) {
+TagDataset readDicomFile(Object fileId) {
   File file;
-  if (file is String) file = new File(fileId);
-  if (file is Filename) file = fileId.file;
+  if (fileId is String) file = new File(fileId);
+  if (fileId is Filename) file = fileId.file;
   if (file is! File) return null;
   return TagReader.readFile(file);
 }

@@ -9,14 +9,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:dcm_convert/dcm.dart';
+import 'package:convert/convert.dart';
 import 'package:path/path.dart' as p;
-import 'package:system/system.dart';
 
 import 'dcm_media_type.dart';
 import 'file_type.dart';
 import 'utils.dart';
 
+// ignore_for_file: only_throw_errors
 //TODO: make everything async
 
 int _firstDot(String s) => p.basename(s).indexOf('.');
@@ -49,7 +49,7 @@ class Filename {
         _path = toAbsolute(file.path);
 
   factory Filename.withExt(Filename fn, [String ext = 'out']) {
-    final path = p.basenameWithoutExtension(fn.path) + '.$ext';
+    final path = '${p.basenameWithoutExtension(fn.path)}.$ext';
     return new Filename(path);
   }
 
@@ -75,7 +75,7 @@ class Filename {
   bool get isFile => FileSystemEntity.isFileSync(_path);
   //*** These getters are based on the expectation that the file extension is accurate.
 
-  /// Returns [true] if a DICOM file type.
+  /// Returns _true_ if a DICOM file type.
   bool get isDicom => subtype.isDicom;
 
   bool get isNotDicom => !isDicom;
@@ -86,22 +86,22 @@ class Filename {
   /// The IANA Media Type of the associated this [Filename].
   DcmMediaType get mediaType => subtype.mediaType;
 
-  /// Returns [true] if the encoding units are bytes.
-  bool get isBinary => subtype.mType?.isBinary ?? null;
+  /// Returns _true_ if the encoding units are bytes.
+  bool get isBinary => subtype?.mType?.isBinary;
 
-  /// Returns [true] if the encoding units are 7-bit US-ASCII.
+  /// Returns _true_ if the encoding units are 7-bit US-ASCII.
   bool get isAscii => subtype.mType?.isAscii;
 
-  /// Returns [true] if the encoding (code) units are UTF8.
+  /// Returns _true_ if the encoding (code) units are UTF8.
   bool get isUtf8 => subtype.mType?.isUtf8;
 
-  /// Returns [true] if the representation encoding is [encoding.part10].
+  /// Returns _true_ if the representation encoding is [encoding].part10.
   bool get isPart10 => subtype.mType?.encoding == Encoding.part10;
 
-  /// Returns [true] if the representation encoding is [encoding.json].
+  /// Returns _true_ if the representation encoding is [encoding].json.
   bool get isJson => subtype.mType?.encoding == Encoding.json;
 
-  /// Returns [true] if the representation encoding is [encoding.xml].
+  /// Returns _true_ if the representation encoding is [encoding].xml.
   bool get isXml => subtype.mType?.encoding == Encoding.xml;
 
   /// The DICOM object [Encoding].
@@ -110,23 +110,23 @@ class Filename {
   /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
 
-  /// Returns [true] if the [Dataset] is [OType.complete], that is, it contains no Bulkdata
+  /// Returns _true_ if the [Dataset] is [OType.complete], that is, it contains no Bulkdata
   /// References.
   bool get isComplete => subtype.oType == OType.complete;
 
-  /// Returns [true] if the Dataset is [Metadata], that is, it contains Bulkdata References.
+  /// Returns _true_ if the Dataset is Metadata, that is, it contains Bulkdata References.
   bool get isMetadata => subtype.oType == OType.metadata;
 
-  /// Returns [true] if this is a [Bulkdata] object.
+  /// Returns _true_ if this is a Bulkdata object.
   bool get isBulkdata => subtype.oType == OType.bulkdata;
 
-  Future<RootTagDataset> get contents => read();
+  Future<TagRootDataset> get contents => read();
 
   //TODO: should this return the bytes or a parsed Entity
   Dataset readSync() {
     log.debug('subtype: $subtype');
     if (isPart10) {
-      return ByteReader.readPath( path);
+      return BDReader.readPath( path);
     } else if (isJson) {
 /*      Uint8List bytes = file.readAsBytesSync();
       return JsonDecoder.decode(bytes);*/
@@ -156,11 +156,10 @@ class Filename {
     throw "Shouldn't get here";
   }
 
-  bool writeSync(TagDataset ds) {
+  Future<bool> writeSync(TagDataset ds) async {
     if (isBinary) {
-      final bytes = TagWriter.writePath(ds, _path);
+      final bytes = await TagWriter.writePath(ds, _path, doAsync: true);
       log.debug('Writing ${bytes.lengthInBytes} bytes.');
-      file.writeAsBytesSync(bytes);
       return true;
     } else if (isJson) {
       //Uint8List bytes = JsonEncoder.encode(entity);
@@ -191,7 +190,7 @@ Subtype: ${FileSubtype.parse(_path)};
   @override
   String toString() => _path;
 
-  static Filename toFilename(obj) {
+  static Filename toFilename(Object obj) {
     if (obj is Filename) return obj;
     if (obj is String) return new Filename(obj);
     if (obj is File) return new Filename.fromFile(obj);

@@ -12,7 +12,7 @@ import 'package:core/core.dart';
 
 import 'dcm_file.dart';
 import 'file_type.dart';
-import 'index.dart';
+import 'fs_index.dart';
 //import 'file_descriptor.dart';
 
 //TODO: Implement all async IO calls
@@ -37,10 +37,10 @@ abstract class FileSystemBase {
 
   FileSubtype get defaultFileSubtype;
 
-  /// Returns an [Index] to the files in this [FileSystem].
+  /// Returns an Index to the files in this FileSystem.
   ///
   /// An [FSIndex] is a structured tree, 3 levels deep, where the interior nodes are
-  /// are [List] and the leaves are [String]s containing the [Uid] of the [SopInstance].
+  /// are [List] and the leaves are [String]s containing the [Uid] of the SopInstance.
   /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
   /// [Series] [Uid] [String]s,
   FSIndex get index;
@@ -60,11 +60,11 @@ abstract class FileSystemBase {
   Future<Entity> read(String path, [FileSubtype subtype]);
 
   /// Returns a [Stream] of [Uint8List]s containing all the
-  /// SOP [Instances] in the [Study].
+  /// SOPInstances in the [Study].
   Future<Study> readStudy(Uid study, [FileSubtype subtype]);
 
   /// Returns a [Stream] of [Uint8List]s containing all the
-  /// SOP [Instances] in the [Study].
+  /// SOPInstances in the [Study].
   Future<Series> readSeries(Uid study, Uid series, [FileSubtype subtype]);
 
   /// Returns a [Future] containing a [Uint8List] containing
@@ -91,8 +91,7 @@ abstract class FileSystemBase {
 
   /// Returns a [Uint8List] or [String] (depending on the [FileSubtype]) containing the
   /// target SOP Instance in the specified [FileSubtype].
-  Instance readInstanceSync(Uid study, Uid series, Uid instance,
-      [FileSubtype subtype]);
+  Instance readInstanceSync(Uid study, Uid series, Uid instance, [FileSubtype subtype]);
 
   // *** Write Async  ***
 
@@ -119,7 +118,7 @@ abstract class FileSystemBase {
   /// file specified by by the [FileSubtype], [Study], [Series], and [Instance] [String]s.
   bool writeInstanceSync(Instance instance, [FileSubtype subtype]);
 
-  /// Return a path to a file in the [FileSystem]
+  /// Return a path to a file in the FileSystem
   String toPath(FileSubtype fType, Uid study,
       [Uid series, Uid instance, String extension]) {
     final part4 = (instance == null) ? '' : '/$instance${fType.extension}';
@@ -134,11 +133,11 @@ abstract class FileSystemBase {
   static Future<Directory> maybeCreateRoot(String rootPath) async {
     final root = new Directory(rootPath);
     final exists = await root.exists();
-    if (!exists) await root.createSync(recursive: true);
+    if (!exists) root.createSync(recursive: true);
     return root;
   }
 
-  /// Create the [root] Directory of the [FileSystem] recursively.
+  /// Create the [root] Directory of the FileSystem recursively.
   static Directory maybeCreateRootSync(String path) {
     final root = new Directory(path);
     if (!root.existsSync()) root.createSync(recursive: true);

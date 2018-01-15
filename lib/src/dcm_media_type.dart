@@ -66,22 +66,22 @@ class DcmMediaType {
 
   bool get isDicom => name != 'Unknown';
 
-  /// Returns [true] if the representation is encoded in [Units.binary].
+  /// Returns _true_ if the representation is encoded in [Units.binary].
   bool get isBinary => units == Units.binary;
 
-  /// Returns [true] if the representation is encoded in [Units.ascii].
+  /// Returns _true_ if the representation is encoded in [Units.ascii].
   bool get isAscii => units == Units.ascii;
 
-  /// Returns [true] if the representation is encoded in [Units.utf8].
+  /// Returns _true_ if the representation is encoded in [Units.utf8].
   bool get isUtf8 => units == Units.utf8;
 
-  /// Returns [true] if the representation encoding is [encoding.part10].
+  /// Returns _true_ if the representation encoding is [encoding].part10.
   bool get isPart10 => encoding == Encoding.part10;
 
-  /// Returns [true] if the representation encoding is [encoding.json].
+  /// Returns _true_ if the representation encoding is [encoding].json.
   bool get isJson => encoding == Encoding.json;
 
-  /// Returns [true] if the representation encoding is [encoding.xml].
+  /// Returns _true_ if the representation encoding is [encoding].xml.
   bool get isXml => encoding == Encoding.xml;
 
   /// Returns information about this DICOM Media Type.
@@ -97,16 +97,18 @@ DcmMediaType:
   String toString() => '$type/$name';
 
   //TODO: finish documenting these
-  static const part10 =
+  static const DcmMediaType part10 =
       const DcmMediaType('dicom', Encoding.part10, Units.binary);
-  static const json =
+  static const DcmMediaType json =
       const DcmMediaType('dicom+json', Encoding.json, Units.utf8);
-  static const fastJson =
+  static const DcmMediaType fastJson =
       const DcmMediaType('dicom+json', Encoding.json, Units.utf8);
-  static const pureJson = const DcmMediaType('json', Encoding.json, Units.utf8);
-  static const xml = const DcmMediaType('dicom+xml', Encoding.xml, Units.utf8);
-  static const octets =
+  static const DcmMediaType pureJson =
+      const DcmMediaType('json', Encoding.json, Units.utf8);
+  static const DcmMediaType xml =
+      const DcmMediaType('dicom+xml', Encoding.xml, Units.utf8);
+  static const DcmMediaType octets =
       const DcmMediaType('octet-stream', Encoding.xml, Units.binary);
-  static const unknown =
+  static const DcmMediaType unknown =
       const DcmMediaType('Unknown', Encoding.unknown, Units.unknown);
 }

@@ -17,26 +17,24 @@ import 'package:path/path.dart' as p;
 ///                   / name /ext
 
 Filename convert(File f) {
-  String name = f.path;
-  String dir = p.dirname(name);
-  String ext = p.extension(name);
-  FileSubtype subtype = FileSubtype.subtypes[ext];
+  final name = f.path;
+  final dir = p.dirname(name);
+  final ext = p.extension(name);
+  final subtype = FileSubtype.subtypes[ext];
   print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
   return new Filename(name);
 }
 
 String ext(String s) {
-  var base = p.basename(s);
-  var i = base.indexOf('.');
-  var ext = base.substring(i);
-  return ext;
+  final base = p.basename(s);
+  final i = base.indexOf('.');
+  return base.substring(i);
 }
 
 List<Filename> getDcmFilesFromDirectory(String source) {
-  var dir = new Directory(source);
-  List<FileSystemEntity> files =
-      dir.listSync(recursive: true, followLinks: false);
-  List<Filename> filenames = [];
+  final dir = new Directory(source);
+  final files = dir.listSync(recursive: true, followLinks: false);
+  final filenames = [];
   for (File f in files) {
     filenames.add(new Filename(f.path));
   }
@@ -50,7 +48,7 @@ String jsonMetadata = 'bas/json/file.mddcmjson';
 String xmlEntity = 'bas/bar/file.dcmxml';
 String xmlMetadata = 'bas/bar/file.mddcmxml';
 String bulkdata = 'bas/bar/file.bddcm';
-var pathList = [
+final List<String> pathList = <String>[
   dcmEntity,
   dcmMetadata,
   jsonEntity,
@@ -60,10 +58,10 @@ var pathList = [
   bulkdata
 ];
 
-String inRoot = "C:/odw/test_data/sfd/CR";
+String inRoot = 'C:/acr/odw/test_data/sfd/CR';
 
 List flatten(List list) {
-  var flat = [];
+  final flat = [];
   for (var l in list)
     if (l is List) {
       flat.addAll(l);
@@ -74,9 +72,9 @@ List flatten(List list) {
 }
 
 List getFiles(String path) {
-  Directory dir = new Directory(path);
-  List<FileSystemEntity> entities = dir.listSync(recursive: true);
-  List<File> files = [];
+  final dir = new Directory(path);
+  final entities = dir.listSync(recursive: true);
+  final files = [];
   for (var e in entities) {
     if (e is Directory) continue;
     files.add(e);
@@ -85,26 +83,26 @@ List getFiles(String path) {
 }
 
 String toAbsolute(String path) {
-  var s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
+  final s = (p.isAbsolute(path)) ? path : '${p.current}/$path';
   return s.replaceAll('\\', '/');
 }
 
 void main() {
-  //var root = 'C:/odw/sdk/io/';
-  for (String s in pathList) {
+  //var root = 'C:/acr/odw/sdk/io/';
+  for (var s in pathList) {
     /*
     String path = toAbsolute(s);
     print('path: $path');
     var dir = p.dirname(path);
     print('dirname: $dir');
 
-    if (dir.indexOf(root) == 0) dir = dir.replaceFirst(root, "");
+    if (dir.indexOf(root) == 0) dir = dir.replaceFirst(root, '');
     print('without root: $dir');
     var dirs = dir.split('/');
     print('dirList: $dirs');
 
     int length = dirs.length;
-    if (length > 2) throw "too many directories: $dir";
+    if (length > 2) throw 'too many directories: $dir';
     var series;
     var study;
     if (length == 2) {
@@ -117,7 +115,7 @@ void main() {
     }
     print('study: $study, series: $series');
 */
-    Filename f = new Filename(s);
+    final f = new Filename(s);
     print('''
 Path: $s
   components:

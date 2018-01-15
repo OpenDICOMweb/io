@@ -1,6 +1,6 @@
 name: io
 description: ODW input/output (files, network, etc.) package
-version: 0.6.5
+version: 0.7.0
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
 homepage: https://github.com/OpenDICOMweb/io
@@ -11,39 +11,21 @@ environment:
 dependencies:
   args: any
   path: any
-  dcm_convert:
-    path: C:/odw/sdk/convert
-    version: ^0.6.3
-  element:
-        path: C:/odw/sdk/element
-        version: ^0.6.5
-  logger:
-      path: C:/odw/sdk/logger
-      version: ^0.6.1
-  system:
-      path: C:\odw\sdk\system
-      version: 0.6.5
-  tag:
-      path: C:\odw\sdk\tag
-      version: 0.6.5
-  timer:
-    path: C:/odw/sdk/timer
-    version: ^0.6.1
-  uid:
-    path: C:/odw/sdk/uid
-    version: ^0.6.5
+  core:
+    path: C:/acr/odw/sdk/core
+    version: ^0.7.0
+  convert:
+    path: C:/acr/odw/sdk/convert
+    version: ^0.7.0
+
 
 dev_dependencies:
   benchmark_harness: ^1.0.4
-  coverage: "^0.7.3"
-  dart_dev: "^1.0.0"
-  dart_style: ">=0.1.8 <0.3.0"
-  dartdoc: "^0.4.0"
-  grinder: ^0.8.0
-  test:  ^0.12.0
+  grinder: ^0.8.0+2
+  test:  ^0.12.24
   test_tools:
-      path: C:/odw/sdk/test_tools
-      version: ^0.6.5
+    path: C:/acr/odw/test_tools
+    version: ^0.7.0
   yaml: ^2.1.12
 
 

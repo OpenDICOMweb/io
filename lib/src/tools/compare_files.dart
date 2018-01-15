@@ -6,8 +6,8 @@
 
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:io/io.dart';
-import 'package:system/system.dart';
 
 /// A simple program that compares to files byte by byte.
 ///
@@ -21,24 +21,23 @@ import 'package:system/system.dart';
 ///
 /// This program could be improved in several ways:
 ///   * Try to parse both files simultaneously.
-
 class FileCompareResult {
   Filename infile;
   Filename outfile;
+
+  List<FileByteDiff> diffs;
   bool sameLength;
   bool hasProblems;
-  List<FileByteDiff> diffs;
 
-  FileCompareResult(
-      this.infile, this.outfile, this.sameLength, this.hasProblems, this.diffs);
+  FileCompareResult(this.infile, this.outfile, this.diffs,
+      {this.sameLength, this.hasProblems});
 
-  String get lengthMsg =>
-      (sameLength) ? 'Equal lengths' : '** Different Lengths';
+  String get lengthMsg => (sameLength) ? 'Equal lengths' : '** Different Lengths';
 
   String get fmtDiffs {
-    var out = 'Differences';
-    for (var d in diffs) out += '$d';
-    return out;
+    final sb = new StringBuffer('Differences');
+    for (var d in diffs) sb.write('$d');
+    return sb.toString();
   }
 
   @override
@@ -127,18 +126,20 @@ FileCompareResult compareFiles(String path0, String path1) {
   log.up;
 
   if (diffs.isNotEmpty) {
-    final result =
-        new FileCompareResult(fn0, fn1, isLengthEqual, hasProblems, diffs);
+    final result = new FileCompareResult(fn0, fn1, diffs,
+        sameLength: isLengthEqual, hasProblems: hasProblems);
     if (hasProblems) {
       log.debug('**** File are different and have problems');
     } else {
       log.debug('** Warning Files are different but result is correct');
     }
-    log..up
+    log
+      ..up
       ..debug(result);
     return result;
   }
-  log..debug('Files are identical')
+  log
+    ..debug('Files are identical')
     ..up;
   return null;
 }
@@ -154,8 +155,7 @@ String _charToString(int c) {
 String _toDecimal(int i) => i.toRadixString(10).padLeft(4, ' ');
 String _toHex(int i) => i.toRadixString(16).padLeft(2, '0').padLeft(4, ' ');
 
-String _foundProblem(
-    Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
+String _foundProblem(Uint8List bytes0, Uint8List bytes1, int i, int before, int after) {
   var out = 'Found a Problem at index $i\n';
   out += '  $i: ${bytes0[i]} != ${bytes1[i]}\n';
 

@@ -15,7 +15,7 @@ import 'package:grinder/grinder.dart';
 ///
 Future main(List<String> args) => grind(args);
 
-/// If [true] some of the tests (notably) [unittest] run asynchronously.
+/// If _true_ some of the tests (notably) [unittest] run asynchronously.
 bool runAsync = false;
 
 /// Default task - runs if no arguments are given to grind.
@@ -55,29 +55,28 @@ Future unittest() async {
 /// Do a Dry Run of dartfmt.
 @Task('Dry Run of Formating Source...')
 void fmtdryrun() {
-  log("Formatting Source...");
+  log('Formatting Source...');
   DartFmt.dryRun('lib', lineLength: 80);
 }
 
 /// Format all dart sources in io package.
 @Task('Formating Source...')
 void format() {
-  log("Formatting Source...");
+  log('Formatting Source...');
   DartFmt.format('.', lineLength: 80);
 }
 
 /// The default path for io docs output
-String dartDocPath = 'C:/odw/sdk/doc/io';
+String dartDocPath = 'C:/acr/odw/sdk/doc/io';
 
 /// The default directory for io docs output
-Directory dartDocDir = new Directory('C:/odw/sdk/doc/io');
+Directory dartDocDir = new Directory('C:/acr/odw/sdk/doc/io');
 
 /// Generate Documentation for io package.
 @Task('DartDoc')
 void tester() {
   log('Generating Documentation...');
-  String s = sdkBin("dartdoc");
-  s = s.replaceAll('\\', '/');
+  final s = sdkBin('dartdoc')..replaceAll('\\', '/');
   print('$s');
 }
 
@@ -97,18 +96,18 @@ void dartdoc() {
 @Task('Build the project.')
 //TODO: test
 void build() {
-  log("Building...");
+  log('Building...');
   Pub.get();
-  Pub.build(mode: "debug");
+  Pub.build(mode: 'debug');
 }
 
 /// Build and Release the io
 //TODO: test
 @Task('Building release...')
 void buildRelease() {
-  log("Building release...");
+  log('Building release...');
   Pub.upgrade();
-  Pub.build(mode: "release");
+  Pub.build(mode: 'release');
 }
 
 /// Compile the io package using Dart Development Compiler (dartdevc).
@@ -116,9 +115,9 @@ void buildRelease() {
 @Task('Compiling...')
 //@Depends(init)
 void compile() {
-  log("Dart Dev Compiler: Compiling...");
-  String dartDevCOutPath = 'dart_dev_output';
-  Directory dartDevCOutputDir = new Directory(dartDevCOutPath);
+  log('Dart Dev Compiler: Compiling...');
+  final dartDevCOutPath = 'dart_dev_output';
+  final dartDevCOutputDir = new Directory(dartDevCOutPath);
   new DevCompiler().compile('lib', dartDevCOutputDir);
 }
 
@@ -134,7 +133,7 @@ void testJavaScript() {
 /// Clean the io package. Used before release.
 @Task('Cleaning...')
 void clean() {
-  log("Cleaning...");
+  log('Cleaning...');
   delete(buildDir);
   delete(dartDocDir);
 }
@@ -145,7 +144,7 @@ void clean() {
 //TODO: decide where this should be deployed to. GitHub, ACR, ...
 @Depends(clean, format, compile, buildRelease, unittest, testJavaScript)
 void deploy() {
-  log("Deploying...");
+  log('Deploying...');
   log('Regenerating Documentationfrom scratch...');
   delete(dartDocDir);
   dartdoc();

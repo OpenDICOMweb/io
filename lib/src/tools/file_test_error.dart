@@ -5,12 +5,12 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:io/io.dart';
-import 'package:io/src/test/compare_files.dart';
+import 'package:io/src/tools/compare_files.dart';
 
-String inputDir = 'C:/odw/sdk/io/example/input';
-String inputDir2 = 'C:/odw/test_data/sfd/CT';
+String inputDir = 'C:/acr/odw/sdk/io/example/input';
+String inputDir2 = 'C:/acr/odw/test_data/sfd/CT';
 
-String outputDir = 'C:/odw/sdk/io/example/output';
+String outputDir = 'C:/acr/odw/sdk/io/example/output';
 
 class FileTestError {
   Filename inFile;
