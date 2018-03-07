@@ -10,11 +10,11 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:entity/entity.dart';
-import 'package:io/src/file_system_base.dart';
-import 'package:uid/uid.dart';
+import 'package:core/core.dart';
 
-import 'dcm_file.dart';
+import 'package:io/src/file_system_base.dart';
+
+import 'pdcm_file.dart';
 import 'file_type.dart';
 import 'index.dart';
 
