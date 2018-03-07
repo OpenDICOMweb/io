@@ -11,6 +11,9 @@ import 'dart:typed_data';
 import 'package:core/core.dart';
 import 'package:path/path.dart';
 
+// ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
+// ignore_for_file: empty_catches
+
 //TODO: document this file
 //TODO: debug and create unit test for this file.
 

@@ -8,19 +8,22 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:convert/convert.dart';
+
 import 'package:io/src/filename.dart';
 import 'package:io/src/tools/compare_files.dart';
 import 'package:io/src/tools/file_test_error.dart';
 
+// ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
+// ignore_for_file: empty_catches
+
 /// Test of
 FileTestError dicomFileTest(Object inFile, Object outFile) {
   Filename sourceFN;
-  Uint8List sourceBytes;
   TagRootDataset rds0;
   Filename resultFN;
-  Uint8List resultBytes;
   TagRootDataset rds1;
   FileTestError error;
+  Bytes bytes0;
 
   // Open input file
   sourceFN = Filename.toFilename(inFile);
@@ -32,15 +35,12 @@ FileTestError dicomFileTest(Object inFile, Object outFile) {
     log
       ..down
       ..debug('Reading $sourceFN'); // Read at least the FMI to get the Transfer Syntax
-    sourceBytes = sourceFN.readAsBytesSync();
-
-    //TODO: put up/down functionality in logger
-    //      e.g. log.debug.down('...')
-    //           log.debug.up('...')
+    final reader0 = new BDReader.fromFile(sourceFN.file);
+    bytes0 = reader0.rb.bytes;
     log
       ..down
-      ..debug1('Read ${sourceBytes.length} bytes');
-    final sourceRDS = BDReader.readFile(sourceFN.file);
+      ..debug1('Read ${bytes0.length} bytes');
+    final sourceRDS = reader0.readRootDataset();
 
     //TODO: instance should have StatusReport
     if (sourceRDS != null) {
@@ -62,10 +62,10 @@ FileTestError dicomFileTest(Object inFile, Object outFile) {
     log
       ..debug('Writing file $resultFN')
       ..down;
-    resultBytes = TagWriter.writeBytes(rds0);
-    resultFN.writeAsBytesSync(resultBytes);
-    if (haveEqualLengths(sourceBytes, resultBytes))
-      log.debug1('Wrote ${resultBytes.length} bytes');
+    final bytes1 = TagWriter.writeBytes(rds0);
+
+    if (bytes0 == bytes1)
+      log.debug1('Wrote ${bytes1.length} bytes');
     activeStudies.remove(rds0.studyUid);
     log.up;
   } catch (e) {}
@@ -75,9 +75,10 @@ FileTestError dicomFileTest(Object inFile, Object outFile) {
     log
       ..debug('Reading Result file $resultFN')
       ..down;
-    resultBytes = resultFN.readAsBytesSync();
-    log.debug1('Read ${resultBytes.length} bytes');
-    rds1 = TagReader.readPath(sourceFN.path);
+    final reader1 = new TagReader.fromPath(sourceFN.path);
+    final bytes1 = reader1.rb.bytes;
+    log.debug1('Read ${bytes1.length} bytes');
+    rds1 = reader1.readRootDataset();
     log
       ..debug1('Instance: 1 ${rds1.info}')
       ..debug2(rds1.format(new Formatter(maxDepth: -1)))

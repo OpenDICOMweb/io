@@ -13,6 +13,8 @@ import 'package:core/core.dart';
 import 'file_system.dart';
 import 'file_type.dart';
 
+// ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
+
 class DcmFile {
   final FileSystem fs;
   final FileType fType;

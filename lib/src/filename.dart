@@ -140,10 +140,10 @@ class Filename {
   //TODO: should this return the bytes or a parsed Entity
   Uint8List readAsBytesSync() => file.readAsBytesSync();
 
-  Future<TagDataset> read() async {
+  Future<Dataset> read({bool doAsync = true}) async {
     if (isBinary) {
       //Uint8List bytes = await file.readAsBytes();
-      return await new Future(() =>TagReader.readPath(_path));
+      return TagReader.readPath(_path, doAsync: doAsync);
     } else if (isJson) {
 //      Uint8List bytes = await file.readAsBytesSync();
 //      return await JsonDecoder.decode(bytes);

@@ -74,7 +74,7 @@ class FileSystem extends FileSystemBase {
     unimplementedError();
 
   /// Reads a DICOM [Series] asynchronously from _this_. Throws an
-  /// [InvalidSeriesError] if [study], or [series] are invalid.
+  /// InvalidSeriesError if [study], or [series] are invalid.
   @override
   Future<Series> readSeries(Uid study, Uid series,
       [FileSubtype subtype = FileSubtype.part10   ]) async =>
@@ -82,7 +82,7 @@ class FileSystem extends FileSystemBase {
 
 
   /// Reads a DICOM [Instance] (SOPInstance) asynchronously from _this_.
-  /// Throws an [InvalidInstanceError] if [study], [series], or [instance]
+  /// Throws an InvalidInstanceError if [study], [series], or [instance]
   /// are invalid.
   @override
   Future<Instance> readInstance(Uid study, Uid series, Uid instance,

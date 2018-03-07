@@ -9,6 +9,8 @@ import 'package:convert/convert.dart';
 import 'package:io/io.dart';
 import 'package:io/src/tools/compare_files.dart';
 
+// ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
+
 String inputDir = 'C:/acr/odw/sdk/io/example/input';
 String inputDir2 = 'C:/acr/odw/test_data/sfd/CT';
 String inputDir3 = 'C:/dicom/6688';

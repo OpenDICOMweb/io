@@ -9,6 +9,8 @@ import 'package:path/path.dart' as p;
 import 'dcm_media_type.dart';
 import 'ie_level.dart';
 
+// ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
+
 // Flush later.
 //int _firstDot(String s) => p.basename(s).indexOf('.');
 
