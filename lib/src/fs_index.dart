@@ -70,7 +70,7 @@ class FSIndex implements FSIndexBase {
 
   /// Returns an [FSIndex] encoded as a JSON string.
   @override
-  String toJson() => JSON.encode(_list);
+  String toJson() => json.encode(_list);
 
   @override
 

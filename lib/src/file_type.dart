@@ -4,10 +4,10 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu>
 // See the AUTHORS file for other contributors.
 
+import 'package:core/core.dart';
 import 'package:path/path.dart' as p;
 
-import 'dcm_media_type.dart';
-import 'ie_level.dart';
+import 'package:io/src/dcm_media_type.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 

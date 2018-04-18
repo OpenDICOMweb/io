@@ -35,8 +35,8 @@ FileTestError dicomFileTest(Object inFile, Object outFile) {
     log
       ..down
       ..debug('Reading $sourceFN'); // Read at least the FMI to get the Transfer Syntax
-    final reader0 = new BDReader.fromFile(sourceFN.file);
-    bytes0 = reader0.rb.bytes;
+    final reader0 = new ByteReader.fromFile(sourceFN.file);
+    bytes0 = reader0.bytes;
     log
       ..down
       ..debug1('Read ${bytes0.length} bytes');
@@ -76,7 +76,7 @@ FileTestError dicomFileTest(Object inFile, Object outFile) {
       ..debug('Reading Result file $resultFN')
       ..down;
     final reader1 = new TagReader.fromPath(sourceFN.path);
-    final bytes1 = reader1.rb.bytes;
+    final bytes1 = reader1.bytes;
     log.debug1('Read ${bytes1.length} bytes');
     rds1 = reader1.readRootDataset();
     log

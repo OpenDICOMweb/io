@@ -12,14 +12,7 @@ import 'package:convert/convert.dart';
 import 'package:core/server.dart';
 import 'package:path/path.dart' as path;
 
-const String xx3 =
-    'C:/acr/odw/test_data/mweb/Different_SOP_Class_UIDs/Anonymized.dcm';
-const String xx2 =
-    'C:/acr/odw/test_data/mweb/Different_SOP_Class_UIDs/Anonymized1.2.840.10008.3.1.2.5.5.dcm';
-const String xx1 =
-    'C:/acr/odw/test_data/mweb/ASPERA/DICOM files only/613a63c7-6c0e-4fd9-b4cb-66322a48524b.dcm';
-const String xx0 =
-    'C:/acr/odw/test_data/mweb/1000+/TRAGICOMIX/TRAGICOMIX/Thorax 1CTA_THORACIC_AORTA_GATED (Adult)/A Aorta w-c  3.0  B20f  0-95%/IM-0001-0020.dcm';
+
 const String xxx =
     'C:/acr/odw/test_data/6684/2017/5/12/21/E5C692DB/A108D14E/A619BCE3';
 const String dcmDir = 'C:/acr/odw/test_data/sfd/MG/DICOMDIR';
@@ -27,9 +20,8 @@ const String evrLarge =
     'C:/acr/odw/test_data/mweb/100 MB Studies/1/S234601/15859205';
 const String evrULength =
     'c:/odw/test_data/6684/2017/5/13/1/8D423251/B0BDD842/E52A69C2';
-const String evrX =
-    'C:/acr/odw/test_data/mweb/ASPERA/Clean_Pixel_test_data/Sop/1.2.840'
-    '.10008.5.1.4.1.1.88.67.dcm';
+const String evrX = 'C:/acr/odw/test_data/mweb/ASPERA/Clean_Pixel_test_data/Sop'
+    '/1.2.840.10008.5.1.4.1.1.88.67.dcm';
 // Defined and Undefined datasets
 const String evrXLarge =
     'C:/acr/odw/test_data/mweb/100 MB Studies/1/S234611/15859368';
@@ -59,36 +51,36 @@ const String bas =
 Future main() async {
   Server.initialize(name: 'ReadFile', level: Level.debug3, throwOnError: true);
 
-  final fPath = evrLarge;
+  final fPath = evrX;
 
   print('path: $fPath');
   print(' out: ${getTempFile(fPath, 'dcmout')}');
   final url = new Uri.file(fPath);
   stdout.writeln('Reading(byte): $url');
 
-  final rds = BDReader.readPath(fPath, doLogging: true, showStats: true);
+  final reader = new ByteReader.fromPath(fPath, doLogging: true);
+  final rds = reader.readRootDataset();
+
   if (rds == null) {
     log.warn('Invalid DICOM file: $fPath');
-  } else {
-    if (rds.pInfo != null) {
-      final infoPath = '${path.withoutExtension(fPath)}.info';
-      log.info('infoPath: $infoPath');
-      final sb = new StringBuffer('${rds.pInfo.summary(rds)}\n')
-        ..write('Bytes Dataset: ${rds.summary}');
-      new File(infoPath)..writeAsStringSync(sb.toString());
-      log.debug(sb.toString());
+  } else if (reader.pInfo != null) {
+    final infoPath = '${path.withoutExtension(fPath)}.info';
+    log.info('infoPath: $infoPath');
+    final sb = new StringBuffer('${reader.pInfo.summary(rds)}\n')
+      ..write('Bytes Dataset: ${rds.summary}');
+    new File(infoPath)..writeAsStringSync(sb.toString());
+    log.debug(sb.toString());
 
-      final z = new Formatter.withIndenter(-1, Prefixer.basic);
-      final fmtPath = '${path.withoutExtension(fPath)}.fmt';
-      log.info('fmtPath: $fmtPath');
-      final fmtOut = rds.format(z);
-      new File(fmtPath)..writeAsStringSync(sb.toString());
-      log.debug(fmtOut);
+    final z = new Formatter.withIndenter(-1, Prefixer.basic);
+    final fmtPath = '${path.withoutExtension(fPath)}.fmt';
+    log.info('fmtPath: $fmtPath');
+    final fmtOut = rds.format(z);
+    new File(fmtPath)..writeAsStringSync(sb.toString());
+    log.debug(fmtOut);
 
 //        print(rds.format(z));
-    } else {
-      print('${rds.summary}');
-    }
+  } else {
+    print('${rds.summary}');
   }
 }
 
