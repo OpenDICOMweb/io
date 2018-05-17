@@ -92,7 +92,7 @@ Future<Null> main(List<String> args) async {
         ..down;
 
       final bytes1 = await TagWriter.writeFile(rds0, outFN.file);
-      log.debug1('Wrote ${bytes1.lengthInBytes} bytes');
+      log.debug1('Wrote ${bytes1.length} bytes');
       activeStudies.remove(rds0.studyUid);
       log
         ..up

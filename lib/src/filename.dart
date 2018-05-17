@@ -159,7 +159,7 @@ class Filename {
   Future<bool> writeSync(TagDataset ds) async {
     if (isBinary) {
       final bytes = await TagWriter.writePath(ds, _path, doAsync: true);
-      log.debug('Writing ${bytes.lengthInBytes} bytes.');
+      log.debug('Writing ${bytes.length} bytes.');
       return true;
     } else if (isJson) {
       //Uint8List bytes = JsonEncoder.encode(entity);

@@ -90,7 +90,7 @@ String _getUid(RootDataset rds, int index, String suffix) {
     if (s.codeUnitAt(s.length - 1) == 0) s = s.substring(0, s.length - 1);
     return '$s$suffix';
   }
-  return invalidElementError(e);
+  return badUidElement(e);
 }
 
 Directory pathToDirectory(String path, {bool mustExist = true}) {
@@ -262,7 +262,7 @@ Bytes readFile(File f,
     return null;
   try {
     final bytes = doAsync ? _readAsync(f) : _readSync(f);
-    return new Bytes.fromTypedData(bytes);
+    return new Bytes.typedDataView(bytes);
   } on FileSystemException {
     return null;
   }
