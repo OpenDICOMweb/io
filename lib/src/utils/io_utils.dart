@@ -53,7 +53,7 @@ String getOutputPath(String inPath, {String dir, String base, String ext}) {
   dir ??= path.dirname(path.current);
   base ??= path.basenameWithoutExtension(inPath);
   ext ??= path.extension(inPath);
-  return path.absolute(dir, '$base.$ext');
+  return cleanPath(path.absolute(dir, '$base.$ext'));
 }
 
 String getOutPath(String base, String ext, {String dir}) {

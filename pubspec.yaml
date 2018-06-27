@@ -12,10 +12,10 @@ dependencies:
   args: any
   path: any
   core:
-    path: C:/acr/odw/sdk/core
-    version: ^0.7.0
+    path: C:/odw/sdk/core
+    version: ^0.7.2
   convert:
-    path: C:/acr/odw/sdk/convert
+    path: C:/odw/sdk/convert
     version: ^0.7.0
 
 
@@ -24,7 +24,7 @@ dev_dependencies:
   grinder: ^0.8.0+2
   test:  ^0.12.24
   test_tools:
-    path: C:/acr/odw/test_tools
+    path: C:/odw/test_tools
     version: ^0.7.0
   yaml: ^2.1.12
 

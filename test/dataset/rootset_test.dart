@@ -11,12 +11,12 @@ import 'package:convert/convert.dart';
 import 'package:io/io.dart';
 import 'package:test/test.dart';
 
-String inRoot0 = 'C:/acr/odw/test_data/sfd/CR';
-String inRoot1 = 'C:/acr/odw/test_data/sfd/CR_and_RF';
-String inRoot2 = 'C:/acr/odw/test_data/sfd/CT';
-String inRoot3 = 'C:/acr/odw/test_data/sfd/MG';
-String inRoot4 = 'C:/acr/odw/test_data/sfd/RTOG STUDY/RTOG STUDY/RTFiles-1';
-String inRoot5 = 'C:/odw/test_data/mweb/TransferUIDs';
+String inRoot0 = 'C:/odw_test_data/sfd/CR';
+String inRoot1 = 'C:/odw_test_data/sfd/CR_and_RF';
+String inRoot2 = 'C:/odw_test_data/sfd/CT';
+String inRoot3 = 'C:/odw_test_data/sfd/MG';
+String inRoot4 = 'C:/odw_test_data/sfd/RTOG STUDY/RTOG STUDY/RTFiles-1';
+String inRoot5 = 'C:/odw_test_data/mweb/TransferUIDs';
 
 String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';

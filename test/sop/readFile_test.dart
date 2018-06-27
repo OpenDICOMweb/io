@@ -10,10 +10,10 @@ import 'package:core/server.dart';
 import 'package:io/io.dart';
 import 'package:test/test.dart';
 
-String inRoot0 = 'C:/acr/odw/test_data/sfd/CR';
-String inRoot1 = 'C:/acr/odw/test_data/sfd/CR_and_RF';
-String inRoot2 = 'C:/acr/odw/test_data/sfd/CT';
-String inRoot3 = 'C:/acr/odw/test_data/sfd/MG';
+String inRoot0 = 'C:/odw_test_data/sfd/CR';
+String inRoot1 = 'C:/odw_test_data/sfd/CR_and_RF';
+String inRoot2 = 'C:/odw_test_data/sfd/CT';
+String inRoot3 = 'C:/odw_test_data/sfd/MG';
 String inRoot4 = 'E:/dicom';
 String file5 = 'E:/dicom/2000+/anmyzd_toshIM-0001-0002.dcm';
 

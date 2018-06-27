@@ -58,7 +58,7 @@ final List<String> pathList = <String>[
   bulkdata
 ];
 
-String inRoot = 'C:/acr/odw/test_data/sfd/CR';
+String inRoot = 'C:/odw_test_data/sfd/CR';
 
 List flatten(List list) {
   final flat = [];
@@ -88,7 +88,7 @@ String toAbsolute(String path) {
 }
 
 void main() {
-  //var root = 'C:/acr/odw/sdk/io/';
+  //var root = 'C:/odw/sdk/io/';
   for (var s in pathList) {
     /*
     String path = toAbsolute(s);
