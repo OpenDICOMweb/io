@@ -6,7 +6,7 @@
 
 import 'dart:io';
 
-import 'package:core/server.dart';
+import 'package:core/server.dart' hide group;
 import 'package:convert/convert.dart';
 import 'package:io/io.dart';
 import 'package:test/test.dart';
