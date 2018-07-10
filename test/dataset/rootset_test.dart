@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'dart:io';
 
 import 'package:core/server.dart' hide group;
@@ -24,23 +24,24 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
-  Server.initialize(name: 'dataset/rootset_dart', level: Level.info0);
+  Server.initialize(name: 'dataset/rootset_dart', level: Level.debug);
+
   // Get the files in the directory
   final files = Filename.listFromDirectory(inRoot5);
   stdout.writeln('File count: ${files.length}');
 
-  // Read, parse, and print a summary of each file.
-  for (var fn in files) {
-    if (fn.isDicom) {
-      log.debug('Reading file: $fn');
-      TagRootDataset rds;
+  group('Data set', () {
+    test('Create a data set object from map', () {
+      // Read, parse, and print a summary of each file.
+      for (var fn in files) {
+        if (fn.isDicom) {
+          log.debug('Reading file: $fn');
+          TagRootDataset rds;
 
-      group('Data set', () {
-        test('Create a data set object from map', () {
           rds = TagReader.readFile(fn.file);
 
-          log.debug(
-              'File name ${fn.base} with Transfer Syntax UID: ${rds[0x00020010].values.elementAt(0)}');
+          log.debug('File name ${fn.base} with Transfer Syntax UID: '
+              '${rds[0x00020010].values.elementAt(0)}');
 
           expect(() => rds[0x00020010], isNotNull);
           expect(() => rds[0x00020010].values, isNotNull);
@@ -64,10 +65,10 @@ void main() {
                 '${rds[0x00143012]?.values?.elementAt(0)}')
             ..debug('          Number of Frames Used for Integration: '
                 '${rds[0x00143073]?.values?.elementAt(0)}');
-        });
-      });
-    } else {
-      log.debug('Skipping ... $fn');
-    }
-  }
+        } else {
+          log.debug('Skipping ... $fn');
+        }
+      }
+    });
+  });
 }
