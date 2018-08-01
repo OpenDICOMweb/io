@@ -7,7 +7,7 @@
 import 'dart:io';
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
+import 'package:converter/converter.dart';
 
 String inRoot0 = 'C:/acr/odw/test_data/sfd/CR';
 String inRoot1 = 'C:/acr/odw/test_data/sfd/CR_and_RF';
@@ -31,8 +31,8 @@ void main() {
   TagRootDataset rds;
   for (File file in fList) {
     print('\nReading file: $file');
-    rds = TagReader.readFile(file);
-    // print('output:\n${instance.patient.format(new Prefixer())}');
+    final bytes = file.readAsBytesSync();
+    rds = TagReader(bytes).readRootDataset();
   }
   print(rds.summary);
   print('Active Patients: $activeStudies');

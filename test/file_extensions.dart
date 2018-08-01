@@ -3,10 +3,10 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'dart:io';
 
-import 'package:io/io.dart';
+import 'package:io_extended/io_extended.dart';
 import 'package:path/path.dart' as p;
 
 //int _firstDot(String s) => p.basename(s).indexOf('.');

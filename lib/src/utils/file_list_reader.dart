@@ -9,8 +9,8 @@
 import 'dart:collection';
 
 import 'package:core/core.dart';
-import 'package:convert/convert.dart';
-import 'package:io/src/utils/io_utils.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/src/utils/io_utils.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 

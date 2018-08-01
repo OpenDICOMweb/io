@@ -11,11 +11,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:io/src/file_system_base.dart';
+import 'package:io_extended/src/file_system_base.dart';
 
-import 'package:io/src/dcm_file.dart';
-import 'package:io/src/file_type.dart';
-import 'package:io/src/fs_index.dart';
+import 'package:io_extended/src/dcm_file.dart';
+import 'package:io_extended/src/file_type.dart';
+import 'package:io_extended/src/fs_index.dart';
 
 //TODO: finish all IO calls async
 

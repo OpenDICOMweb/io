@@ -5,8 +5,8 @@
 // See the   AUTHORS file for other contributors.
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
 
 String path0 = 'C:/acr/odw/test_data/IM-0001-0001.dcm';
 String path1 =
@@ -27,7 +27,8 @@ void main(List<String> args) {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
 
   final fn = new Filename(path5);
-  final rds = TagReader.readFile(fn.file);
+  final bytes = fn.file.readAsBytesSync();
+  final rds = TagReader(bytes).readRootDataset();
   log
     ..debug('Instance: $rds')
     ..debug('dataset length: ${rds.length} elements')

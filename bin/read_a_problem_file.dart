@@ -3,9 +3,11 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
+//
+import 'dart:io';
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
+import 'package:converter/converter.dart';
 
 
 const String inputDir = 'C:/acr/odw/test_data/problems/';
@@ -23,8 +25,8 @@ void main() {
   for (var path in filesList) {
     print('Reading file: $path');
     log.config('Reading file: $path');
-
-    final rds = TagReader.readPath(path);
+    final bytes = new File(path).readAsBytesSync();
+    final rds = TagReader(bytes).readRootDataset();
     print('***patient:\n${rds.format(new Formatter(maxDepth:5))}');
   }
 

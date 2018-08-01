@@ -9,12 +9,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:convert/convert.dart';
+import 'package:converter/converter.dart';
 import 'package:path/path.dart' as p;
 
 import 'dcm_media_type.dart';
 import 'file_type.dart';
-import 'utils.dart';
 
 // ignore_for_file: only_throw_errors
 //TODO: make everything async
@@ -142,8 +141,8 @@ class Filename {
 
   Future<Dataset> read({bool doAsync = true}) async {
     if (isBinary) {
-      //Uint8List bytes = await file.readAsBytes();
-      return TagReader.readPath(_path, doAsync: doAsync);
+      final Uint8List bytes = await file.readAsBytes();
+      return TagReader(bytes).readRootDataset();
     } else if (isJson) {
 //      Uint8List bytes = await file.readAsBytesSync();
 //      return await JsonDecoder.decode(bytes);
@@ -156,9 +155,9 @@ class Filename {
     throw "Shouldn't get here";
   }
 
-  Future<bool> writeSync(TagDataset ds) async {
+  bool writeSync(TagDataset ds) {
     if (isBinary) {
-      final bytes = await TagWriter.writePath(ds, _path, doAsync: true);
+      final bytes = TagWriter(ds).writeRootDataset();
       log.debug('Writing ${bytes.length} bytes.');
       return true;
     } else if (isJson) {

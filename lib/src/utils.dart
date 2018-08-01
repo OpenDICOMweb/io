@@ -93,6 +93,7 @@ List _walkSync(Directory d, Function func, List list) {
 }
 
 Stream getFiles(String root, [Filter filter]) => walk(new Directory(root), filter);
+/*
 
 //TODO move to utilities
 /// Returns a [List] of [File]s with extension [ext] from the specified [Directory].
@@ -106,6 +107,7 @@ List<File> getFilesFromDirectory(String source, [String ext = '.dcm']) {
   }
   return files;
 }
+*/
 
 //TODO: debug and create unit test
 /// Returns a [List] of values that result from walking the [Directory] tree, and applying [filter]

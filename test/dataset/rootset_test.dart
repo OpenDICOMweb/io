@@ -7,8 +7,8 @@
 import 'dart:io';
 
 import 'package:core/server.dart' hide group;
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
 import 'package:test/test.dart';
 
 String inRoot0 = 'C:/odw_test_data/sfd/CR';
@@ -37,7 +37,8 @@ void main() {
 
       group('Data set', () {
         test('Create a data set object from map', () {
-          rds = TagReader.readFile(fn.file);
+          final bytes = fn.file.readAsBytesSync();
+          rds = TagReader(bytes).readRootDataset();
 
           log.debug(
               'File name ${fn.base} with Transfer Syntax UID: ${rds[0x00020010].values.elementAt(0)}');

@@ -8,7 +8,7 @@ DICOM Media Type. See PS3.18, Section 6.1.1.8.
 A simple usage exampl
 
     TODO: validate code
-    import 'package:io/io.dart';
+    import 'package:io_extended/io_extended.dart';
     
     String inPath = '/2.25.2094332409/2.25123456789/2.25.987654321.dcm';
 

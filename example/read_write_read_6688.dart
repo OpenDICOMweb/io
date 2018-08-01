@@ -3,11 +3,11 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
-
+//
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
-import 'package:io/src/tools/compare_files.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
+import 'package:io_extended/src/tools/compare_files.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
@@ -33,10 +33,13 @@ void main(List<String> args) {
   for (var i = 0; i < files.length; i++) {
     final inFN = files[i];
 
-    log..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')..down;
+    log
+      ..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
+      ..down;
 
     // Read at least the FMI to get the Transfer Syntax
-    final rds0 = TagReader.readFile(inFN.file);
+    final bytes = inFN.file.readAsBytesSync();
+    final rds0 = TagReader(bytes).readRootDataset();
     if (rds0 == null) {
       log.info0('Skipping File $i Bad TS: $inFN');
       continue;
@@ -49,11 +52,15 @@ void main(List<String> args) {
       ..up;
 
     // Write a File
-    final outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
-    log..info0('Writing file $i: $outFN')..info0('Reading Result file $i: $outFN', 1);
+    final outFN =
+        new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+    log
+      ..info0('Writing file $i: $outFN')
+      ..info0('Reading Result file $i: $outFN', 1);
 
     // Now read the file we just wrote.
-    final rds1 = TagReader.readFile(inFN.file);
+    final bytes1 = inFN.file.readAsBytesSync();
+    final rds1 = TagReader(bytes1).readRootDataset();
 
     // Compare [Dataset]s
     //log.watermark = Level.info;

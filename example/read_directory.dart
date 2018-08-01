@@ -6,7 +6,7 @@
 
 import 'dart:io';
 
-import 'package:io/io.dart';
+import 'package:io_extended/io_extended.dart';
 
 String inRoot0 = 'C:/acr/odw/test_data/sfd/CR';
 String inRoot1 = 'C:/acr/odw/test_data/sfd/CR_and_RF';

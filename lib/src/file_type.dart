@@ -7,7 +7,7 @@
 import 'package:core/core.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:io/src/dcm_media_type.dart';
+import 'package:io_extended/src/dcm_media_type.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 

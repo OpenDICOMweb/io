@@ -5,7 +5,7 @@
 //  that can be found in the odw/LICENSE file.
 //  Primary Author: Jim Philbin <jfphilbin@gmail.edu>
 //  See the AUTHORS file for other contributors.
-
+//
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -15,83 +15,15 @@ import 'package:path/path.dart' as path;
 
 int getFieldWidth(int total) => '$total'.length;
 
-String getPaddedInt(int n, int width) =>
-    (n == null) ? '' : '${"$n".padLeft(width, '0')}';
-
-String cleanPath(String path) => path.replaceAll('\\', '/');
-
 String getTempFile(String infile, String extension) {
   final name = path.basenameWithoutExtension(infile);
   final dir = Directory.systemTemp.path;
   return '$dir/$name.$extension';
 }
 
-//TODO: move to io_utils
-/// Checks that [dataset] is not empty.
-void checkRootDataset(Dataset dataset) {
-  if (dataset == null || dataset.isEmpty)
-    throw new ArgumentError('Empty ' 'Empty Dataset: $dataset');
-}
-
-/// Checks that [file] is not empty.
-void checkFile(File file, {bool overWrite = false}) {
-  if (file == null) throw new ArgumentError('null File');
-  if (file.existsSync() && (file.lengthSync() == 0))
-    throw new ArgumentError('$file has zero length');
-}
-
-/// Checks that [path] is not empty.
-String checkPath(String path) {
-  if (path == null || path == '') throw new ArgumentError('Empty path: $path');
-  return path;
-}
-
 final path.Context pathContext = new path.Context(style: path.Style.posix);
 final String separator = pathContext.separator;
 
-String getOutputPath(String inPath, {String dir, String base, String ext}) {
-  dir ??= path.dirname(path.current);
-  base ??= path.basenameWithoutExtension(inPath);
-  ext ??= path.extension(inPath);
-  return cleanPath(path.absolute(dir, '$base.$ext'));
-}
-
-String getOutPath(String base, String ext, {String dir}) {
-  dir ??= path.dirname(path.current);
-  return cleanPath(path.absolute(dir, '$base.$ext'));
-}
-
-String getVNAPath(RootDataset rds, String rootDir, String ext) {
-  final study = _getUid(rds, kStudyInstanceUID, '/');
-  final series = _getUid(rds, kSeriesInstanceUID, '/');
-  final instance = _getUid(rds, kSOPInstanceUID, '');
-  final dirPath = '$rootDir$study$series';
-  final dir = new Directory(dirPath);
-  if (!dir.existsSync()) dir.createSync(recursive: true);
-  return (instance == '')
-      ? '${dirPath.substring(0, dirPath.length - 1)}.$ext'
-      : '$dirPath$instance.$ext';
-}
-
-/// Returns a [Uid] value for the [UI] [Element] with [index].
-/// If the [Element] is not present or if the [Element] has more
-/// than one value, either throws or returns _null_.
-String _getUid(RootDataset rds, int index, String suffix) {
-  // Note: this might be UI or UN
-  final e = rds.lookup(index);
-  if (e == null) return '';
-  if (e is UI) {
-    final List<String> vList = e.values;
-    final length = vList.length;
-    return (length == 1) ? '${vList[0]}$suffix' : '';
-  }
-  if (e is UN) {
-    var s = e.vfBytesAsAscii;
-    if (s.codeUnitAt(s.length - 1) == 0) s = s.substring(0, s.length - 1);
-    return '$s$suffix';
-  }
-  return badUidElement(e);
-}
 
 Directory pathToDirectory(String path, {bool mustExist = true}) {
   final dir = new Directory(path);

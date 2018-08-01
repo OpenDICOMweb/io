@@ -7,9 +7,9 @@
 import 'dart:io';
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
+import 'package:converter/converter.dart';
 
-import 'package:io/src/filename.dart';
+import 'package:io_extended/src/filename.dart';
 
 String inRoot0 = 'C:/odw_test_data/sfd/CR';
 String inRoot1 = 'C:/odw_test_data/sfd/CR_and_RF';
@@ -20,7 +20,6 @@ String outRoot0 = 'test/output/root0';
 String outRoot1 = 'test/output/root1';
 String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
-
 
 void main() {
   Server.initialize(name: 'readFile_test.dart', level: Level.info0);
@@ -42,10 +41,11 @@ void main() {
 }
 
 /// Returns a [TagDataset] read from the [File] associated with [fileId]
-TagDataset readDicomFile(Object fileId) {
+TagRootDataset readDicomFile(Object fileId) {
   File file;
   if (fileId is String) file = new File(fileId);
   if (fileId is Filename) file = fileId.file;
   if (file is! File) return null;
-  return TagReader.readFile(file);
+  final bytes = file.readAsBytesSync();
+  return new TagReader(bytes).readRootDataset();
 }

@@ -7,7 +7,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:io/io.dart';
+import 'package:io_extended/io_extended.dart';
 
 Future main() async {
   final root = r'C:\odw\test_data\sfd\CR_and_RF';

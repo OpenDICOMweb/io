@@ -7,8 +7,8 @@
 //import 'dart:convert';
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
 
 //TODO: cleanup for V0.9.0
 
@@ -24,7 +24,8 @@ void main(List<String> args) {
     var count = 0;
     log.info0('*** Starting($count): $fn');
     if (fn.isPart10) {
-      final  rds = TagReader.readFile(fn.file);
+      final bytes = fn.file.readAsBytesSync();
+      final rds = TagReader(bytes).readRootDataset();
       if (rds == null) {
         log.debug('  *** Skipping Invalid Transfer Syntax: $fn ');
       } else {
@@ -41,6 +42,3 @@ void main(List<String> args) {
     log.info0('*** Finished $fn\n');
   }
 }
-
-
-

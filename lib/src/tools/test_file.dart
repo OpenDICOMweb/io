@@ -3,15 +3,16 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:convert/convert.dart';
+import 'package:converter/converter.dart';
 
-import 'package:io/src/filename.dart';
-import 'package:io/src/tools/compare_files.dart';
-import 'package:io/src/tools/file_test_error.dart';
+import 'package:io_extended/src/filename.dart';
+import 'package:io_extended/src/tools/compare_files.dart';
+import 'package:io_extended/src/tools/file_test_error.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 // ignore_for_file: empty_catches
@@ -75,7 +76,8 @@ FileTestError dicomFileTest(Object inFile, Object outFile) {
     log
       ..debug('Reading Result file $resultFN')
       ..down;
-    final reader1 = new TagReader.fromPath(sourceFN.path);
+    final bytes = new File(sourceFN.path).readAsBytesSync();
+    final reader1 = new TagReader(bytes);
     final bytes1 = reader1.bytes;
     log.debug1('Read ${bytes1.length} bytes');
     rds1 = reader1.readRootDataset();

@@ -5,9 +5,9 @@
 // See the   AUTHORS file for other contributors.
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
-import 'package:io/src/tools/compare_files.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
+import 'package:io_extended/src/tools/compare_files.dart';
 
 //String inPath = 'C:/acr/odw/test_data/IM-0001-0001.dcm';
 String inPath =
@@ -46,7 +46,8 @@ String in9 =
     'C:/acr/odw/test_data/sfd/CT/Patient_8_Non_ossifying_fibroma/1_DICOM_Original/IM002102'
     '.dcm';
 
-String in10 = 'C:/acr/odw/test_data/sfd/CT/PID_TESTCT1/1_DICOM_Original/0034C9BE.dcm';
+String in10 =
+    'C:/acr/odw/test_data/sfd/CT/PID_TESTCT1/1_DICOM_Original/0034C9BE.dcm';
 
 String in11 =
     'C:/acr/odw/test_data/sfd/CT/Patient_3_Cardiac_CTA/1_DICOM_Original/IM008679.dcm';
@@ -66,7 +67,8 @@ void main() {
 
   final fn = new Filename(in10);
   log.info0('Reading: $fn');
-  final rds0 = TagReader.readFile(fn.file);
+  final bytes0 = fn.file.readAsBytesSync();
+  final TagRootDataset rds0 = TagReader(bytes0).readRootDataset();
   log.info0('Decoded: $rds0');
   if (rds0 == null) return null;
   log
@@ -74,10 +76,12 @@ void main() {
     ..info0('${rds0[kFileMetaInformationGroupLength].info}')
     ..info0('${rds0[kFileMetaInformationVersion].info}');
   // Write a File
-  final fnOut = new Filename.withType(outX, FileSubtype.part10)..writeSync(rds0);
+  final fnOut = new Filename.withType(outX, FileSubtype.part10)
+    ..writeSync(rds0);
 
   log.info0('Re-reading: $fnOut');
-  final rds1 = TagReader.readFile(fn.file);
+  final bytes1 = fn.file.readAsBytesSync();
+  final rds1 = TagReader(bytes1).readRootDataset();
   log
     ..info0(rds1)
     ..debug(rds1.format(new Formatter(maxDepth: -1)));
@@ -88,16 +92,18 @@ void main() {
     log.fatal('Result: ${comparitor.info}');
   }
   // Compare input and output
-  log..info0('Comparing Bytes:')
-  ..down
-  ..info0('Original: ${fn.path}')
-  ..info0('Result: ${fnOut.path}');
+  log
+    ..info0('Comparing Bytes:')
+    ..down
+    ..info0('Original: ${fn.path}')
+    ..info0('Result: ${fnOut.path}');
   final out = compareFiles(fn.path, fnOut.path);
   if (out == null) {
     log.info0('Files are identical.');
   } else {
-    log..info0('Files are different!')
-    ..fatal('$out');
+    log
+      ..info0('Files are different!')
+      ..fatal('$out');
   }
   log.up;
 }

@@ -6,8 +6,8 @@
 
 
 import 'package:core/server.dart' hide group;
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
 import 'package:test/test.dart';
 
 String path0 = 'C:/odw_test_data/mweb/TransferUIDs/1.2.840.10008.1.2.5.dcm';
@@ -18,7 +18,8 @@ void main() {
   group('RLE Data set', () {
     test('Verify RLE parsing', () {
       final fn = new Filename(path0);
-      final  rds  = TagReader.readFile(fn.file);
+      final bytes = fn.file.readAsBytesSync();
+      final  rds  = TagReader(bytes).readRootDataset();
       print(rds.format(new Formatter(maxDepth: 146)));
     });
   });

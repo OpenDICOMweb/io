@@ -7,7 +7,7 @@
 import 'dart:typed_data';
 
 import 'package:core/server.dart';
-import 'package:io/io.dart';
+import 'package:io_extended/io_extended.dart';
 
 
 /// A simple program that compares to files byte by byte.

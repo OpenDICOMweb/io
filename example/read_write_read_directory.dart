@@ -3,14 +3,14 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the   AUTHORS file for other contributors.
-
+//
 import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
-import 'package:io/src/tools/compare_files.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
+import 'package:io_extended/src/tools/compare_files.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
@@ -64,7 +64,7 @@ Future<Null> main(List<String> args) async {
     } else if (inFN.isDicom) {
       // Read at least the FMI to get the Transfer Syntax
       final Uint8List bytes0 = inFN.file.readAsBytesSync();
-      final rds0 = TagReader.readFile(inFN.file);
+      final rds0 = TagReader(bytes0).readRootDataset();
       if (rds0 == null) {
         log.info0('Skipping File $i Bad TS: $inFN');
         continue;
@@ -91,7 +91,7 @@ Future<Null> main(List<String> args) async {
         ..debug('Writing file $i: $outFN')
         ..down;
 
-      final bytes1 = await TagWriter.writeFile(rds0, outFN.file);
+      final bytes1 = TagWriter(rds0).writeRootDataset();
       log.debug1('Wrote ${bytes1.length} bytes');
       activeStudies.remove(rds0.studyUid);
       log
@@ -109,7 +109,8 @@ Future<Null> main(List<String> args) async {
       } else {
         log.error('Files have different lengths: original($length0), result ($length2)');
       }
-      final rds1 = TagReader.readFile(inFN.file);
+      final Uint8List bytes3 = inFN.file.readAsBytesSync();
+      final rds1 = TagReader(bytes3).readRootDataset();
       log
         ..debug1('rds: 1 ${rds1.info}')
         ..debug2(rds1.format(new Formatter(maxDepth: -1)))

@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:convert/convert.dart';
+import 'package:converter/converter.dart';
 import 'package:core/server.dart';
 import 'package:path/path.dart' as path;
 

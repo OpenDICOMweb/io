@@ -5,10 +5,10 @@
 // See the   AUTHORS file for other contributors.
 
 //import 'dart:convert';
-
+//
 import 'package:core/server.dart';
-import 'package:convert/convert.dart';
-import 'package:io/io.dart';
+import 'package:converter/converter.dart';
+import 'package:io_extended/io_extended.dart';
 
 
 /// This program copies DICOM PS3.10 files (i.e. files with an extension of '.dcm') from anywhere
@@ -39,9 +39,7 @@ void main() {
   for (var fn in files) {
     if (fn.isPart10) {
       final bytes = fn.file.readAsBytesSync();
-      //print('Filename: $fn');
-
-      final rds = TagReader.readFile(fn.file);
+      final rds = TagReader(bytes).readRootDataset();
       print('Entity: ${rds.format(new Formatter())}');
 
       final entity = activeStudies.entityFromRootDataset(rds);
