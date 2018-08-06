@@ -7,7 +7,7 @@
 import 'dart:io';
 
 import 'package:core/server.dart' hide group;
-import 'package:io_extended/io_extended.dart';
+import 'package:converter/converter.dart';
 import 'package:test/test.dart';
 
 String inRoot0 = 'C:/odw_test_data/sfd/CR';
@@ -26,16 +26,17 @@ void main() {
   Server.initialize(name: 'read_test.dart', level: Level.info0);
 
   // Get the files in the directory
-  final files = Filename.listFromDirectory(inRoot5);
+  final files = getFilesFromDirectory(inRoot5, '.dcm');
   stdout.writeln('File count: ${files.length}');
 
   group('Data set', () {
     test('Create a data set object from map', () {
       // Read, parse, and print a summary of each file.
       for (var file in files) {
-        if (file.isDicom && file.base != 'ct.0.dcm') {
+        if (file.path != 'ct.0.dcm') {
           print('Reading file: $file');
-          final RootDataset rds = file.readSync();
+          final bytes = file.readAsBytesSync();
+          final rds = TagReader(bytes).readRootDataset();
           print(rds.info);
         } else {
           print('Skipping ... $file');
