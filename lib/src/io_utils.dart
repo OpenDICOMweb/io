@@ -15,12 +15,111 @@ import 'package:path/path.dart' as path;
 
 
 
+//TODO: move to io_utils
+/// Checks that [dataset] is not empty.
+void checkRootDataset(Dataset dataset) {
+  if (dataset == null || dataset.isEmpty)
+    throw new ArgumentError('Empty ' 'Empty Dataset: $dataset');
+}
+
+
+
+final path.Context pathContext = new path.Context(style: path.Style.posix);
+final String separator = pathContext.separator;
+
+
+typedef void FSERunner(FileSystemEntity f, [int level]);
+
+/// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
+Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
+  final eList = dir.list(recursive: false, followLinks: true);
+
+  var count = 0;
+  var _level = level;
+  await for (FileSystemEntity e in eList) {
+    if (e is Directory) {
+      count += await walkDirectory(e, f, _level++);
+    } else if (e is File) {
+      await new Future(() => f(e, level));
+      count++;
+    } else {
+      stderr.write('Warning: $e is not a File or Directory');
+    }
+  }
+  return count;
+}
+
+typedef void FileRunner(File f, [int level]);
+
+/// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
+Future<int> walkDirectoryFiles(Directory dir, FileRunner f,
+    [int level = 0]) async {
+  final eList = dir.list(recursive: false, followLinks: true);
+
+  var count = 0;
+  var _level = level;
+  await for (FileSystemEntity fse in eList) {
+    if (fse is Directory) {
+      count += await walkDirectory(fse, f, _level++);
+    } else if (fse is File) {
+      await new Future(() => f(fse, level));
+      count++;
+    } else {
+      stderr.write('Warning: $fse is not a File or Directory');
+    }
+  }
+  return count;
+}
+
+/// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
+int walkDirectorySync(Directory dir, FSERunner f, [int level = 0]) {
+  var _level = level;
+  f(dir, _level);
+  final eList = dir.listSync(recursive: false, followLinks: true);
+
+  _level++;
+  var count = 0;
+  for (var e in eList) {
+    if (e is Directory) {
+      count += walkDirectorySync(e, f, _level);
+    } else if (e is File) {
+      f(e, _level);
+      count++;
+    } else {
+      stderr.write('Warning: $e is not a File or Directory');
+    }
+  }
+  _level--;
+  return count;
+}
+
+/// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
+int walkDirectoryFilesSync(Directory dir, FileRunner f, [int level = 0]) {
+  var _level = level;
+  // f(dir, _level);
+  final eList = dir.listSync(recursive: false, followLinks: true);
+
+  _level++;
+  var count = 0;
+  for (var e in eList) {
+    if (e is Directory) {
+      count += walkDirectorySync(e, f, _level);
+    } else if (e is File) {
+      f(e, _level);
+      count++;
+    } else {
+      stderr.write('Warning: $e is not a File or Directory');
+    }
+  }
+  _level--;
+  return count;
+}
+
 typedef Null RunFile(File f, [int count]);
 
 /// Walks a [List] of [String], [File], List<String>, or List<File>, and
 /// applies [runner] to each one asynchronously.
-Future<int> walkPathList(Iterable paths, RunFile runner,
-    [int level = 0]) async {
+Future<int> walkPathList(Iterable paths, RunFile runner, [int level = 0]) async {
   var count = 0;
   var _level = level;
   for (var entry in paths) {
@@ -81,7 +180,7 @@ Bytes readFile(File f,
     return null;
   try {
     final bytes = doAsync ? _readAsync(f) : _readSync(f);
-    return new Bytes.typedDataView(bytes);
+    return new Bytes.from(bytes);
   } on FileSystemException {
     return null;
   }

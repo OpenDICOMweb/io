@@ -5,12 +5,13 @@
 //  that can be found in the odw/LICENSE file.
 //  Primary Author: Jim Philbin <jfphilbin@gmail.edu>
 //  See the AUTHORS file for other contributors.
-
+//
 import 'dart:collection';
 
-import 'package:core/core.dart';
 import 'package:converter/converter.dart';
-import 'package:io_extended/src/utils/io_utils.dart';
+import 'package:core/core.dart';
+import 'package:io_extended/src/utils/path.dart';
+import 'package:io_extended/src/utils/string.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
@@ -91,7 +92,7 @@ class FileListReader {
 
   List<String> get read {
     RootDataset rds;
-    final fileNoWidth = getFieldWidth(paths.length);
+    final fileNoWidth = getIntWidth(paths.length);
 
     bool success;
 

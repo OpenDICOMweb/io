@@ -23,31 +23,44 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
-  Server.initialize(name: 'dataset/rootset_dart', level: Level.debug);
+  Server.initialize(name: 'dataset/rootset_dart',
+      throwOnError: true,
+      level: Level.debug);
   // Get the files in the directory
-  final files = getFilesFromDirectory(inRoot5, '.dcm');
+  final files = getFilesFromDirectory(inRoot0, '.dcm');
   stdout.writeln('File count: ${files.length}\n');
 
   group('Reed Root Dataset', () {
     test('Create a data set object from a File', () {
       // Read, parse, and print a summary of each file.
+      var count = 0;
       for (var file in files) {
-        log.debug('Reading file: ${cleanPath(file.path)}');
+        log
+          ..debug('\n')
+          ..debug('Reading file[$count]: ${cleanPath(file.path)}', 1);
+        count++;
         TagRootDataset rds;
 
         final bytes = file.readAsBytesSync();
-        rds = TagReader(bytes).readRootDataset();
+        rds = TagReader(bytes, doLogging: true).readRootDataset();
         log.debug('rds: $rds');
         if (rds == null) {
           log.debug('Error: Skipping ... $file');
           continue;
         }
 
-        log.debug('File name ${file.path} with Transfer Syntax UID: '
-            '${rds[0x00020010].values.elementAt(0)}');
+        final ui0 = rds[0x00020010];
+        log.debug('ui0: $ui0');
+        if (ui0 == null) {
+          log.debug('Transfer Syntax missing: TS = '
+              '${TransferSyntax.kDefaultForDIMSE}');
+        } else {
+          final uid0 = ui0.value;
+          log.debug('Transfer Syntax UID: $uid0}');
 
-        expect(() => rds[0x00020010], isNotNull);
-        expect(() => rds[0x00020010].values, isNotNull);
+          expect(() => rds[0x00020010], isNotNull);
+          expect(() => rds[0x00020010].values, isNotNull);
+        }
 
         expect(() => rds[0x00143012], isNotNull);
         expect(() => rds[0x00143012].values, isNotNull);
@@ -67,7 +80,7 @@ void main() {
           ..debug('          Number of frames integrated: '
               '${rds[0x00143012]?.values?.elementAt(0)}')
           ..debug('          Number of Frames Used for Integration: '
-              '${rds[0x00143073]?.values?.elementAt(0)}');
+              '${rds[0x00143073]?.values?.elementAt(0)}', -1);
       }
     });
   });

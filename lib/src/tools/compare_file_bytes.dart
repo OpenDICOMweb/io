@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'dart:typed_data';
 
 import 'package:core/server.dart';
