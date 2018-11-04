@@ -137,7 +137,9 @@ Stream _walk(Directory d, Filter filter) async* {
         walk(e, filter);
       }
     }
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     print(e.toString());
   }
 }
@@ -160,14 +162,13 @@ List _walkSync(Directory d, Function func, List list) {
         list.add(_walkSync(e, func, list));
       }
     }
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     print(e.toString());
   }
   return list;
 }
 
-Stream getFiles(String root, [Filter filter]) => walk(new Directory(root), filter);
-
-
-
-
+Stream getFiles(String root, [Filter filter]) =>
+    walk(new Directory(root), filter);

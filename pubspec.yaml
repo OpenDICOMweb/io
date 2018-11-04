@@ -1,6 +1,6 @@
 name: io_extended
 description: ODW input/output (files, network, etc.) package
-version: 0.7.5
+version: 0.7.6
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
 homepage: https://github.com/OpenDICOMweb/io
@@ -12,10 +12,10 @@ dependencies:
   args: any
   path: any
   core:
-    path: C:/odw/sdk/core
+    path: ../core
     version: ^0.7.5
   converter:
-    path: C:/odw/sdk/converter
+    path: ../converter
     version: ^0.7.5
 
 

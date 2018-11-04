@@ -30,6 +30,8 @@ void main() {
   final files = getFilesFromDirectory(inRoot0, '.dcm');
   stdout.writeln('File count: ${files.length}\n');
 
+  doTrimWhitespace = true;
+
   group('Reed Root Dataset', () {
     test('Create a data set object from a File', () {
       // Read, parse, and print a summary of each file.

@@ -7,7 +7,7 @@
 //export 'package:io_extended/src/encoding.dart';
 
 export 'package:io_extended/src/dcm_file.dart';
-export 'package:io_extended/src/dcm_media_type.dart';
+export 'package:io_extended/src/dicom_media_type.dart';
 export 'package:io_extended/src/file_system.dart';
 export 'package:io_extended/src/file_type.dart';
 export 'package:io_extended/src/filename.dart';

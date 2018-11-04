@@ -12,7 +12,7 @@ import 'package:core/core.dart';
 import 'package:converter/converter.dart';
 import 'package:path/path.dart' as p;
 
-import 'dcm_media_type.dart';
+import 'dicom_media_type.dart';
 import 'file_type.dart';
 
 // ignore_for_file: only_throw_errors
@@ -35,10 +35,6 @@ String toAbsolute(String path) {
 /// This is a file from a non-DICOM File System.
 //TODO: change this so it is based on [File] rather than [path].
 class Filename {
-  final String _path;
-  FileSubtype _subtype;
-  File _file;
-
   Filename(String path) : _path = toAbsolute(path);
 
   Filename.withType(String path, this._subtype) : _path = toAbsolute(path);
@@ -51,6 +47,10 @@ class Filename {
     final path = '${p.basenameWithoutExtension(fn.path)}.$ext';
     return new Filename(path);
   }
+
+  final String _path;
+  FileSubtype _subtype;
+  File _file;
 
   // lazy if created with [Filename].
   File get file => _file ??= new File(_path);
@@ -83,7 +83,7 @@ class Filename {
   String get extension => ext;
 
   /// The IANA Media Type of the associated this [Filename].
-  DcmMediaType get mediaType => subtype.mediaType;
+  DicomMediaType get mediaType => subtype.mediaType;
 
   /// Returns _true_ if the encoding units are bytes.
   bool get isBinary => subtype?.mType?.isBinary;

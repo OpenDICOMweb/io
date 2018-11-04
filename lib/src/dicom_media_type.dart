@@ -3,6 +3,9 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
+//
+import 'package:core/core.dart';
+import 'package:path/path.dart' as pp;
 
 /// The [Units] of the DICOM Media Type.
 enum Units {
@@ -48,7 +51,7 @@ enum Encoding {
 }
 
 /// DICOM Media Type.
-class DcmMediaType {
+class DicomMediaType {
   /// The media type subtype [name].
   final String name;
 
@@ -59,7 +62,14 @@ class DcmMediaType {
   final Units units;
 
   /// A DICOM Media Type.
-  const DcmMediaType(this.name, this.encoding, this.units);
+  const DicomMediaType(this.name, this.encoding, this.units);
+
+  factory DicomMediaType.fromPath(String path) {
+    var ext = pp.extension(path);
+    ext ??= '';
+    final mt = extensions[ext];
+    return (mt == null) ? badDicomFileExtension(ext) : mt;
+  }
 
   /// The media type [type] of DICOM Media Types
   String get type => 'application';
@@ -86,7 +96,7 @@ class DcmMediaType {
 
   /// Returns information about this DICOM Media Type.
   String get info => '''
-DcmMediaType:
+$runtimeType:
   name: $name
   encoding: $encoding
   units: $units
@@ -97,18 +107,54 @@ DcmMediaType:
   String toString() => '$type/$name';
 
   //TODO: finish documenting these
-  static const DcmMediaType part10 =
-      const DcmMediaType('dicom', Encoding.part10, Units.binary);
-  static const DcmMediaType json =
-      const DcmMediaType('dicom+json', Encoding.json, Units.utf8);
-  static const DcmMediaType fastJson =
-      const DcmMediaType('dicom+json', Encoding.json, Units.utf8);
-  static const DcmMediaType pureJson =
-      const DcmMediaType('json', Encoding.json, Units.utf8);
-  static const DcmMediaType xml =
-      const DcmMediaType('dicom+xml', Encoding.xml, Units.utf8);
-  static const DcmMediaType octets =
-      const DcmMediaType('octet-stream', Encoding.xml, Units.binary);
-  static const DcmMediaType unknown =
-      const DcmMediaType('Unknown', Encoding.unknown, Units.unknown);
+  static const DicomMediaType dicom =
+      DicomMediaType('dicom', Encoding.part10, Units.binary);
+  static const DicomMediaType part10 = dicom;
+  static const DicomMediaType json =
+      DicomMediaType('dicom+json', Encoding.json, Units.utf8);
+  static const DicomMediaType fastJson =
+      DicomMediaType('dicom+json', Encoding.json, Units.utf8);
+  static const DicomMediaType pureJson =
+      DicomMediaType('json', Encoding.json, Units.utf8);
+  static const DicomMediaType xml =
+      DicomMediaType('dicom+xml', Encoding.xml, Units.utf8);
+  static const DicomMediaType octets =
+      DicomMediaType('octet-stream', Encoding.xml, Units.binary);
+  static const DicomMediaType unknown =
+      DicomMediaType('Unknown', Encoding.unknown, Units.unknown);
+
+  static const Map<String, DicomMediaType> extensions =
+  <String, DicomMediaType> {
+    '': dicom,
+    'dcm': dicom,
+    'json': json,
+    'dcmjson': json,
+    'xml': xml,
+    'dcmxml': xml
+  };
 }
+
+Null badDicomFileExtension(String ext) {
+  final msg = 'Bad DICOM file extension: $ext';
+  log.error(msg);
+  if (throwOnError) throw new DicomMediaTypeError(msg);
+  return null;
+}
+
+Null badDicomMediaType(DicomMediaType mt) {
+  final msg = 'Bad DICOM media type: $mt';
+  log.error(msg);
+  if (throwOnError) throw new DicomMediaTypeError(msg);
+  return null;
+}
+
+class DicomMediaTypeError extends Error {
+  final String msg;
+
+  DicomMediaTypeError(this.msg);
+
+  @override
+  String toString() => msg;
+}
+
+

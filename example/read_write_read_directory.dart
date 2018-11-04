@@ -20,14 +20,14 @@ String inputDir2 = 'C:/acr/odw/test_data/sfd/CT';
 String outputDir = 'C:/acr/odw/sdk/io/example/output';
 
 class FileTestError {
+  FileTestError(this.inFile, this.outFile);
+
   Filename inFile;
   Filename outFile;
   String read;
   String reRead;
   String dsCompare;
   FileCompareResult result;
-
-  FileTestError(this.inFile, this.outFile);
 
   @override
   String toString() => '''

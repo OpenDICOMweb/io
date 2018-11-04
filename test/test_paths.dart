@@ -4,11 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-import 'package:io_extended/src/dicom/dicom_file.dart';
+const String dcmPath0 = 'C:/foo/bar/bas0';
+const String dcmPath1 = 'C:/foo/bar/bas1.dcm';
 
-void main([List<String> args = const ['foo']]) {
-  final path = args[0];
-  final file = DicomFile(path, exists: true);
-  final instance = file.read();
-  print('Instance: $instance');
-}
+const List<String> dcmPaths = const <String>[dcmPath0, dcmPath1];

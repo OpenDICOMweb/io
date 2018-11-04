@@ -37,7 +37,7 @@ class FileSystem extends FileSystemBase {
   /// Returns the [Directory] corresponding to the specified [Study] or [Series].
   @override
   Directory directory(Entity entity) =>
-      new Directory('$rootPath${entity.path}');
+      new Directory('$rootPath$entity');
 
   /// Returns the [DcmFile] corresponding to the arguments.
   @override

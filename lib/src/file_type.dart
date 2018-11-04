@@ -7,7 +7,7 @@
 import 'package:core/core.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:io_extended/src/dcm_media_type.dart';
+import 'package:io_extended/src/dicom_media_type.dart';
 
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
@@ -63,7 +63,7 @@ class FileType {
 
   // Media Type  and associated accessors.
   /// The IANA Media Type of the associated FileName.
-  DcmMediaType get mediaType => subtype.mType;
+  DicomMediaType get mediaType => subtype.mType;
 
   /// Returns _true_ if the encoding units are bytes.
   bool get isBinary => subtype.mType.isBinary;
@@ -285,7 +285,7 @@ class FileSubtype {
   final int index;
   final String name;
   final OType oType;
-  final DcmMediaType mType; // SubType
+  final DicomMediaType mType; // SubType
   final String ext; // File Extension
 
   //TODO: jfp document this
@@ -298,7 +298,7 @@ class FileSubtype {
 
   // Media Type  and associated accessors.
   /// The IANA Media Type of the associated FileName.
-  DcmMediaType get mediaType => mType;
+  DicomMediaType get mediaType => mType;
 
   /// Returns _true_ if the encoding units are bytes.
   bool get isBinary => mType.isBinary;
@@ -335,34 +335,34 @@ class FileSubtype {
   /// Returns _true_ if this is a Bulkdata object.
   bool get isBulkdata => oType == OType.bulkdata;
 
-  bool get isUnknown => mediaType == DcmMediaType.unknown;
+  bool get isUnknown => mediaType == DicomMediaType.unknown;
 
   @override
   String toString() => '$runtimeType: $name encoded as $mediaType';
 
   static const FileSubtype part10 =
-      const FileSubtype(1, 'Part10', OType.complete, DcmMediaType.part10, '.dcm');
+      const FileSubtype(1, 'Part10', OType.complete, DicomMediaType.dicom, '.dcm');
   static const FileSubtype part10MD = const FileSubtype(
-      2, 'Part10 Metadata', OType.metadata, DcmMediaType.part10, '.mddcm');
+      2, 'Part10 Metadata', OType.metadata, DicomMediaType.dicom, '.mddcm');
   static const FileSubtype bulkdata = const FileSubtype(
-      3, 'Binary Bulkdata', OType.bulkdata, DcmMediaType.octets, '.bddcm');
+      3, 'Binary Bulkdata', OType.bulkdata, DicomMediaType.octets, '.bddcm');
 
   static const FileSubtype json =
-      const FileSubtype(4, 'JSON', OType.complete, DcmMediaType.json, '.dcmjson');
+      const FileSubtype(4, 'JSON', OType.complete, DicomMediaType.json, '.dcmjson');
   static const FileSubtype jsonMD = const FileSubtype(
-      5, 'JSON Metadata', OType.metadata, DcmMediaType.json, '.mddcmjson');
+      5, 'JSON Metadata', OType.metadata, DicomMediaType.json, '.mddcmjson');
   static const FileSubtype jsonBD = const FileSubtype(
-      6, 'JSON Bulkdata', OType.bulkdata, DcmMediaType.json, '.bddcmjson');
+      6, 'JSON Bulkdata', OType.bulkdata, DicomMediaType.json, '.bddcmjson');
 
   static const FileSubtype xml =
-      const FileSubtype(7, 'XML', OType.complete, DcmMediaType.xml, '.dcmxml');
+      const FileSubtype(7, 'XML', OType.complete, DicomMediaType.xml, '.dcmxml');
   static const FileSubtype xmlMD = const FileSubtype(
-      8, 'XML Metadata', OType.metadata, DcmMediaType.xml, '.mddcm.xml');
+      8, 'XML Metadata', OType.metadata, DicomMediaType.xml, '.mddcm.xml');
   static const FileSubtype xmlBD =
-      const FileSubtype(9, 'XML Bulkdata', OType.bulkdata, DcmMediaType.xml, '.bddcmxml');
+      const FileSubtype(9, 'XML Bulkdata', OType.bulkdata, DicomMediaType.xml, '.bddcmxml');
 
   static const FileSubtype unknown =
-      const FileSubtype(9, 'Unknown', OType.unknown, DcmMediaType.unknown, '');
+      const FileSubtype(9, 'Unknown', OType.unknown, DicomMediaType.unknown, '');
 
   static FileSubtype parseExt(String ext) => lookup(ext);
 

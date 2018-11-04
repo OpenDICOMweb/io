@@ -16,20 +16,19 @@ import 'file_type.dart';
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
 class DcmFile {
+  DcmFile(this.fs, this.fType, this.entity);
+  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toFile(path);
+
   final FileSystem fs;
   final FileType fType;
   final Entity entity;
-
-  DcmFile(this.fs, this.fType, this.entity);
-
-  factory DcmFile.fromPath(FileSystem fs, String path) => fs.toFile(path);
 
   Directory get directory => fs.directory(entity);
 
   File get file => new File(path);
 
   /// Returns the [File] corresponding to the specified arguments.
-  String get path => '${fs.rootPath}${entity.path}${fType.extension}';
+  String get path => '${fs.rootPath}$entity${fType.extension}';
 
   Uint8List get bytes {
     if (fType.subtype.isBinary) {

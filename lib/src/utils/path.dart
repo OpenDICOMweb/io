@@ -108,10 +108,16 @@ Entity _readBinaryDirectorySync(Directory d, List<Uint8List> bytesList) {
       } else if (e is File) {
         bytesList.add(e.readAsBytesSync());
       } else {
+        // ignore: only_throw_errors
         throw 'Invalid FileSystem Entity: $e';
       }
     }
-  } catch (e) {}
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
+    // ignore: avoid_empty_catch_blocks
+  }
+  // ignore: only_throw_errors
   throw 'Unimplemented';
 }
 
@@ -132,17 +138,21 @@ List<String> _readStringDirectorySync(Directory d, List<String> bytesList) {
       } else if (e is File) {
         bytesList.add(e.readAsStringSync());
       } else {
+        // ignore: only_throw_errors
         throw 'Invalid FileSystem Entity: $e';
       }
     }
-  } catch (e) {
-
+  }
+  // ignore: avoid_catches_without_on_clauses,
+  catch (e) {
+    // ignore: avoid_empty_catch_blocks
   }
   return bytesList;
 }
 
 
 Future<Entity> readBinaryFile(String path) async {
+  // ignore: only_throw_errors
   throw 'Unimplemented';
 }
 
@@ -150,7 +160,9 @@ Uint8List readBinaryFileSync(String path) {
   final f = new File(path);
   try {
     return f.readAsBytesSync();
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     //TODO: finish
     return kEmptyUint8List;
   }
@@ -163,7 +175,9 @@ Future<Null> writeBinaryFile(String path, Uint8List bytes) async {
   final f = new File(path);
   try {
     await f.writeAsBytes(bytes);
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     //TODO: add code
   }
 }
@@ -175,7 +189,9 @@ void writeDirectorySync(String path, Map<String, Uint8List> entries) {
     final f = new File(path);
     try {
       f.writeAsBytesSync(bytes);
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       //TODO: finish
     }
   });
@@ -185,7 +201,9 @@ void writeBinaryFileSync(String path, Uint8List bytes) {
   final f = new File(path);
   try {
     f.writeAsBytes(bytes);
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     //TODO: finish
   }
 }
@@ -207,7 +225,9 @@ void writeStringDirectorySync(String path, Map<String, String> entries) {
     final f = new File(path);
     try {
       f.writeAsStringSync(s);
-    } catch (e) {
+    }
+    // ignore: avoid_catches_without_on_clauses
+    catch (e) {
       //TODO: finish
     }
   });
@@ -223,7 +243,9 @@ String readStringFileSync(String path) {
   String s;
   try {
     s = f.readAsStringSync();
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     //TODO: finish
   }
   return s;
@@ -233,7 +255,9 @@ Future<Null> writeStringFile(String path, String s) async {
   final f = new File(path);
   try {
     await f.writeAsString(s);
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     //TODO: add code
   }
 }
@@ -242,7 +266,9 @@ void writeStringFileSync(String path, String s) {
   final f = new File(path);
   try {
     f.writeAsString(s);
-  } catch (e) {
+  }
+  // ignore: avoid_catches_without_on_clauses
+  catch (e) {
     //TODO: finish
   }
 }
