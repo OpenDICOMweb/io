@@ -13,7 +13,7 @@ A simple usage exampl
     String inPath = '/2.25.2094332409/2.25123456789/2.25.987654321.dcm';
 
     main() {
-      var fs = new FileSystem();
+      var fs = FileSystem();
       DcmFile file = fs.toFile(inPath);
       Entity entity = file.readSync();
       print('entity: $entity');

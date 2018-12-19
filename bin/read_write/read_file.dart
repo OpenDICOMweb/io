@@ -12,7 +12,6 @@ import 'package:converter/converter.dart';
 import 'package:core/server.dart';
 import 'package:path/path.dart' as path;
 
-
 const String xxx =
     'C:/acr/odw/test_data/6684/2017/5/12/21/E5C692DB/A108D14E/A619BCE3';
 const String dcmDir = 'C:/acr/odw/test_data/sfd/MG/DICOMDIR';
@@ -51,14 +50,14 @@ const String bas =
 Future main() async {
   Server.initialize(name: 'ReadFile', level: Level.debug3, throwOnError: true);
 
-  final fPath = evrX;
+  const fPath = evrX;
 
   print('path: $fPath');
   print(' out: ${getTempFile(fPath, 'dcmout')}');
-  final url = new Uri.file(fPath);
+  final url = Uri.file(fPath);
   stdout.writeln('Reading(byte): $url');
 
-  final reader = new ByteReader.fromPath(fPath, doLogging: true);
+  final reader = ByteReader.fromPath(fPath, doLogging: true);
   final rds = reader.readRootDataset();
 
   if (rds == null) {
@@ -66,16 +65,16 @@ Future main() async {
   } else if (reader.pInfo != null) {
     final infoPath = '${path.withoutExtension(fPath)}.info';
     log.info('infoPath: $infoPath');
-    final sb = new StringBuffer('${reader.pInfo.summary(rds)}\n')
+    final sb = StringBuffer('${reader.pInfo.summary(rds)}\n')
       ..write('Bytes Dataset: ${rds.summary}');
-    new File(infoPath)..writeAsStringSync(sb.toString());
+    File(infoPath).writeAsStringSync(sb.toString());
     log.debug(sb.toString());
 
-    final z = new Formatter.withIndenter(-1, Prefixer.basic);
+    final z = Formatter.withIndenter(-1, Prefixer.basic);
     final fmtPath = '${path.withoutExtension(fPath)}.fmt';
     log.info('fmtPath: $fmtPath');
     final fmtOut = rds.format(z);
-    new File(fmtPath)..writeAsStringSync(sb.toString());
+    File(fmtPath).writeAsStringSync(sb.toString());
     log.debug(fmtOut);
 
 //        print(rds.format(z));
@@ -138,7 +137,7 @@ const String x16 =
 const String x17 =
     'C:/acr/odw/test_data/mweb/Sop-selected/1.2.840.10008.5.1.4.1.1.66.dcm';
 
-const List<String> badFiles = const <String>[
+const List<String> badFiles = <String>[
   x00,
   x01,
   x02,

@@ -39,9 +39,9 @@ File Text Error:
   ''';
 }
 
-Future<Null> main(List<String> args) async {
-  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
-  final watch = new Stopwatch();
+Future<void> main(List<String> args) async {
+  Server.initialize(name: 'read_file_test.dart', level: Level.info0);
+  final watch = Stopwatch();
   var filesTotal = 0;
   var filesRead = 0;
 
@@ -86,7 +86,8 @@ Future<Null> main(List<String> args) async {
         ..debug1('rds0: $rds0', -2);
 
       // Write a File
-      final outFN = new Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
+      final outFN =
+          Filename.withType('$outputDir/${inFN.base}', FileSubtype.part10);
       log
         ..debug('Writing file $i: $outFN')
         ..down;
@@ -107,27 +108,27 @@ Future<Null> main(List<String> args) async {
       if (length0 == length2) {
         log.debug('Both files have length($length0)');
       } else {
-        log.error('Files have different lengths: original($length0), result ($length2)');
+        log.error('Files have different lengths: original($length0), '
+            'result ($length2)');
       }
       final Uint8List bytes3 = inFN.file.readAsBytesSync();
       final rds1 = TagReader(bytes3).readRootDataset();
       log
         ..debug1('rds: 1 ${rds1.info}')
-        ..debug2(rds1.format(new Formatter(maxDepth: -1)))
+        ..debug2(rds1.format(Formatter(maxDepth: -1)))
         ..up
 
-      // Compare [Dataset]s
-      //log.watermark = Level.info;
-      ..debug('Comparing Datasets: 0: $rds0, 1: $rds1', 1);
-      final comparitor = new DatasetComparitor(rds0, rds1)
-      ..run;
+        // Compare [Dataset]s
+        //log.watermark = Level.info;
+        ..debug('Comparing Datasets: 0: $rds0, 1: $rds1', 1);
+      final comparitor = DatasetComparitor(rds0, rds1)..run;
       log.down;
       if (comparitor.hasDifference) {
-        log..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
-        ..config('Result: ${comparitor.info}')
-        ..debug(comparitor.toString());
-        error = new FileTestError(inFN, outFN)
-        ..dsCompare = comparitor.info;
+        log
+          ..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
+          ..config('Result: ${comparitor.info}')
+          ..debug(comparitor.toString());
+        error = FileTestError(inFN, outFN)..dsCompare = comparitor.info;
         throw 'stop';
       } else {
         log.debug('Dataset are identical');
@@ -148,7 +149,7 @@ Future<Null> main(List<String> args) async {
         log
           ..config('*** ($filesRead) File $i of $filesTotal: ${inFN.path}')
           ..debug('Files have differences at : $result');
-        error = error ??= new FileTestError(inFN, outFN)..result = result;
+        error = error ??= FileTestError(inFN, outFN)..result = result;
       }
       log.up;
     } else {

@@ -13,12 +13,12 @@ String outPath = 'C:/acr/odw/sdk/io/example/output/IM-0001-0001.dcm';
 
 void main() {
   // Read a File
-  final fnIn = new Filename(inPath);
+  final fnIn = Filename(inPath);
 
   final bytes = fnIn.file.readAsBytesSync();
   final TagRootDataset rds = TagReader(bytes).readRootDataset();
-  print(rds.format(new Formatter(maxDepth: -1)));
+  print(rds.format(Formatter(maxDepth: -1)));
 
   // Write a File
-  new Filename.withType(outPath, FileSubtype.part10)..writeSync(rds);
+  Filename.withType(outPath, FileSubtype.part10).writeSync(rds);
 }

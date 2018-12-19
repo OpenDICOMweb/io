@@ -65,7 +65,7 @@ class FileMapReader extends IterableBase<String> {
   FileMapReader(this.fileMap);
 
   @override
-  FileListIterator get iterator => new FileListIterator(fileMap);
+  FileListIterator get iterator => FileListIterator(fileMap);
 
   @override
   int get length => fileMap.values.length;

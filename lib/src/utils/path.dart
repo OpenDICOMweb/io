@@ -13,15 +13,17 @@ import 'dart:typed_data';
 import 'package:core/core.dart';
 import 'package:path/path.dart' as path;
 
+// ignore_for_file: public_member_api_docs
+
 //String cleanPath(String path) => path.replaceAll('\\', '/');
 
 /// Checks that [path] is not empty.
 String checkPath(String path) {
-  if (path == null || path == '') throw new ArgumentError('Empty path: $path');
+  if (path == null || path == '') throw ArgumentError('Empty path: $path');
   return path;
 }
 
-final path.Context pathContext = new path.Context(style: path.Style.posix);
+final path.Context pathContext = path.Context(style: path.Style.posix);
 final String separator = pathContext.separator;
 
 /*
@@ -43,21 +45,21 @@ String getVNAPath(RootDataset rds, String rootDir, String ext) {
   final series = rds.getUid(kSeriesInstanceUID);
   final instance = rds.getUid(kSOPInstanceUID);
   final dirPath = '$rootDir/$study/$series';
-  final dir = new Directory(dirPath);
+  final dir = Directory(dirPath);
   if (!dir.existsSync()) dir.createSync(recursive: true);
   return '$dirPath/$instance.$ext';
 }
 
 Directory pathToDirectory(String path, {bool mustExist = true}) {
-  final dir = new Directory(path);
+  final dir = Directory(path);
   return (mustExist && !dir.existsSync()) ? null : dir;
 }
 
 File pathToFile(String path, {bool mustExist = true}) {
-  final file = new File(path);
+  final file = File(path);
   final exists = file.existsSync();
   if (mustExist && !exists) {
-    if (throwOnError) throw new FileSystemException('Non-Existant File', path);
+    if (throwOnError) throw FileSystemException('Non-Existant File', path);
     return null;
   } else {
     return file;
@@ -69,25 +71,24 @@ File pathToFile(String path, {bool mustExist = true}) {
 /// Returns the [root] [Directory] of the MintFileSystem,
 /// creating it if it doesn't exist.
 Future<Directory> createRoot(String path) async {
-  final root = new Directory(path);
+  final root = Directory(path);
   if (!await root.exists()) await root.create(recursive: true);
   return root;
 }
 */
 
 //TODO move to utilities
-/// Returns a [List] of [File]s with extension [ext] from the specified [Directory].
+/// Returns a [List] of [File]s with extension [ext] from
+/// the specified [Directory].
 List<File> getFilesFromDirectory(String path, [String ext = '.dcm']) {
-  final dir = new Directory(path);
+  final dir = Directory(path);
   final entities = dir.listSync(recursive: true, followLinks: false);
-//  print('FS Entities: ${entities.length}');
-  final files = [];
+  final files = <File>[];
   for (var e in entities) {
     if (e is File) files.add(e);
   }
   return files;
 }
-
 
 //**** Binary Utility Functions
 //TODO: implement later
@@ -95,7 +96,7 @@ Future<FileSystemEntity> readDirectory(String path) => unimplementedError();
 
 //TODO: debug, doc, and Test
 Entity readBinaryDirectorySync(String path) {
-  final d = new Directory(path);
+  final d = Directory(path);
   return _readBinaryDirectorySync(d, []);
 }
 
@@ -121,13 +122,12 @@ Entity _readBinaryDirectorySync(Directory d, List<Uint8List> bytesList) {
   throw 'Unimplemented';
 }
 
-
 //**** [String] based [File] utilities
 //TODO: implement later
 Stream<String> readStringDirectory(String path) {}
 
 List<String> readStringDirectorySync(String path) =>
-    _readStringDirectorySync(new Directory(path), []);
+    _readStringDirectorySync( Directory(path), []);
 
 List<String> _readStringDirectorySync(Directory d, List<String> bytesList) {
   final entities = d.listSync(recursive: true, followLinks: false);
@@ -150,14 +150,13 @@ List<String> _readStringDirectorySync(Directory d, List<String> bytesList) {
   return bytesList;
 }
 
-
 Future<Entity> readBinaryFile(String path) async {
   // ignore: only_throw_errors
   throw 'Unimplemented';
 }
 
 Uint8List readBinaryFileSync(String path) {
-  final f = new File(path);
+  final f = File(path);
   try {
     return f.readAsBytesSync();
   }
@@ -171,8 +170,8 @@ Uint8List readBinaryFileSync(String path) {
 //TODO: implement later
 //Stream<Uint8List> writeDirectory(String path) {}
 
-Future<Null> writeBinaryFile(String path, Uint8List bytes) async {
-  final f = new File(path);
+Future<void> writeBinaryFile(String path, Uint8List bytes) async {
+  final f = File(path);
   try {
     await f.writeAsBytes(bytes);
   }
@@ -186,7 +185,7 @@ Future<Null> writeBinaryFile(String path, Uint8List bytes) async {
 //TODO: add try block
 void writeDirectorySync(String path, Map<String, Uint8List> entries) {
   entries.forEach((path, bytes) {
-    final f = new File(path);
+    final f = File(path);
     try {
       f.writeAsBytesSync(bytes);
     }
@@ -198,7 +197,7 @@ void writeDirectorySync(String path, Map<String, Uint8List> entries) {
 }
 
 void writeBinaryFileSync(String path, Uint8List bytes) {
-  final f = new File(path);
+  final f = File(path);
   try {
     f.writeAsBytes(bytes);
   }
@@ -213,7 +212,7 @@ bool isBinaryDicom(String path) {
   final bytes = readBinaryFileSync(path);
   if (bytes.lengthInBytes < 132) return false;
   final s = bytes.sublist(128, 132).toString();
-  return (s == 'DICM');
+  return s == 'DICM';
 }
 
 //TODO: implement later
@@ -222,7 +221,7 @@ bool isBinaryDicom(String path) {
 //TODO: debug and test
 void writeStringDirectorySync(String path, Map<String, String> entries) {
   entries.forEach((path, s) {
-    final f = new File(path);
+    final f = File(path);
     try {
       f.writeAsStringSync(s);
     }
@@ -234,12 +233,12 @@ void writeStringDirectorySync(String path, Map<String, String> entries) {
 }
 
 Future<String> readStringFile(String path) async {
-  final f = new File(path);
+  final f = File(path);
   return await f.readAsString();
 }
 
 String readStringFileSync(String path) {
-  final f = new File(path);
+  final f = File(path);
   String s;
   try {
     s = f.readAsStringSync();
@@ -251,8 +250,8 @@ String readStringFileSync(String path) {
   return s;
 }
 
-Future<Null> writeStringFile(String path, String s) async {
-  final f = new File(path);
+Future<void> writeStringFile(String path, String s) async {
+  final f = File(path);
   try {
     await f.writeAsString(s);
   }
@@ -263,7 +262,7 @@ Future<Null> writeStringFile(String path, String s) async {
 }
 
 void writeStringFileSync(String path, String s) {
-  final f = new File(path);
+  final f = File(path);
   try {
     f.writeAsString(s);
   }
@@ -272,5 +271,3 @@ void writeStringFileSync(String path, String s) {
     //TODO: finish
   }
 }
-
-

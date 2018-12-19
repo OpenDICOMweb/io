@@ -13,22 +13,19 @@ import 'dart:typed_data';
 import 'package:core/core.dart';
 import 'package:path/path.dart' as path;
 
-
+// ignore_for_file: public_member_api_docs
 
 //TODO: move to io_utils
 /// Checks that [dataset] is not empty.
 void checkRootDataset(Dataset dataset) {
   if (dataset == null || dataset.isEmpty)
-    throw new ArgumentError('Empty ' 'Empty Dataset: $dataset');
+    throw ArgumentError('Empty ' 'Empty Dataset: $dataset');
 }
 
-
-
-final path.Context pathContext = new path.Context(style: path.Style.posix);
+final path.Context pathContext = path.Context(style: path.Style.posix);
 final String separator = pathContext.separator;
 
-
-typedef void FSERunner(FileSystemEntity f, [int level]);
+typedef FSERunner = void Function(FileSystemEntity f, [int level]);
 
 /// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
 Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
@@ -40,7 +37,7 @@ Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
     if (e is Directory) {
       count += await walkDirectory(e, f, _level++);
     } else if (e is File) {
-      await new Future(() => f(e, level));
+      await Future(() => f(e, level));
       count++;
     } else {
       stderr.write('Warning: $e is not a File or Directory');
@@ -49,7 +46,7 @@ Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
   return count;
 }
 
-typedef void FileRunner(File f, [int level]);
+typedef FileRunner = void Function(File f, [int level]);
 
 /// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
 Future<int> walkDirectoryFiles(Directory dir, FileRunner f,
@@ -62,7 +59,7 @@ Future<int> walkDirectoryFiles(Directory dir, FileRunner f,
     if (fse is Directory) {
       count += await walkDirectory(fse, f, _level++);
     } else if (fse is File) {
-      await new Future(() => f(fse, level));
+      await Future(() => f(fse, level));
       count++;
     } else {
       stderr.write('Warning: $fse is not a File or Directory');
@@ -115,18 +112,19 @@ int walkDirectoryFilesSync(Directory dir, FileRunner f, [int level = 0]) {
   return count;
 }
 
-typedef Null RunFile(File f, [int count]);
+typedef RunFile = Null Function(File f, [int count]);
 
 /// Walks a [List] of [String], [File], List<String>, or List<File>, and
 /// applies [runner] to each one asynchronously.
-Future<int> walkPathList(Iterable paths, RunFile runner, [int level = 0]) async {
+Future<int> walkPathList(Iterable paths, RunFile runner,
+    [int level = 0]) async {
   var count = 0;
   var _level = level;
   for (var entry in paths) {
     if (entry is List) {
       count += await walkPathList(entry, runner, _level++);
     } else if (entry is String) {
-      final f = new File(entry);
+      final f = File(entry);
       await runFile(f, runner);
     } else if (entry is File) {
       await runFile(entry, runner);
@@ -139,20 +137,20 @@ Future<int> walkPathList(Iterable paths, RunFile runner, [int level = 0]) async 
 }
 
 Future<Null> runFile(File file, RunFile runner, [int level = 0]) async =>
-    await new Future<Null>(() => runner(file, level));
+    await Future<Null>(() => runner(file, level));
 
 Future<Null> runPath(String path, RunFile runner, [int level = 0]) async =>
-    await new Future<Null>(() => runner(new File(path), level));
+    await Future<Null>(() => runner(File(path), level));
 
 /// Returns the number of [File]s in a [Directory]
-int fileCount(Directory d, {List<String> extensions, bool recursive: true}) {
+int fileCount(Directory d, {List<String> extensions, bool recursive = true}) {
   final eList = d.listSync(recursive: recursive);
   var count = 0;
   for (var fse in eList) if (fse is File) count++;
   return count;
 }
 
-const List<String> stdDcmExtensions = const <String>['.dcm', '', '.DCM'];
+const List<String> stdDcmExtensions = <String>['.dcm', '', '.DCM'];
 
 //TODO: what should default be?
 const int kSmallDcmFileLimit = 376;
@@ -165,7 +163,7 @@ Bytes readPath(String fPath,
     int maxLength}) {
   final ext = path.extension(fPath);
   if (!extensions.contains(ext)) return null;
-  final f = new File(fPath);
+  final f = File(fPath);
   return readFile(f,
       doAsync: doAsync, minLength: minLength, maxLength: maxLength);
 }
@@ -180,7 +178,7 @@ Bytes readFile(File f,
     return null;
   try {
     final bytes = doAsync ? _readAsync(f) : _readSync(f);
-    return new Bytes.from(bytes);
+    return Bytes.from(bytes);
   } on FileSystemException {
     return null;
   }
@@ -194,14 +192,14 @@ Future<bool> _checkLenAsync(File f, int min, int max) async {
   final len = await f.length();
   final max0 = max ?? len;
   assert(min >= 0 && max0 > min);
-  return (len >= min && len <= max0) ? true : false;
+  return len >= min && len <= max0;
 }
 
 bool _checkLenSync(File f, int min, int max) {
   final len = f.lengthSync();
   final max0 = max ?? len;
   assert(min >= 0 && max0 > min);
-  final v = (len >= min && len <= max0) ? true : false;
+  final v = len >= min && len <= max0;
   return v;
 }
 
@@ -209,7 +207,7 @@ Future<Uint8List> _readAsync(File f) async => await f.readAsBytes();
 Uint8List _readSync(File f) => f.readAsBytesSync();
 
 List<String> fileListFromDirectory(String dirPath) {
-  final dir = new Directory(dirPath);
+  final dir = Directory(dirPath);
   final fList = dir.listSync(recursive: true);
   final fsEntityCount = fList.length;
   log

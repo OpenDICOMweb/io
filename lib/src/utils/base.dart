@@ -8,4 +8,4 @@ import 'dart:io';
 
 /// A predicate for testing properties of [File]s.
 /// If the filter should return a [File] or null.
-typedef File Filter(File f);
+typedef Filter = File Function(File f);

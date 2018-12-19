@@ -3,10 +3,12 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
+
+// ignore_for_file: public_member_api_docs
 
 void printIt(Uint8List bytes, int offset, int count) {
   final length = bytes.length;
@@ -24,7 +26,7 @@ void printBytes(TypedData list, int length) {
   print('list.length(${list.lengthInBytes}, length($length)');
   final l32 = list.buffer.asUint32List();
   for (var i = 0; i < 64; i += 16) {
-    final out = [];
+    final out = <int>[];
     for (var j = 0; j < 16; j++) {
       if (i + j >= l32.length) break;
       out.add(l32[i + j]);
@@ -33,7 +35,7 @@ void printBytes(TypedData list, int length) {
   }
 
   for (var i = l32.length - 64; i < l32.length; i += 16) {
-    final out = [];
+    final out = <int>[];
     for (var j = 0; j < 16; j++) {
       if (i + j >= l32.length) break;
       out.add(l32[i + j]);

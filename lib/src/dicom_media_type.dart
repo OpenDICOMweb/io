@@ -7,6 +7,8 @@
 import 'package:core/core.dart';
 import 'package:path/path.dart' as pp;
 
+// ignore_for_file: public_member_api_docs
+
 /// The [Units] of the DICOM Media Type.
 enum Units {
   /// The encoding units are 8-bit octets (bytes).
@@ -28,22 +30,23 @@ enum Encoding {
   ///
   /// The representation (object) is encoded in the DICOM File Format
   /// as specified in
-  /// [PS3.10, Section 7](http://dicom.nema.org/medical/dicom/current/output/html/part10
-  /// .html#chapter_7).
+  /// [PS3.10, Section 7](http://dicom.nema.org/medical/dicom/current/output/
+  /// html/part10.html#chapter_7).
   part10,
 
   /// DICOM+JSON File Format.
   ///
-  /// The representation (object) is encoded in the DICOM+JSON Format as specified in
-  /// [PS3.18, Annex F](http://dicom.nema.org/medical/dicom/current/output/html/part18
-  /// .html#chapter_F).
+  /// The representation (object) is encoded in the DICOM+JSON Format
+  /// as specified in
+  /// [PS3.18, Annex F](http://dicom.nema.org/medical/dicom/current/output/
+  /// html/part18.html#chapter_F).
   json,
 
   /// DICOM+XML File Format.
   ///
-  /// The representation (object) is encoded in the DIas specified in
-  /// [PS3.19, Annex A.1](http://dicom.nema.org/medical/dicom/current/output/html/part19
-  /// .html#sect_A.1).
+  /// The representation (object) is encoded in the DICOM+XML as specified in
+  /// [PS3.19, Annex A.1](http://dicom.nema.org/medical/dicom/current/output
+  /// /html/part19.html#sect_A.1).
   xml,
 
   /// The Encoding is [unknown].
@@ -137,14 +140,14 @@ $runtimeType:
 Null badDicomFileExtension(String ext) {
   final msg = 'Bad DICOM file extension: $ext';
   log.error(msg);
-  if (throwOnError) throw new DicomMediaTypeError(msg);
+  if (throwOnError) throw DicomMediaTypeError(msg);
   return null;
 }
 
 Null badDicomMediaType(DicomMediaType mt) {
   final msg = 'Bad DICOM media type: $mt';
   log.error(msg);
-  if (throwOnError) throw new DicomMediaTypeError(msg);
+  if (throwOnError) throw DicomMediaTypeError(msg);
   return null;
 }
 

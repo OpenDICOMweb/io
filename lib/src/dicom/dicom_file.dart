@@ -14,6 +14,8 @@ import 'package:path/path.dart' as pp;
 
 import 'package:io_extended/src/dicom_media_type.dart';
 
+// ignore_for_file: public_member_api_docs
+
 enum DicomFileType { dicom, dicomJson, dicomXml }
 
 /// A binary DICOM file.
@@ -181,7 +183,7 @@ class DicomXmlFile extends DicomFile {
 
 Null badDicomFile(String msg) {
   log.error(msg);
-  if (throwOnError) throw new DicomFileError(msg);
+  if (throwOnError) throw DicomFileError(msg);
   return null;
 }
 

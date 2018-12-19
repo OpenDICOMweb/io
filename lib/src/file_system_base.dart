@@ -15,10 +15,13 @@ import 'file_type.dart';
 import 'fs_index.dart';
 //import 'file_descriptor.dart';
 
+// ignore_for_file: public_member_api_docs
+
 //TODO: Implement all async IO calls
 
 /// Goals:
-/// 1. The file system should be completely independent of core except for [Uid]s.
+/// 1. The file system should be completely independent of core
+///    except for [Uid]s.
 /// 2. Simple read write interface using study, series, and instance [Uid]s
 
 /// The interface to all ODW File Systems.
@@ -39,13 +42,14 @@ abstract class FileSystemBase {
 
   /// Returns an Index to the files in this FileSystem.
   ///
-  /// An [FSIndex] is a structured tree, 3 levels deep, where the interior nodes are
-  /// are [List] and the leaves are [String]s containing the [Uid] of the SopInstance.
-  /// The root node is a [Study] [Uid] [String]s, and the level 2 nodes are
-  /// [Series] [Uid] [String]s,
+  /// An [FSIndex] is a structured tree, 3 levels deep, where the
+  /// interior nodes are are [List] and the leaves are [String]s
+  /// containing the [Uid] of the SopInstance. The root node is a [Study]
+  /// [Uid] [String]s, and the level 2 nodes are [Series] [Uid] [String]s,
   FSIndex get index;
 
-  /// Returns the [Directory] corresponding to the specified [root], [Study] and [Series].
+  /// Returns the [Directory] corresponding to the specified [root],
+  /// [Study] and [Series].
   Directory directory(Entity entity);
 
   /// Returns the [File] corresponding to [entity] plus the specified arguments.
@@ -84,14 +88,15 @@ abstract class FileSystemBase {
   /// [Study] in the target [Directory] in the specified [FileSubtype].
   Study readStudySync(Uid study, [FileSubtype subtype]);
 
-  /// Returns a [List] of [Uint8List]s, or [String] (depending on the [FileSubtype])
-  /// containing all the SOP Instances of the [Series] in the target [Directory]
-  /// in the specified [FileSubtype].
+  /// Returns a [List] of [Uint8List]s, or [String] (depending on
+  /// the [FileSubtype]) containing all the SOP Instances of the
+  /// [Series] in the target [Directory] in the specified [FileSubtype].
   Series readSeriesSync(Uid study, Uid series, [FileSubtype subtype]);
 
-  /// Returns a [Uint8List] or [String] (depending on the [FileSubtype]) containing the
-  /// target SOP Instance in the specified [FileSubtype].
-  Instance readInstanceSync(Uid study, Uid series, Uid instance, [FileSubtype subtype]);
+  /// Returns a [Uint8List] or [String] (depending on the [FileSubtype])
+  /// containing the target SOP Instance in the specified [FileSubtype].
+  Instance readInstanceSync(Uid study, Uid series, Uid instance,
+      [FileSubtype subtype]);
 
   // *** Write Async  ***
 
@@ -114,8 +119,9 @@ abstract class FileSystemBase {
   //TODO: needed?
   bool writeSeriesSync(Series series, [FileSubtype subtype]);
 
-  /// Writes the [Uint8List] or [String] contained in the bytes argument, to the
-  /// file specified by by the [FileSubtype], [Study], [Series], and [Instance] [String]s.
+  /// Writes the [Uint8List] or [String] contained in the bytes
+  /// argument, to the file specified by by the [FileSubtype],
+  /// [Study], [Series], and [Instance] [String]s.
   bool writeInstanceSync(Instance instance, [FileSubtype subtype]);
 
   /// Return a path to a file in the FileSystem
@@ -131,7 +137,7 @@ abstract class FileSystemBase {
 
   // TODO: debug - allows asynchronous creation of the FS root.
   static Future<Directory> maybeCreateRoot(String rootPath) async {
-    final root = new Directory(rootPath);
+    final root = Directory(rootPath);
     final exists = await root.exists();
     if (!exists) root.createSync(recursive: true);
     return root;
@@ -139,7 +145,7 @@ abstract class FileSystemBase {
 
   /// Create the [root] Directory of the FileSystem recursively.
   static Directory maybeCreateRootSync(String path) {
-    final root = new Directory(path);
+    final root = Directory(path);
     if (!root.existsSync()) root.createSync(recursive: true);
     return root;
   }

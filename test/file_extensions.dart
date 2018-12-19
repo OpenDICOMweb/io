@@ -11,7 +11,8 @@ import 'package:path/path.dart' as p;
 
 //int _firstDot(String s) => p.basename(s).indexOf('.');
 
-//String _extension(String fname) => p.basename(fname).substring(_firstDot(fname));
+//String _extension(String fname) =>
+// p.basename(fname).substring(_firstDot(fname));
 
 /// path = root / dir / base
 ///                   / name /ext
@@ -22,7 +23,7 @@ Filename convert(File f) {
   final ext = p.extension(name);
   final subtype = FileSubtype.subtypes[ext];
   print('Convert: name: $name, dir: $dir, ext: $ext, subtype: $subtype');
-  return new Filename(name);
+  return Filename(name);
 }
 
 String ext(String s) {
@@ -32,11 +33,11 @@ String ext(String s) {
 }
 
 List<Filename> getDcmFilesFromDirectory(String source) {
-  final dir = new Directory(source);
+  final dir = Directory(source);
   final files = dir.listSync(recursive: true, followLinks: false);
-  final filenames = [];
+  final filenames = <Filename>[];
   for (File f in files) {
-    filenames.add(new Filename(f.path));
+    filenames.add(Filename(f.path));
   }
   return filenames;
 }
@@ -60,8 +61,8 @@ final List<String> pathList = <String>[
 
 String inRoot = 'C:/odw_test_data/sfd/CR';
 
-List flatten(List list) {
-  final flat = [];
+List flatten(List<Object> list) {
+  final flat = <Object>[];
   for (var l in list)
     if (l is List) {
       flat.addAll(l);
@@ -72,9 +73,9 @@ List flatten(List list) {
 }
 
 List getFiles(String path) {
-  final dir = new Directory(path);
+  final dir = Directory(path);
   final entities = dir.listSync(recursive: true);
-  final files = [];
+  final files = <File>[];
   for (var e in entities) {
     if (e is Directory) continue;
     files.add(e);
@@ -115,7 +116,7 @@ void main() {
     }
     print('study: $study, series: $series');
 */
-    final f = new Filename(s);
+    final f = Filename(s);
     print('''
 Path: $s
   components:
@@ -134,7 +135,7 @@ Path: $s
 }
 /*
 List<DcmFile> getDcmFilesFromDirectory(String source) {
-  var dir = new Directory(source);
+  var dir = Directory(source);
   List<File> files = dir.listSync(recursive: true, followLinks: false);
   List<Filename> dcmFiles = [];
   for(File f in files) {
@@ -144,22 +145,23 @@ List<DcmFile> getDcmFilesFromDirectory(String source) {
 }
 
 Entity readFilenamesSync(String path) {
-  var file = new Filename(path);
+  var file = Filename(path);
   if (file.existsSync()) {
     Uint8List bytes = file.readAsBytesSync();
-    DcmDecoder decoder = new DcmDecoder(bytes);
+    DcmDecoder decoder = DcmDecoder(bytes);
     return decoder.entity;
   }
   return null;
 }
 
 Instance writeSopInstance(Instance instance, file) {
-  if (file is String) file = new File(file);
-  if (file is! File) throw new ArgumentError('file ($file) must be a String or File.');
-  DcmEncoder encoder = new DcmEncoder(instance.dataset.lengthInBytes);
+  if (file is String) file = File(file);
+  if (file is! File)
+  throw ArgumentError('file ($file) must be a String or File.');
+  DcmEncoder encoder = DcmEncoder(instance.dataset.lengthInBytes);
   encoder.writeSopInstance(instance);
   Uint8List bytes = file.readAsBytesSync();
-  DcmDecoder decoder = new DcmDecoder(bytes);
+  DcmDecoder decoder = DcmDecoder(bytes);
   return decoder.readInstance(file.path);
 }
 */

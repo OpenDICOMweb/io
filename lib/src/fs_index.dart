@@ -12,6 +12,8 @@ import 'package:core/core.dart';
 import 'package:io_extended/src/file_system_base.dart';
 import 'package:io_extended/src/file_type.dart';
 
+// ignore_for_file: public_member_api_docs
+
 /// An interface for an Index of a FileSystem.
 abstract class FSIndexBase {
   FileSystemBase fs;

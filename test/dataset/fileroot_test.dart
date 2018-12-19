@@ -17,10 +17,10 @@ void main() {
 
   group('RLE Data set', () {
     test('Verify RLE parsing', () {
-      final fn = new Filename(path0);
+      final fn = Filename(path0);
       final bytes = fn.file.readAsBytesSync();
       final  rds  = TagReader(bytes).readRootDataset();
-      print(rds.format(new Formatter(maxDepth: 146)));
+      print(rds.format(Formatter(maxDepth: 146)));
     });
   });
 

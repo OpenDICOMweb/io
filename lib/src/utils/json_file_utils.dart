@@ -5,14 +5,16 @@
 //  that can be found in the odw/LICENSE file.
 //  Primary Author: Jim Philbin <jfphilbin@gmail.edu>
 //  See the AUTHORS file for other contributors.
-
+//
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:path/path.dart' as path;
 
-const List<String> stdDcmJsonExtensions = const <String>[
+// ignore_for_file: public_member_api_docs
+
+const List<String> stdDcmJsonExtensions = <String>[
   '.json',
   '.dcmjson',
   '.JSON'
@@ -26,7 +28,7 @@ Future<String> readDcmJsonPath(String fPath,
     int sizeLimit = kSmallDcmJsonFileLimit]) async {
   final ext = path.extension(fPath);
   if (!extensions.contains(ext)) return null;
-  final f = new File(fPath);
+  final f = File(fPath);
   return readDcmJsonFile(f, sizeLimit);
 }
 
@@ -53,7 +55,7 @@ Uint8List readJsonPathSync(String fPath,
     int sizeLimit = kSmallDcmJsonFileLimit]) {
   final ext = path.extension(fPath);
   if (!extensions.contains(ext)) return null;
-  final f = new File(fPath);
+  final f = File(fPath);
   return readJsonFileSync(f, sizeLimit);
 }
 

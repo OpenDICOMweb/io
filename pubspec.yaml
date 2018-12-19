@@ -6,17 +6,17 @@ author: Jim Philbin <mailto:jfphilbin@gmail.com>
 homepage: https://github.com/OpenDICOMweb/io
 
 environment:
-  sdk: ^2.0.0
+  sdk: '>=2.0.0 <3.0.0'
 
 dependencies:
   args: any
   path: any
   core:
     path: ../core
-    version: ^0.7.5
+    version: ^0.7.6
   converter:
     path: ../converter
-    version: ^0.7.5
+    version: ^0.7.6
 
 
 dev_dependencies:

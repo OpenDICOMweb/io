@@ -13,6 +13,8 @@ import 'package:core/core.dart';
 import 'package:path/path.dart';
 import 'package:io_extended/src/utils/base.dart';
 
+// ignore_for_file: public_member_api_docs
+
 /// Returns a [List] of [Uint8List]s containing all the SOP Instances
 /// of the [Study] specified by the [Directory].
 String getFilename(File f) => basenameWithoutExtension(f.path);
@@ -27,16 +29,16 @@ String getTempFile(String infile, String extension) {
 /// Checks that [file] is not empty.
 // Urgent: rename isEmptyFile
 void checkFile(File file, {bool overWrite = false}) {
-  if (file == null) throw new ArgumentError('null File');
+  if (file == null) throw ArgumentError('null File');
   if (file.existsSync() && (file.lengthSync() == 0))
-    throw new ArgumentError('$file has zero length');
+    throw ArgumentError('$file has zero length');
 }
-
 
 /// Returns _true_ if the [path] has [ext] as it's file extension.
 bool hasExtension(String path, String ext) => extension(path) == ext;
 
-String testExtension(String path, String ext) => (hasExtension(path, ext)) ? ext : null;
+String testExtension(String path, String ext) =>
+    (hasExtension(path, ext)) ? ext : null;
 /*
 /// Returns _true_ if [f] has the [sopInstance] file extension.
 File isDcmFile(File f) =>
@@ -53,5 +55,3 @@ File filter(File f, Filter p) => (p(f) != null) ? f : null;
 
 //
 File isFile(Object f) => (f is File) ? f : null;
-
-

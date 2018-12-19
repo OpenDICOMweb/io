@@ -20,14 +20,14 @@ String p4 = '$inputDir\d1faaaaa-edf8-450e-8f62-35ebe592ca1b.dcm';
 List<String> filesList = [p2];
 
 void main() {
-  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
+  Server.initialize(name: 'read_file_test.dart', level: Level.info0);
 
   for (var path in filesList) {
     print('Reading file: $path');
     log.config('Reading file: $path');
-    final bytes = new File(path).readAsBytesSync();
+    final bytes = File(path).readAsBytesSync();
     final rds = TagReader(bytes).readRootDataset();
-    print('***patient:\n${rds.format(new Formatter(maxDepth:5))}');
+    print('***patient:\n${rds.format(Formatter(maxDepth:5))}');
   }
 
   print('Active Patients: ${activeStudies.stats}');

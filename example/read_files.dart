@@ -16,8 +16,8 @@ import 'package:io_extended/io_extended.dart';
 /// DICOM file extension and print's out some information about the
 /// [Dataset] contained in the file.
 void main(List<String> args) {
-  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
-  final source = r'C:/acr/odw/test_data/sfd/CT';
+  Server.initialize(name: 'read_file_test.dart', level: Level.info0);
+  const source = r'C:/acr/odw/test_data/sfd/CT';
   final files = Filename.listFromDirectory(source);
 
   for (var fn in files) {

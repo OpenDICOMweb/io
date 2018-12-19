@@ -3,9 +3,11 @@
 // that can be found in the LICENSE file.
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'package:io_extended/io_extended.dart';
 import 'package:io_extended/src/tools/compare_files.dart';
+
+// ignore_for_file: public_member_api_docs
 
 String inputDir = 'C:/acr/odw/sdk/io/example/input';
 String inputDir2 = 'C:/acr/odw/test_data/sfd/CT';

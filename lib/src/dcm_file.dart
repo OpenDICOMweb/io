@@ -13,6 +13,7 @@ import 'package:core/core.dart';
 import 'file_system.dart';
 import 'file_type.dart';
 
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
 class DcmFile {
@@ -25,14 +26,14 @@ class DcmFile {
 
   Directory get directory => fs.directory(entity);
 
-  File get file => new File(path);
+  File get file => File(path);
 
   /// Returns the [File] corresponding to the specified arguments.
   String get path => '${fs.rootPath}$entity${fType.extension}';
 
   Uint8List get bytes {
     if (fType.subtype.isBinary) {
-      final f = new File(path);
+      final f = File(path);
       return f.readAsBytesSync();
     } else {
       throw 'Not a binary file type $this';
@@ -51,14 +52,14 @@ class DcmFile {
   String toString() => 'DcmFile($path)';
 
   Future<bool> write(Uint8List bytes) async {
-    final f = new File(path);
+    final f = File(path);
     await f.writeAsBytes(bytes);
     return true;
   }
 
   void writeSync(Uint8List bytes) {
     //  print('writeSync: path:$path');
-    final f = new File(path);
+    final f = File(path);
     if (f.existsSync()) {
       throw 'File $f already exists';
     } else {

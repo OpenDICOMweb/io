@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -15,7 +15,9 @@ import 'package:path/path.dart' as p;
 import 'dicom_media_type.dart';
 import 'file_type.dart';
 
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: only_throw_errors
+
 //TODO: make everything async
 
 int _firstDot(String s) => p.basename(s).indexOf('.');
@@ -25,7 +27,8 @@ String toAbsolute(String path) {
   return s.replaceAll('\\', '/');
 }
 
-// flushString _extension(String fname) => p.basename(fname).substring(_firstDot(fname));
+// flushString _extension(String fname) =>
+// p.basename(fname).substring(_firstDot(fname));
 
 /// path = root / dir / base
 ///                   / name /ext
@@ -45,7 +48,14 @@ class Filename {
 
   factory Filename.withExt(Filename fn, [String ext = 'out']) {
     final path = '${p.basenameWithoutExtension(fn.path)}.$ext';
-    return new Filename(path);
+    return Filename(path);
+  }
+
+  factory Filename.toFilename(Object obj) {
+    if (obj is Filename) return obj;
+    if (obj is String) return Filename(obj);
+    if (obj is File) return Filename.fromFile(obj);
+    return null;
   }
 
   final String _path;
@@ -53,7 +63,7 @@ class Filename {
   File _file;
 
   // lazy if created with [Filename].
-  File get file => _file ??= new File(_path);
+  File get file => _file ??= File(_path);
 
   // Lazy [type] getter.
   FileSubtype get subtype => _subtype ??= FileSubtype.parse(_path);
@@ -72,7 +82,6 @@ class Filename {
   bool get isDirectory => FileSystemEntity.isDirectorySync(_path);
 
   bool get isFile => FileSystemEntity.isFileSync(_path);
-  //*** These getters are based on the expectation that the file extension is accurate.
 
   /// Returns _true_ if a DICOM file type.
   bool get isDicom => subtype.isDicom;
@@ -109,11 +118,13 @@ class Filename {
   /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
 
-  /// Returns _true_ if the [Dataset] is [OType.complete], that is, it contains no Bulkdata
+  /// Returns _true_ if the [Dataset] is [OType.complete],
+  /// that is, it contains no Bulkdata
   /// References.
   bool get isComplete => subtype.oType == OType.complete;
 
-  /// Returns _true_ if the Dataset is Metadata, that is, it contains Bulkdata References.
+  /// Returns _true_ if the Dataset is Metadata, that is,
+  /// it contains Bulkdata References.
   bool get isMetadata => subtype.oType == OType.metadata;
 
   /// Returns _true_ if this is a Bulkdata object.
@@ -125,7 +136,7 @@ class Filename {
   Dataset readSync() {
     log.debug('subtype: $subtype');
     if (isPart10) {
-      return ByteReader.readPath( path);
+      return ByteReader.readPath(path);
     } else if (isJson) {
 /*      Uint8List bytes = file.readAsBytesSync();
       return JsonDecoder.decode(bytes);*/
@@ -189,22 +200,14 @@ Subtype: ${FileSubtype.parse(_path)};
   @override
   String toString() => _path;
 
-  static Filename toFilename(Object obj) {
-    if (obj is Filename) return obj;
-    if (obj is String) return new Filename(obj);
-    if (obj is File) return new Filename.fromFile(obj);
-    return null;
-  }
-
   //TODO move to utilities
   static List<Filename> listFromDirectory(String source,
       [String ext = '.dcm']) {
     log.debug('source: $source');
     final files = getFilesFromDirectory(source, ext);
     log.debug('Total FSEntities: ${files.length}');
-    final fNames = new List(files.length);
-    for (var i = 0; i < files.length; i++)
-      fNames[i] = new Filename(files[i].path);
+    final fNames = List<Filename>(files.length);
+    for (var i = 0; i < files.length; i++) fNames[i] = Filename(files[i].path);
     return fNames;
   }
 }

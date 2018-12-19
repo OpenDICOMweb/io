@@ -44,11 +44,11 @@ void analyze() {
 Future unittest() async {
   if (runAsync) {
     log('Unit Tests (running asynchronously)...');
-    await new TestRunner().testAsync();
+    await TestRunner().testAsync();
   } else {
     log('Unit Tests (running synchronously)...');
-    new PubApp.local('test').run([]);
-    // new TestRunner();
+    PubApp.local('test').run([]);
+    // TestRunner();
   }
 }
 
@@ -70,7 +70,7 @@ void format() {
 String dartDocPath = 'C:/acr/odw/sdk/doc/io';
 
 /// The default directory for io docs output
-Directory dartDocDir = new Directory('C:/acr/odw/sdk/doc/io');
+Directory dartDocDir = Directory('C:/acr/odw/sdk/doc/io');
 
 /// Generate Documentation for io package.
 @Task('DartDoc')
@@ -116,9 +116,9 @@ void buildRelease() {
 //@Depends(init)
 void compile() {
   log('Dart Dev Compiler: Compiling...');
-  final dartDevCOutPath = 'dart_dev_output';
-  final dartDevCOutputDir = new Directory(dartDevCOutPath);
-  new DevCompiler().compile('lib', dartDevCOutputDir);
+  const dartDevCOutPath = 'dart_dev_output';
+  final dartDevCOutputDir = Directory(dartDevCOutPath);
+  DevCompiler().compile('lib', dartDevCOutputDir);
 }
 
 /// Test the JavaScript files
@@ -127,7 +127,7 @@ void compile() {
 //TODO: make sure this runs the .js files
 @Depends(build)
 void testJavaScript() {
-  new PubApp.local('test').run([]);
+  PubApp.local('test').run([]);
 }
 
 /// Clean the io package. Used before release.

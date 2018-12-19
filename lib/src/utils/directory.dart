@@ -12,16 +12,18 @@ import 'dart:io';
 import 'package:io_extended/src/utils/base.dart';
 import 'package:io_extended/src/utils/file.dart';
 
+// ignore_for_file: public_member_api_docs
+
 // TODO: debug - allows asynchronous creation of the FS root.
 /// Returns the [root] [Directory] of the MintFileSystem,
 /// creating it if it doesn't exist.
 Future<Directory> createRoot(String path) async {
-  final root = new Directory(path);
+  final root = Directory(path);
   if (!await root.exists()) await root.create(recursive: true);
   return root;
 }
 
-typedef void FSERunner(FileSystemEntity f, [int level]);
+typedef FSERunner = void Function(FileSystemEntity f, [int level]);
 
 /// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
 Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
@@ -33,7 +35,7 @@ Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
     if (e is Directory) {
       count += await walkDirectory(e, f, _level++);
     } else if (e is File) {
-      await new Future(() => f(e, level));
+      await Future(() => f(e, level));
       count++;
     } else {
       stderr.write('Warning: $e is not a File or Directory');
@@ -42,7 +44,7 @@ Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
   return count;
 }
 
-typedef void FileRunner(File f, [int level]);
+typedef FileRunner = void Function(File f, [int level]);
 
 /// Walks a [Directory] recursively and applies [Runner] [f] to each [File].
 Future<int> walkDirectoryFiles(Directory dir, FileRunner f,
@@ -55,7 +57,7 @@ Future<int> walkDirectoryFiles(Directory dir, FileRunner f,
     if (fse is Directory) {
       count += await walkDirectory(fse, f, _level++);
     } else if (fse is File) {
-      await new Future(() => f(fse, level));
+      await Future(() => f(fse, level));
       count++;
     } else {
       stderr.write('Warning: $fse is not a File or Directory');
@@ -111,15 +113,15 @@ int walkDirectoryFilesSync(Directory dir, FileRunner f, [int level = 0]) {
 /// Returns a [List] of [File] from the [Directory] specified by rootPath.
 List getFilesSync(Object directory, [Filter filter = isFile]) {
   Directory dir;
-  if (directory is String) dir = new Directory(directory);
+  if (directory is String) dir = Directory(directory);
   if (directory is Directory) dir = directory;
-  if (dir == null) throw new ArgumentError('must be String or Directory');
+  if (dir == null) throw ArgumentError('must be String or Directory');
   return walkSync(dir, filter);
 }
 
 //TODO: debug and create unit test
-/// Returns a [List] of values that result from walking the [Directory] tree, and applying [filter]
-/// to each [File] in the tree.
+/// Returns a [List] of values that result from walking the
+/// [Directory] tree, and applying [filter] to each [File] in the tree.
 Stream walk(Directory d, Filter filter) => _walk(d, filter);
 
 Stream _walk(Directory d, Filter filter) async* {
@@ -145,17 +147,18 @@ Stream _walk(Directory d, Filter filter) async* {
 }
 
 //TODO: debug and create unit test
-/// Returns a [List] of values that result from walking the [Directory] tree, and applying [func]
-/// to each [File] in the tree.
-List walkSync(Directory d, Function func) => _walkSync(d, func, []);
+/// Returns a [List] of values that result from walking the
+/// [Directory] tree, and applying [func] to each [File] in the tree.
+List walkSync(Directory d, Function func) => _walkSync(d, func, <Object>[]);
 
-List _walkSync(Directory d, Function func, List list) {
+// TODO: replace Function with true type
+List _walkSync(Directory d, Function func, List<Object> list) {
   final entries = d.listSync(followLinks: false);
   try {
     for (var e in entries) {
       if (e is File) {
         // print('Found file ${e.path}');
-        final v = func(e);
+        final Object v = func(e);
         if (v == null) continue;
         list.add(v);
       } else if (e is Directory) {
@@ -171,4 +174,4 @@ List _walkSync(Directory d, Function func, List list) {
 }
 
 Stream getFiles(String root, [Filter filter]) =>
-    walk(new Directory(root), filter);
+    walk(Directory(root), filter);

@@ -65,29 +65,28 @@ String outX = 'C:/acr/odw/sdk/io/example/output/foo.dcm';
 void main() {
   Server.initialize(name: 'read_write_file.dart', level: Level.debug);
 
-  final fn = new Filename(in10);
+  final fn = Filename(in10);
   log.info0('Reading: $fn');
   final bytes0 = fn.file.readAsBytesSync();
   final TagRootDataset rds0 = TagReader(bytes0).readRootDataset();
   log.info0('Decoded: $rds0');
   if (rds0 == null) return null;
   log
-    ..debug(rds0.format(new Formatter(maxDepth: -1)))
+    ..debug(rds0.format(Formatter(maxDepth: -1)))
     ..info0('${rds0[kFileMetaInformationGroupLength].info}')
     ..info0('${rds0[kFileMetaInformationVersion].info}');
   // Write a File
-  final fnOut = new Filename.withType(outX, FileSubtype.part10)
-    ..writeSync(rds0);
+  final fnOut = Filename.withType(outX, FileSubtype.part10)..writeSync(rds0);
 
   log.info0('Re-reading: $fnOut');
   final bytes1 = fn.file.readAsBytesSync();
   final rds1 = TagReader(bytes1).readRootDataset();
   log
     ..info0(rds1)
-    ..debug(rds1.format(new Formatter(maxDepth: -1)));
+    ..debug(rds1.format(Formatter(maxDepth: -1)));
 
   // Compare [Dataset]s
-  final comparitor = new DatasetComparitor(rds0, rds1)..run;
+  final comparitor = DatasetComparitor(rds0, rds1)..run;
   if (comparitor.hasDifference) {
     log.fatal('Result: ${comparitor.info}');
   }

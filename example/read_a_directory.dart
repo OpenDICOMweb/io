@@ -20,9 +20,9 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
-  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
+  Server.initialize(name: 'read_file_test.dart', level: Level.info0);
 
-  final dir = new Directory(inRoot1);
+  final dir = Directory(inRoot1);
 
   final fList = dir.listSync();
   log.info0('File count: ${fList.length}');

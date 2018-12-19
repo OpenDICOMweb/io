@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 
 import 'package:io_extended/src/dicom_media_type.dart';
 
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: only_throw_errors, avoid_catches_without_on_clauses
 
 // Flush later.
@@ -31,7 +32,8 @@ String _extension(String path) {
 ///     - Entity: contains all data (Metadata & Bulkdata) for the object.
 ///     - Metadata: contains all Data Elements, but some large values have
 ///       been moved to a Bulkdata object.
-///     - Bulkdata: A set of large values that are referred to by a Metadata object.
+///     - Bulkdata: A set of large values that are referred to
+///       by a Metadata object.
 ///
 
 ///
@@ -89,11 +91,12 @@ class FileType {
   /// The [Encoding] [Units].
   Units get units => subtype.mType.units;
 
-  /// Returns _true_ if the Dataset is [OType.complete], that is, it contains no Bulkdata
-  /// References.
+  /// Returns _true_ if the Dataset is [OType.complete], that is,
+  /// it contains no Bulkdata References.
   bool get isComplete => subtype.oType == OType.complete;
 
-  /// Returns _true_ if the Dataset is Metadata, that is, it contains Bulkdata References.
+  /// Returns _true_ if the Dataset is Metadata, that is, it contains
+  /// Bulkdata References.
   bool get isMetadata => subtype.oType == OType.metadata;
 
   /// Returns _true_ if this is a Bulkdata object.
@@ -103,75 +106,86 @@ class FileType {
 
   //TODO: fix indices
   static const FileType part10Study =
-      const FileType(1, IELevel.study, FileSubtype.part10);
+      FileType(1, IELevel.study, FileSubtype.part10);
   static const FileType part10StudyMD =
-      const FileType(2, IELevel.study, FileSubtype.part10MD);
+      FileType(2, IELevel.study, FileSubtype.part10MD);
   static const FileType part10StudyBD =
-      const FileType(2, IELevel.study, FileSubtype.bulkdata);
+      FileType(2, IELevel.study, FileSubtype.bulkdata);
 
   static const FileType part10Series =
-      const FileType(1, IELevel.series, FileSubtype.part10);
+      FileType(1, IELevel.series, FileSubtype.part10);
   static const FileType part10SeriesMD =
-      const FileType(2, IELevel.series, FileSubtype.part10MD);
+      FileType(2, IELevel.series, FileSubtype.part10MD);
   static const FileType part10SeriesBD =
-      const FileType(2, IELevel.series, FileSubtype.bulkdata);
+      FileType(2, IELevel.series, FileSubtype.bulkdata);
 
   static const FileType part10Instance =
-      const FileType(1, IELevel.instance, FileSubtype.part10);
+      FileType(1, IELevel.instance, FileSubtype.part10);
   static const FileType part10InstanceMD =
-      const FileType(2, IELevel.instance, FileSubtype.part10MD);
+      FileType(2, IELevel.instance, FileSubtype.part10MD);
   static const FileType part10InstanceBD =
-      const FileType(2, IELevel.instance, FileSubtype.bulkdata);
+      FileType(2, IELevel.instance, FileSubtype.bulkdata);
 
-  // static const part10Frames = const FileType(1, IELevel.frames, FileSubtype.part10);
-  // static const part10FramesMD = const FileType(2, IELevel.frames, FileSubtype.part10MD);
-  // static const part10FramesBD = const FileType(2, IELevel.frames, FileSubtype.bulkdata);
+  // static const part10Frames =
+  //     const FileType(1, IELevel.frames, FileSubtype.part10);
+  // static const part10FramesMD =
+  //     const FileType(2, IELevel.frames, FileSubtype.part10MD);
+  // static const part10FramesBD =
+  //     const FileType(2, IELevel.frames, FileSubtype.bulkdata);
 
-  static const FileType jsonStudy = const FileType(1, IELevel.study, FileSubtype.json);
+  static const FileType jsonStudy =
+      FileType(1, IELevel.study, FileSubtype.json);
   static const FileType jsonStudyMD =
-      const FileType(2, IELevel.study, FileSubtype.jsonMD);
+      FileType(2, IELevel.study, FileSubtype.jsonMD);
   static const FileType jsonStudyBD =
-      const FileType(2, IELevel.study, FileSubtype.jsonBD);
+      FileType(2, IELevel.study, FileSubtype.jsonBD);
 
-  static const FileType jsonSeries = const FileType(1, IELevel.series, FileSubtype.json);
+  static const FileType jsonSeries =
+      FileType(1, IELevel.series, FileSubtype.json);
   static const FileType jsonSeriesMD =
-      const FileType(2, IELevel.series, FileSubtype.jsonMD);
+      FileType(2, IELevel.series, FileSubtype.jsonMD);
   static const FileType jsonSeriesBD =
-      const FileType(2, IELevel.series, FileSubtype.jsonBD);
+      FileType(2, IELevel.series, FileSubtype.jsonBD);
 
   static const FileType jsonInstance =
-      const FileType(1, IELevel.instance, FileSubtype.json);
+      FileType(1, IELevel.instance, FileSubtype.json);
   static const FileType jsonInstanceMD =
-      const FileType(2, IELevel.instance, FileSubtype.jsonMD);
+      FileType(2, IELevel.instance, FileSubtype.jsonMD);
   static const FileType jsonInstanceBD =
-      const FileType(2, IELevel.instance, FileSubtype.jsonBD);
+      FileType(2, IELevel.instance, FileSubtype.jsonBD);
 
-//  static const jsonFrames = const FileType(1, IELevel.frames, FileSubtype.json);
-//  static const jsonFramesMD = const FileType(2, IELevel.frames, FileSubtype.jsonMD);
-//  static const jsonFramesBD = const FileType(2, IELevel.frames, FileSubtype.jsonBD);
+//  static const jsonFrames =
+//      FileType(1, IELevel.frames, FileSubtype.json);
+//  static const jsonFramesMD =
+//      FileType(2, IELevel.frames, FileSubtype.jsonMD);
+//  static const jsonFramesBD =
+//      FileType(2, IELevel.frames, FileSubtype.jsonBD);
 
-  static const FileType xmlStudy = const FileType(1, IELevel.study, FileSubtype.xml);
-  static const FileType xmlStudyMD = const FileType(2, IELevel.study, FileSubtype.xmlMD);
-  static const FileType xmlStudyBD = const FileType(2, IELevel.study, FileSubtype.xmlBD);
+  static const FileType xmlStudy = FileType(1, IELevel.study, FileSubtype.xml);
+  static const FileType xmlStudyMD =
+      FileType(2, IELevel.study, FileSubtype.xmlMD);
+  static const FileType xmlStudyBD =
+      FileType(2, IELevel.study, FileSubtype.xmlBD);
 
-  static const FileType xmlSeries = const FileType(1, IELevel.series, FileSubtype.xml);
+  static const FileType xmlSeries =
+      FileType(1, IELevel.series, FileSubtype.xml);
   static const FileType xmlSeriesMD =
-      const FileType(2, IELevel.series, FileSubtype.xmlMD);
+      FileType(2, IELevel.series, FileSubtype.xmlMD);
   static const FileType xmlSeriesBD =
-      const FileType(2, IELevel.series, FileSubtype.xmlBD);
+      FileType(2, IELevel.series, FileSubtype.xmlBD);
 
   static const FileType xmlInstance =
-      const FileType(1, IELevel.instance, FileSubtype.xml);
+      FileType(1, IELevel.instance, FileSubtype.xml);
   static const FileType xmlInstanceMD =
-      const FileType(2, IELevel.instance, FileSubtype.xmlMD);
+      FileType(2, IELevel.instance, FileSubtype.xmlMD);
   static const FileType xmlInstanceBD =
-      const FileType(2, IELevel.instance, FileSubtype.xmlBD);
+      FileType(2, IELevel.instance, FileSubtype.xmlBD);
 
-//  static const xmlFrames = const FileType(1, IELevel.frames, FileSubtype.xml);
-//  static const xmlFramesMD = const FileType(2, IELevel.frames, FileSubtype.xmlMD);
-//  static const xmlFramesBD = const FileType(2, IELevel.frames, FileSubtype.xmlBD);
+//  static const xmlFrames =  FileType(1, IELevel.frames, FileSubtype.xml);
+//  static const xmlFramesMD =  FileType(2, IELevel.frames, FileSubtype.xmlMD);
+//  static const xmlFramesBD =  FileType(2, IELevel.frames, FileSubtype.xmlBD);
 
-  static const FileType unknown = const FileType(2, null, FileSubtype.unknown);
+  static const FileType unknown = FileType(2, null, FileSubtype.unknown);
 
   FileType lookup(IELevel eType, FileSubtype fSubtype) {
     switch (eType) {
@@ -341,38 +355,38 @@ class FileSubtype {
   String toString() => '$runtimeType: $name encoded as $mediaType';
 
   static const FileSubtype part10 =
-      const FileSubtype(1, 'Part10', OType.complete, DicomMediaType.dicom, '.dcm');
-  static const FileSubtype part10MD = const FileSubtype(
+      FileSubtype(1, 'Part10', OType.complete, DicomMediaType.dicom, '.dcm');
+  static const FileSubtype part10MD = FileSubtype(
       2, 'Part10 Metadata', OType.metadata, DicomMediaType.dicom, '.mddcm');
-  static const FileSubtype bulkdata = const FileSubtype(
+  static const FileSubtype bulkdata = FileSubtype(
       3, 'Binary Bulkdata', OType.bulkdata, DicomMediaType.octets, '.bddcm');
 
   static const FileSubtype json =
-      const FileSubtype(4, 'JSON', OType.complete, DicomMediaType.json, '.dcmjson');
-  static const FileSubtype jsonMD = const FileSubtype(
+      FileSubtype(4, 'JSON', OType.complete, DicomMediaType.json, '.dcmjson');
+  static const FileSubtype jsonMD = FileSubtype(
       5, 'JSON Metadata', OType.metadata, DicomMediaType.json, '.mddcmjson');
-  static const FileSubtype jsonBD = const FileSubtype(
+  static const FileSubtype jsonBD = FileSubtype(
       6, 'JSON Bulkdata', OType.bulkdata, DicomMediaType.json, '.bddcmjson');
 
   static const FileSubtype xml =
-      const FileSubtype(7, 'XML', OType.complete, DicomMediaType.xml, '.dcmxml');
-  static const FileSubtype xmlMD = const FileSubtype(
+      FileSubtype(7, 'XML', OType.complete, DicomMediaType.xml, '.dcmxml');
+  static const FileSubtype xmlMD = FileSubtype(
       8, 'XML Metadata', OType.metadata, DicomMediaType.xml, '.mddcm.xml');
-  static const FileSubtype xmlBD =
-      const FileSubtype(9, 'XML Bulkdata', OType.bulkdata, DicomMediaType.xml, '.bddcmxml');
+  static const FileSubtype xmlBD = FileSubtype(
+      9, 'XML Bulkdata', OType.bulkdata, DicomMediaType.xml, '.bddcmxml');
 
   static const FileSubtype unknown =
-      const FileSubtype(9, 'Unknown', OType.unknown, DicomMediaType.unknown, '');
+      FileSubtype(9, 'Unknown', OType.unknown, DicomMediaType.unknown, '');
 
   static FileSubtype parseExt(String ext) => lookup(ext);
 
   static FileSubtype parse(String _path) => parseExt(p.extension(_path));
 
-  static bool isValidExtension(String ext) => (parseExt(ext) != null);
+  static bool isValidExtension(String ext) => parseExt(ext) != null;
 
   static FileSubtype lookup(String ext) => subtypes[ext] ?? FileSubtype.unknown;
 
-  static const Map<String, FileSubtype> subtypes = const {
+  static const Map<String, FileSubtype> subtypes = {
     '.dcm': FileSubtype.part10,
     '.mddcm': FileSubtype.part10MD,
     '.bddcm': FileSubtype.bulkdata,

@@ -26,9 +26,9 @@ void main() {
   Server.initialize(name: 'sop/readFile_test', level: Level.info0);
 
   // Get the files in the directory
-  final files = new Filename(file5);
-  final file1 = new Filename.fromFile(
-      new File('E:/dicom/1.2.840.113619.2.5.1762583153.215519.978957063.89.dcm'));
+  final files = Filename(file5);
+  final file1 = Filename.fromFile(
+      File('E:/dicom/1.2.840.113619.2.5.1762583153.215519.978957063.89.dcm'));
 
   group('Data set', () {
     test('Create a data set object from map', () {

@@ -24,13 +24,13 @@ String path5 =
 String outPath = 'C:/acr/odw/sdk/io/example/output/out.dcm';
 
 void main(List<String> args) {
-  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
+  Server.initialize(name: 'read_file_test.dart', level: Level.info0);
 
-  final fn = new Filename(path5);
+  final fn = Filename(path5);
   final bytes = fn.file.readAsBytesSync();
   final rds = TagReader(bytes).readRootDataset();
   log
     ..debug('Instance: $rds')
     ..debug('dataset length: ${rds.length} elements')
-    ..debug(rds.format(new Formatter(maxDepth: 146)));
+    ..debug(rds.format(Formatter(maxDepth: 146)));
 }

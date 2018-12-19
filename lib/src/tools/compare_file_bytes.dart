@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:core/server.dart';
 import 'package:io_extended/io_extended.dart';
 
+// ignore_for_file: public_member_api_docs
 
 /// A simple program that compares to files byte by byte.
 ///
@@ -30,12 +31,12 @@ String inPath1 = 'C:/acr/odw/sdk/io/example/output/IM-0001-0001.dcm';
 void main(List<String> args) {
   Server.initialize(name: 'compare_file_bytes.dart', level: Level.info0);
 
-  final fn0 = new Filename(inPath0);
+  final fn0 =  Filename(inPath0);
   final bytes0 = fn0.file.readAsBytesSync();
   final length0 = bytes0.length;
   log.debug('fn0 read $length0 bytes');
 
-  final fn1 = new Filename(inPath1);
+  final fn1 =  Filename(inPath1);
   final bytes1 = fn1.file.readAsBytesSync();
   final length1 = bytes1.length;
   log.debug('fn1 read $length1 bytes');
@@ -60,47 +61,47 @@ void printDifference(
     if (bytes0[i] == bytes1[i]) break;
     log.debug('$i: ${bytes0[i]} != ${bytes1[i]}');
 
-    final d0List = [];
-    final h0List = [];
-    final c0List = [];
-    final d1List = [];
-    final h1List = [];
-    final c1List = [];
+    final d0List = <String>[];
+    final h0List = <String>[];
+    final c0List = <String>[];
+    final d1List = <String>[];
+    final h1List = <String>[];
+    final c1List = <String>[];
 
     for (var k = 0; k < before; k++) {
       // File 0
       final v0 = bytes0[(i - before) + k];
       d0List.add(v0.toRadixString(10).padLeft(3, ' '));
       h0List.add(v0.toRadixString(16).padLeft(3, ' '));
-      c0List.add(new String.fromCharCode(v0).padLeft(3, ' '));
+      c0List.add( String.fromCharCode(v0).padLeft(3, ' '));
       // File 1
       final v1 = bytes1[(i - before) + k];
       d1List.add(v1.toRadixString(10).padLeft(3, ' '));
       h1List.add(v1.toRadixString(16).padLeft(3, ' '));
-      c1List.add(new String.fromCharCode(v1).padLeft(3, ' '));
+      c1List.add( String.fromCharCode(v1).padLeft(3, ' '));
     }
     // File 0
     final v0 = bytes0[i];
     d0List.add('|${v0.toRadixString(10).padLeft(3, ' ')}|');
     h0List.add('|${v0.toRadixString(16).padLeft(3, ' ')}|');
-    c0List.add('|${new String.fromCharCode(v0).padLeft(3, ' ')}|');
+    c0List.add('|${ String.fromCharCode(v0).padLeft(3, ' ')}|');
     // File 1
     final v1 = bytes1[i];
     d1List.add('|${v1.toRadixString(10).padLeft(3, ' ')}|');
     h1List.add('|${v1.toRadixString(16).padLeft(3, ' ')}|');
-    c1List.add('|${new String.fromCharCode(v1).padLeft(3, ' ')}|');
+    c1List.add('|${ String.fromCharCode(v1).padLeft(3, ' ')}|');
 
     for (var k = 0; k < after; k++) {
       // File 0
       final v0 = bytes0[(i - after) + k];
       d0List.add(v0.toRadixString(10).padLeft(3, ' '));
       h0List.add(v0.toRadixString(16).padLeft(3, ' '));
-      c0List.add(new String.fromCharCode(v0).padLeft(3, ' '));
+      c0List.add( String.fromCharCode(v0).padLeft(3, ' '));
       // File 1
       final v1 = bytes1[(i - after) + k];
       d1List.add(v1.toRadixString(10).padLeft(3, ' '));
       h1List.add(v1.toRadixString(16).padLeft(3, ' '));
-      c1List.add(new String.fromCharCode(v1).padLeft(3, ' '));
+      c1List.add( String.fromCharCode(v1).padLeft(3, ' '));
     }
   }
 }

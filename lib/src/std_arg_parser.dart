@@ -3,8 +3,10 @@
 // that can be found in the LICENSE file.
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
-
+//
 import 'package:args/args.dart';
+
+// ignore_for_file: public_member_api_docs
 
 ArgResults parse(List<String> args) {
   final parser = getArgParser();
@@ -12,7 +14,7 @@ ArgResults parse(List<String> args) {
 }
 
 ArgParser getArgParser() {
-  final parser = new ArgParser()
+  final parser = ArgParser()
     ..addOption('source',
         abbr: 's', defaultsTo: '.', help: 'Specifies the source directory.')
     ..addOption('target',

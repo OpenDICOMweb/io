@@ -11,8 +11,9 @@ import 'package:converter/converter.dart';
 import 'package:io_extended/io_extended.dart';
 
 
-/// This program copies DICOM PS3.10 files (i.e. files with an extension of '.dcm') from anywhere
-/// in a source directory to a ODW SOP File System rooted at the destination directory.
+/// This program copies DICOM PS3.10 files (i.e. files with
+/// an extension of '.dcm') from anywhere in a source directory
+/// to a ODW SOP File System rooted at the destination directory.
 
 String inRoot = 'C:/acr/odw/test_data/sfd/CR/PID_MINT10/1_DICOM_Original/';
 String outRoot = 'C:/acr/odw/sdk/io/bin/output';
@@ -27,12 +28,12 @@ void main() {
 
   //var results = parse(args);
   //var source = results['source'];
-  final source = r'C:/acr/odw/test_data/sfd/CR_and_RF';
+  const source = r'C:/acr/odw/test_data/sfd/CR_and_RF';
   final files = Filename.listFromDirectory(source);
   print('source: $source');
   //var target = results['target'];
-  final target = 'C:/acr/odw/sdk/io/example/output';
-  final fs = new FileSystem(target);
+  const target = 'C:/acr/odw/sdk/io/example/output';
+  final fs = FileSystem(target);
 
   print('files: $files');
 
@@ -40,7 +41,7 @@ void main() {
     if (fn.isPart10) {
       final bytes = fn.file.readAsBytesSync();
       final rds = TagReader(bytes).readRootDataset();
-      print('Entity: ${rds.format(new Formatter())}');
+      print('Entity: ${rds.format(Formatter())}');
 
       final entity = activeStudies.entityFromRootDataset(rds);
 
@@ -52,7 +53,7 @@ void main() {
     } else if (fn.isJson) {
 //      Uint8List s = fn.file.readAsBytesSync();
 //      Entity e = JsonDecoder.decode(s);
-//      print('Entity: ${e.format(new Formatter())}');
+//      print('Entity: ${e.format(Formatter())}');
     } else {
       print('Skipping none ".dcm" file: $fn');
     }

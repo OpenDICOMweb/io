@@ -22,7 +22,7 @@ String outRoot2 = 'test/output/root2';
 String outRoot3 = 'test/output/root3';
 
 void main() {
-  Server.initialize(name: 'readFile_test.dart', level: Level.info0);
+  Server.initialize(name: 'read_file_test.dart', level: Level.info0);
 
   // Get the files in the directory
   final files = Filename.listFromDirectory(inRoot0);
@@ -43,9 +43,9 @@ void main() {
 /// Returns a [TagDataset] read from the [File] associated with [fileId]
 TagRootDataset readDicomFile(Object fileId) {
   File file;
-  if (fileId is String) file = new File(fileId);
+  if (fileId is String) file = File(fileId);
   if (fileId is Filename) file = fileId.file;
   if (file is! File) return null;
   final bytes = file.readAsBytesSync();
-  return new TagReader(bytes).readRootDataset();
+  return TagReader(bytes).readRootDataset();
 }

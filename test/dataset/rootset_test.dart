@@ -57,7 +57,7 @@ void main() {
           log.debug('Transfer Syntax missing: TS = '
               '${TransferSyntax.kDefaultForDIMSE}');
         } else {
-          final uid0 = ui0.value;
+          final Uid uid0 = ui0.value;
           log.debug('Transfer Syntax UID: $uid0}');
 
           expect(() => rds[0x00020010], isNotNull);

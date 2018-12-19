@@ -51,7 +51,7 @@ const String ivrWithGroupLengths =
 
 const String bar = 'C:/acr/odw/test_data/mweb/10 Patient IDs/04443352';
 
-const List<String> files = const <String>[
+const List<String> files = <String>[
   xx0, xx1, xx2, xx3, xxx, dcmDir, evrLarge, evrX, evrXLarge, evrOWPixels,
   ivrClean, ivrCleanMR, evrDataAfterPixels, ivrWithGroupLengths, bar
 ];
@@ -65,10 +65,10 @@ Future main() async {
 
     print('$i: path: $fPath');
     print(' out: ${getTempFile(fPath, 'dcmout')}');
-    final url = new Uri.file(fPath);
+    final url = Uri.file(fPath);
     stdout.writeln('Reading(byte): $url');
 
-    final reader = new ByteReader.fromPath(fPath, doLogging: false);
+    final reader = ByteReader.fromPath(fPath, doLogging: false);
     final rds = reader.readRootDataset();
 
     if (rds == null) {
@@ -77,17 +77,17 @@ Future main() async {
       if (reader.pInfo != null) {
         final infoPath = '${path.withoutExtension(fPath)}.info';
         log.info('infoPath: $infoPath');
-        final sb = new StringBuffer('${reader.pInfo.summary(rds)}\n')
+        final sb = StringBuffer('${reader.pInfo.summary(rds)}\n')
           ..write('Bytes Dataset: ${rds.summary}');
-        new File(infoPath)..writeAsStringSync(sb.toString());
+        File(infoPath).writeAsStringSync(sb.toString());
         log.debug(sb.toString());
 
-        //   final formatter = new Formatter.withIndenter(-1, Indenter.basic);
-        final formatter = new Formatter(maxDepth: -1);
+        //   final formatter = Formatter.withIndenter(-1, Indenter.basic);
+        final formatter = Formatter(maxDepth: -1);
         final fmtPath = '${path.withoutExtension(fPath)}.fmt';
         log.info('fmtPath: $fmtPath');
         final fmtOut = rds.format(formatter);
-        new File(fmtPath)..writeAsStringSync(sb.toString());
+        File(fmtPath).writeAsStringSync(sb.toString());
         log.debug(fmtOut);
       } else {
         print('${rds.summary}');
@@ -150,7 +150,7 @@ const String x16 =
 const String x17 =
     'C:/acr/odw/test_data/mweb/Sop-selected/1.2.840.10008.5.1.4.1.1.66.dcm';
 
-const List<String> badFiles = const <String>[
+const List<String> badFiles = <String>[
   x00,
   x01,
   x02,

@@ -8,6 +8,8 @@
 //
 import 'package:core/core.dart';
 
+// ignore_for_file: public_member_api_docs
+
 abstract class Cache<K, V>{
   int maxEntries;
   Map<K, V> cache;
