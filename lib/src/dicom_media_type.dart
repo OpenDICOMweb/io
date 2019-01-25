@@ -137,6 +137,7 @@ $runtimeType:
   };
 }
 
+// ignore: prefer_void_to_null
 Null badDicomFileExtension(String ext) {
   final msg = 'Bad DICOM file extension: $ext';
   log.error(msg);
@@ -144,6 +145,7 @@ Null badDicomFileExtension(String ext) {
   return null;
 }
 
+// ignore: prefer_void_to_null
 Null badDicomMediaType(DicomMediaType mt) {
   final msg = 'Bad DICOM media type: $mt';
   log.error(msg);

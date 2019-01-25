@@ -100,7 +100,7 @@ abstract class FileSystemBase {
 
   // *** Write Async  ***
 
-  Future<bool> write(Entity entity, [FileSubtype fType]);
+  Future<bool> write(Entity entity, [FileSubtype subtype]);
 
   Future<bool> writeStudy(Study study, [FileSubtype subtype]);
 

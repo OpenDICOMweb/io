@@ -181,6 +181,7 @@ class DicomXmlFile extends DicomFile {
   String _write(RootDataset rds) => XmlWriter(rds, rds.path).writeRootDataset();
 }
 
+// ignore: prefer_void_to_null
 Null badDicomFile(String msg) {
   log.error(msg);
   if (throwOnError) throw DicomFileError(msg);

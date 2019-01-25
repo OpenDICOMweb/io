@@ -15,7 +15,7 @@ import 'package:path/path.dart' as path;
 
 // ignore_for_file: public_member_api_docs
 
-typedef RunFile = Null Function(File f, [int count]);
+typedef RunFile = void Function(File f, [int count]);
 
 /// Walks a [List] of [String], [File], List<String>, or List<File>, and
 /// applies [runner] to each one asynchronously.
@@ -39,11 +39,11 @@ Future<int> walkPathList(Iterable paths, RunFile runner,
   return count;
 }
 
-Future<Null> runFile(File file, RunFile runner, [int level = 0]) async =>
-    await Future<Null>(() => runner(file, level));
+Future<void> runFile(File file, RunFile runner, [int level = 0]) async =>
+    await Future<void>(() => runner(file, level));
 
-Future<Null> runPath(String path, RunFile runner, [int level = 0]) async =>
-    await Future<Null>(() => runner(File(path), level));
+Future<void> runPath(String path, RunFile runner, [int level = 0]) async =>
+    await Future<void>(() => runner(File(path), level));
 
 /// Returns the number of [File]s in a [Directory]
 int fileCount(Directory d, {List<String> extensions, bool recursive = true}) {

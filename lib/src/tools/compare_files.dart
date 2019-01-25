@@ -69,7 +69,7 @@ class FileByteDiff {
 FileCompareResult compareFiles(String path0, String path1) {
   final diffs = <FileByteDiff>[];
   const maxProblems = 3;
-  var hasProblems = false;
+  const hasProblems = false;
   var contiguous = false;
 
   log.down;
@@ -120,6 +120,7 @@ FileCompareResult compareFiles(String path0, String path1) {
     if (!contiguous && diffs.length < maxProblems) {
       final problem = _foundProblem(bytes0, bytes1, i, 20, 20);
       diffs.add(FileByteDiff(i, 'Problem', byte0, byte1, problem));
+      // ignore: unnecessary_statements
       hasProblems == true;
     }
     contiguous = true;
