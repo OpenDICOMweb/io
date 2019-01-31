@@ -124,7 +124,7 @@ Entity _readBinaryDirectorySync(Directory d, List<Uint8List> bytesList) {
 
 //**** [String] based [File] utilities
 //TODO: implement later
-Stream<String> readStringDirectory(String path) {}
+//Stream<String> readStringDirectory(String path) {}
 
 List<String> readStringDirectorySync(String path) =>
     _readStringDirectorySync( Directory(path), []);
