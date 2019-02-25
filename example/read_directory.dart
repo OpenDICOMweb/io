@@ -24,7 +24,7 @@ void main() {
   stdout.writeln('File count: ${files.length}');
 
   // Read, parse, and print a summary of each file.
-  for (var file in files) {
+  for (final file in files) {
     if (file.isDicom) {
       print('Reading file: $file');
       final rds = file.readSync();

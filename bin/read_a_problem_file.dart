@@ -22,7 +22,7 @@ List<String> filesList = [p2];
 void main() {
   Server.initialize(name: 'read_file_test.dart', level: Level.info0);
 
-  for (var path in filesList) {
+  for (final path in filesList) {
     print('Reading file: $path');
     log.config('Reading file: $path');
     final bytes = File(path).readAsBytesSync();

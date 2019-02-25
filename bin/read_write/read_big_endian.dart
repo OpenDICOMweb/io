@@ -55,7 +55,7 @@ Future main() async {
   }
 }
 
-Future<Uint8List> readFileAsync(File file) async => await file.readAsBytes();
+Future<Uint8List> readFileAsync(File file) async => file.readAsBytes();
 
 String getTempFile(String infile, String extension) {
   final name = path.basenameWithoutExtension(infile);

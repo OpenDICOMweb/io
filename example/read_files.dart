@@ -20,7 +20,7 @@ void main(List<String> args) {
   const source = r'C:/acr/odw/test_data/sfd/CT';
   final files = Filename.listFromDirectory(source);
 
-  for (var fn in files) {
+  for (final fn in files) {
     var count = 0;
     log.info0('*** Starting($count): $fn');
     if (fn.isPart10) {

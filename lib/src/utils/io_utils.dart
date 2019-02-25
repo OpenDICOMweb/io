@@ -23,7 +23,7 @@ Future<int> walkPathList(Iterable paths, RunFile runner,
     [int level = 0]) async {
   var count = 0;
   var _level = level;
-  for (var entry in paths) {
+  for (final entry in paths) {
     if (entry is List) {
       count += await walkPathList(entry, runner, _level++);
     } else if (entry is String) {
@@ -40,16 +40,16 @@ Future<int> walkPathList(Iterable paths, RunFile runner,
 }
 
 Future<void> runFile(File file, RunFile runner, [int level = 0]) async =>
-    await Future<void>(() => runner(file, level));
+    Future<void>(() => runner(file, level));
 
 Future<void> runPath(String path, RunFile runner, [int level = 0]) async =>
-    await Future<void>(() => runner(File(path), level));
+    Future<void>(() => runner(File(path), level));
 
 /// Returns the number of [File]s in a [Directory]
 int fileCount(Directory d, {List<String> extensions, bool recursive = true}) {
   final eList = d.listSync(recursive: recursive);
   var count = 0;
-  for (var fse in eList) if (fse is File) count++;
+  for (final fse in eList) if (fse is File) count++;
   return count;
 }
 
@@ -106,7 +106,7 @@ bool _checkLenSync(File f, int min, int max) {
   return v;
 }
 
-Future<Uint8List> _readAsync(File f) async => await f.readAsBytes();
+Future<Uint8List> _readAsync(File f) async => f.readAsBytes();
 Uint8List _readSync(File f) => f.readAsBytesSync();
 
 List<String> fileListFromDirectory(String dirPath) {
@@ -118,7 +118,7 @@ List<String> fileListFromDirectory(String dirPath) {
     ..debug('FSEntity count: $fsEntityCount');
 
   final files = <String>[];
-  for (var fse in fList) {
+  for (final fse in fList) {
     if (fse is! File) continue;
     final ext = path.extension(fse.path);
     if (ext == '.dcm' || ext == '') {

@@ -24,12 +24,12 @@ void main() {
 
   final dir = Directory(inRoot1);
 
-  final fList = dir.listSync();
+  final List<File> fList = dir.listSync();
   log.info0('File count: ${fList.length}');
-  for (File f in fList) log.info0('File: $f');
+  for (final f in fList) log.info0('File: $f');
 
   TagRootDataset rds;
-  for (File file in fList) {
+  for (final file in fList) {
     print('\nReading file: $file');
     final bytes = file.readAsBytesSync();
     rds = TagReader(bytes).readRootDataset();

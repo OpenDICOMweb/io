@@ -26,7 +26,7 @@ class FSFormatter {
     if (fse is Directory) {
       level++;
       final list = fse.listSync(followLinks: false);
-      for (var e in list) sb.write(call(e, output));
+      for (final e in list) sb.write(call(e, output));
       level--;
     }
     return sb.toString();

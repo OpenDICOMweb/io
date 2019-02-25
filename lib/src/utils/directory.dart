@@ -31,7 +31,7 @@ Future<int> walkDirectory(Directory dir, FSERunner f, [int level = 0]) async {
 
   var count = 0;
   var _level = level;
-  await for (FileSystemEntity e in eList) {
+  await for (final e in eList) {
     if (e is Directory) {
       count += await walkDirectory(e, f, _level++);
     } else if (e is File) {
@@ -53,7 +53,7 @@ Future<int> walkDirectoryFiles(Directory dir, FileRunner f,
 
   var count = 0;
   var _level = level;
-  await for (FileSystemEntity fse in eList) {
+  await for (final fse in eList) {
     if (fse is Directory) {
       count += await walkDirectory(fse, f, _level++);
     } else if (fse is File) {
@@ -74,7 +74,7 @@ int walkDirectorySync(Directory dir, FSERunner f, [int level = 0]) {
 
   _level++;
   var count = 0;
-  for (var e in eList) {
+  for (final e in eList) {
     if (e is Directory) {
       count += walkDirectorySync(e, f, _level);
     } else if (e is File) {
@@ -96,7 +96,7 @@ int walkDirectoryFilesSync(Directory dir, FileRunner f, [int level = 0]) {
 
   _level++;
   var count = 0;
-  for (var e in eList) {
+  for (final e in eList) {
     if (e is Directory) {
       count += walkDirectorySync(e, f, _level);
     } else if (e is File) {
@@ -128,7 +128,7 @@ Stream _walk(Directory d, Filter filter) async* {
   final stream = d.list(followLinks: false);
   // print('Length: ${entries.length}');
   try {
-    await for (FileSystemEntity e in stream) {
+    await for (final e in stream) {
       if (e is File) {
         // print('Found file ${e.path}');
         final v = filter(e);
@@ -155,7 +155,7 @@ List walkSync(Directory d, Function func) => _walkSync(d, func, <Object>[]);
 List _walkSync(Directory d, Function func, List<Object> list) {
   final entries = d.listSync(followLinks: false);
   try {
-    for (var e in entries) {
+    for (final e in entries) {
       if (e is File) {
         // print('Found file ${e.path}');
         final Object v = func(e);

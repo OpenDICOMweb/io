@@ -36,7 +36,7 @@ void main() {
     test('Create a data set object from a File', () {
       // Read, parse, and print a summary of each file.
       var count = 0;
-      for (var file in files) {
+      for (final file in files) {
         log
           ..debug('\n')
           ..debug('Reading file[$count]: ${cleanPath(file.path)}', 1);

@@ -36,7 +36,7 @@ List<Filename> getDcmFilesFromDirectory(String source) {
   final dir = Directory(source);
   final files = dir.listSync(recursive: true, followLinks: false);
   final filenames = <Filename>[];
-  for (File f in files) {
+  for (final f in files) {
     filenames.add(Filename(f.path));
   }
   return filenames;
@@ -63,7 +63,7 @@ String inRoot = 'C:/odw_test_data/sfd/CR';
 
 List flatten(List<Object> list) {
   final flat = <Object>[];
-  for (var l in list)
+  for (final l in list)
     if (l is List) {
       flat.addAll(l);
     } else {
@@ -76,7 +76,7 @@ List getFiles(String path) {
   final dir = Directory(path);
   final entities = dir.listSync(recursive: true);
   final files = <File>[];
-  for (var e in entities) {
+  for (final e in entities) {
     if (e is Directory) continue;
     files.add(e);
   }
@@ -90,7 +90,7 @@ String toAbsolute(String path) {
 
 void main() {
   //var root = 'C:/odw/sdk/io/';
-  for (var s in pathList) {
+  for (final s in pathList) {
     /*
     String path = toAbsolute(s);
     print('path: $path');

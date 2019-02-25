@@ -37,7 +37,7 @@ void main() {
 
   print('files: $files');
 
-  for (var fn in files) {
+  for (final fn in files) {
     if (fn.isPart10) {
       final bytes = fn.file.readAsBytesSync();
       final rds = TagReader(bytes).readRootDataset();

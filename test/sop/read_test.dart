@@ -32,7 +32,7 @@ void main() {
   group('Data set', () {
     test('Create a data set object from map', () {
       // Read, parse, and print a summary of each file.
-      for (var file in files) {
+      for (final file in files) {
         if (file.path != 'ct.0.dcm') {
           print('Reading file: $file');
           final bytes = file.readAsBytesSync();

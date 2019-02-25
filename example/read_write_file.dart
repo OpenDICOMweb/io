@@ -70,7 +70,7 @@ void main() {
   final bytes0 = fn.file.readAsBytesSync();
   final TagRootDataset rds0 = TagReader(bytes0).readRootDataset();
   log.info0('Decoded: $rds0');
-  if (rds0 == null) return null;
+  if (rds0 == null) return;
   log
     ..debug(rds0.format(Formatter(maxDepth: -1)))
     ..info0('${rds0[kFileMetaInformationGroupLength].info}')

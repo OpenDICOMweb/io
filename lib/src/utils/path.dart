@@ -84,7 +84,7 @@ List<File> getFilesFromDirectory(String path, [String ext = '.dcm']) {
   final dir = Directory(path);
   final entities = dir.listSync(recursive: true, followLinks: false);
   final files = <File>[];
-  for (var e in entities) {
+  for (final e in entities) {
     if (e is File) files.add(e);
   }
   return files;
@@ -103,7 +103,7 @@ Entity readBinaryDirectorySync(String path) {
 Entity _readBinaryDirectorySync(Directory d, List<Uint8List> bytesList) {
   final entities = d.listSync(recursive: true, followLinks: false);
   try {
-    for (var e in entities) {
+    for (final e in entities) {
       if (e is Directory) {
         _readBinaryDirectorySync(e, bytesList);
       } else if (e is File) {
@@ -132,7 +132,7 @@ List<String> readStringDirectorySync(String path) =>
 List<String> _readStringDirectorySync(Directory d, List<String> bytesList) {
   final entities = d.listSync(recursive: true, followLinks: false);
   try {
-    for (var e in entities) {
+    for (final e in entities) {
       if (e is Directory) {
         _readStringDirectorySync(e, bytesList);
       } else if (e is File) {
@@ -234,7 +234,7 @@ void writeStringDirectorySync(String path, Map<String, String> entries) {
 
 Future<String> readStringFile(String path) async {
   final f = File(path);
-  return await f.readAsString();
+  return f.readAsString();
 }
 
 String readStringFileSync(String path) {

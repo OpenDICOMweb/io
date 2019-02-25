@@ -38,7 +38,7 @@ class FileCompareResult {
 
   String get fmtDiffs {
     final sb = StringBuffer('Differences');
-    for (var d in diffs) sb.write('$d');
+    for (final d in diffs) sb.write('$d');
     return sb.toString();
   }
 
