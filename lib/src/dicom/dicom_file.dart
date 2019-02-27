@@ -53,9 +53,9 @@ class DicomFile {
 
   RootDataset readSync() => unsupportedError();
 
-  Future<void> write(RootDataset rds) async => unsupportedError();
+  Future<void> write(RootDataset rds) async { unsupportedError(); }
 
-  void writeSync(RootDataset rds) => unsupportedError();
+  void writeSync(RootDataset rds) { unsupportedError(); }
 
   // **** Constructors
 

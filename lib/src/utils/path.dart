@@ -91,8 +91,13 @@ List<File> getFilesFromDirectory(String path, [String ext = '.dcm']) {
 }
 
 //**** Binary Utility Functions
+/*
 //TODO: implement later
-Future<FileSystemEntity> readDirectory(String path) => unimplementedError();
+Future<FileSystemEntity> readDirectory(String path) {
+  unimplementedError();
+  return null;
+}
+*/
 
 //TODO: debug, doc, and Test
 Entity readBinaryDirectorySync(String path) {

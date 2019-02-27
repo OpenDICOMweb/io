@@ -143,8 +143,7 @@ class FileSystem extends FileSystemBase {
 
   @override
   Future<bool> writeInstance(Instance instance,
-          [FileSubtype subtype = FileSubtype.part10]) =>
-      unimplementedError();
+          [FileSubtype subtype = FileSubtype.part10]) => unimplementedError();
 
   // *** Write Sync  ***
 
